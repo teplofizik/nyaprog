@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NyaProg</RootNamespace>
+    <AssemblyName>NyaProg</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Programmer.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extension\Argument.cs" />
+    <Compile Include="Extension\ArgumentList.cs" />
+    <Compile Include="Extension\MACAddress.cs" />
+    <Compile Include="fMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fMain.Designer.cs">
+      <DependentUpon>fMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Programmer\Controls\BufferedControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Programmer\Controls\ComponentPlacer.cs" />
+    <Compile Include="Programmer\Controls\Mapper.cs" />
+    <Compile Include="Programmer\Controls\Mappers\OptionMapper.cs" />
+    <Compile Include="Programmer\Controls\Mappers\StepMapper.cs" />
+    <Compile Include="Programmer\Controls\Mappers\ButtonMapper.cs" />
+    <Compile Include="Programmer\Controls\OptionViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Programmer\Controls\OptionViewer.Designer.cs">
+      <DependentUpon>OptionViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Programmer\Controls\StepControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Programmer\Environment\ActionEvent.cs" />
+    <Compile Include="Programmer\Environment\Conditions\ConditionChecker.cs" />
+    <Compile Include="Programmer\Environment\Conditions\CondType.cs" />
+    <Compile Include="Programmer\Environment\Conditions\CondDetector.cs" />
+    <Compile Include="Programmer\Environment\Conditions\Expression\CondHasOption.cs" />
+    <Compile Include="Programmer\Environment\Conditions\Expression\CondNotEqual.cs" />
+    <Compile Include="Programmer\Environment\Conditions\Expression\CondEqual.cs" />
+    <Compile Include="Programmer\Environment\Conditions\Expression\CondExpression.cs" />
+    <Compile Include="Programmer\Environment\Preference.cs" />
+    <Compile Include="Programmer\Environment\ScriptGroup.cs" />
+    <Compile Include="Programmer\Environment\State.cs" />
+    <Compile Include="Programmer\Environment\XML\XMLLoader.cs" />
+    <Compile Include="Programmer\Environment\XML\XMLWriter.cs" />
+    <Compile Include="Programmer\Input\InputType.cs" />
+    <Compile Include="Programmer\Input\InputTypeLibrary.cs" />
+    <Compile Include="Programmer\Input\Types\IT_Generic.cs" />
+    <Compile Include="Programmer\Input\Types\IT_IP.cs" />
+    <Compile Include="Programmer\Input\Types\IT_MAC_old.cs" />
+    <Compile Include="Programmer\Input\Types\IT_MAC.cs" />
+    <Compile Include="Programmer\Options\Rewrite\OptHexExtractor.cs" />
+    <Compile Include="Programmer\Options\Rewrite\OptRewrite.cs" />
+    <Compile Include="Programmer\Environment\ScriptExec.cs" />
+    <Compile Include="Programmer\Options\Rewrite\ORAliasConv.cs" />
+    <Compile Include="Programmer\Options\Rewrite\ORAlias.cs" />
+    <Compile Include="Programmer\Options\Types\OptionInput.cs" />
+    <Compile Include="Programmer\Options\XML\XMLLoader.cs" />
+    <Compile Include="Programmer\Project\Action.cs" />
+    <Compile Include="Programmer\Project\InputParam.cs" />
+    <Compile Include="Programmer\Project\ProjLibrary.cs" />
+    <Compile Include="Programmer\Project\Script.cs" />
+    <Compile Include="Programmer\Project\XML\XMLLoader.cs" />
+    <Compile Include="Programmer\Tool\ExternalExec.cs" />
+    <Compile Include="Programmer\Tool\InternalTools\TlExternal.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\Detectors\ExitCodeMatch.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\Detectors\RegexMatch.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\Detectors\StringMatch.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\XMLResultDetector.cs" />
+    <Compile Include="Programmer\XMLFile\XmlLoad.cs" />
+    <Compile Include="Programmer\XMLFile\XmlSave.cs" />
+    <Compile Include="Programmer\Environment\Config.cs" />
+    <Compile Include="Programmer\Environment\ProgEnv.cs" />
+    <Compile Include="Programmer\Options\Types\OptionHidden.cs" />
+    <Compile Include="Programmer\Project\Project.cs" />
+    <Compile Include="Programmer\Tool\Executer.cs" />
+    <Compile Include="Programmer\ExternalTool.cs" />
+    <Compile Include="Programmer\Log.cs" />
+    <Compile Include="Programmer\Options\Option.cs" />
+    <Compile Include="Programmer\Options\Types\OptionList.cs" />
+    <Compile Include="Programmer\Options\Types\OptionListItem.cs" />
+    <Compile Include="Programmer\Options\Types\OptionText.cs" />
+    <Compile Include="Programmer\Tool\ExecResult.cs" />
+    <Compile Include="Programmer\Tool\InternalTools\TlBase.cs" />
+    <Compile Include="Programmer\Tool\InternalTools\TlMessages.cs" />
+    <Compile Include="Programmer\Tool\InternalTools\TlFileTools.cs" />
+    <Compile Include="Programmer\Tool\ToolSet.cs" />
+    <Compile Include="Programmer\Tool\Toolsets\ProgToolsets.cs" />
+    <Compile Include="Programmer\Tool\Toolsets\CustomToolsets.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\TlBaseXML.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\XMLLoader.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\XMLTool.cs" />
+    <Compile Include="Programmer\Tool\XMLTools\XML\XMLToolAction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Programmer\Tool\UniTool.cs" />
+    <EmbeddedResource Include="fMain.resx">
+      <DependentUpon>fMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Programmer\Controls\OptionViewer.resx">
+      <DependentUpon>OptionViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Programmer.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
