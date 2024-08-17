@@ -35,7 +35,7 @@ namespace Programmer.Tool
                     if (T.Valid())
                         Tools.Add(T);
                     else
-                        Log.WriteLine($"{T.Name} is not valid");
+                        Log.WriteLine($"{T.Name} is not valid:");
                 }
             }
             else

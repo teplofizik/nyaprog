@@ -54,7 +54,7 @@ namespace Programmer.Project.XML
             if (File.Exists(FNt))
                 return File.ReadAllText(FNt);
 
-            FNt = P.Dir + "\\" + FN;
+            FNt = Path.Combine(P.Dir, FN);
             if (File.Exists(FNt))
                 return File.ReadAllText(FNt);
 
@@ -72,7 +72,8 @@ namespace Programmer.Project.XML
                 {
                     case "cathegory": S.Cathegory = X.GetAttribute("value"); break;
                     case "name": S.Name = X.GetAttribute("value"); break;
-                    case "photo": /* TODO */ break;
+                    case "photo": /* TODO */ 
+                        break;
                     case "options": LoadOptions(S, X.GetSubtree()); break;
                     case "input":
                         {
@@ -108,7 +109,7 @@ namespace Programmer.Project.XML
             if (!X.Load(FileName)) return false;
 
             P.File = FileName;
-            P.Dir = Path.GetDirectoryName(FileName) + "\\";
+            P.Dir = Path.GetDirectoryName(FileName);
 
             while (X.Read())
             {
