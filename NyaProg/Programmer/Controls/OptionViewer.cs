@@ -71,12 +71,32 @@ namespace Programmer.Controls
         /// </summary>
         public string Value => GetValue();
 
-        public void Increment()
+        public bool Increment()
         {
             var O = InternalOption;
-            if(O.GetType() == typeof(OptionInput))
+            if (O.GetType() == typeof(OptionInput))
             {
+                var OI = O as OptionInput;
 
+                if (OI.Type.CanIncrement)
+                {
+                    SetValue(OI.Type.Increment(Value));
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+
+        private void SetValue(string Text)
+        {
+            var O = InternalOption;
+            if (O != null)
+            {
+                if (O.GetType() == typeof(OptionText))
+                    (EditControl as TextBox).Text = Text;
+                else if (O.GetType() == typeof(OptionInput))
+                    (EditControl as TextBox).Text = Text;
             }
         }
 
@@ -87,7 +107,7 @@ namespace Programmer.Controls
             {
                 if (O.GetType() == typeof(OptionText))
                     return (EditControl as TextBox).Text;
-                if (O.GetType() == typeof(OptionInput))
+                else if(O.GetType() == typeof(OptionInput))
                     return (EditControl as TextBox).Text;
                 else if (O.GetType() == typeof(OptionList))
                     return (EditControl as ComboBox).Text;

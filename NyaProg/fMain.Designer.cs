@@ -37,6 +37,8 @@
             this.tOptions = new System.Windows.Forms.TabPage();
             this.lResult = new System.Windows.Forms.Label();
             this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.ckAutoinc = new System.Windows.Forms.CheckBox();
+            this.ckSuccess = new System.Windows.Forms.CheckBox();
             this.bCancel = new System.Windows.Forms.Button();
             this.bStart = new System.Windows.Forms.Button();
             this.bBack = new System.Windows.Forms.Button();
@@ -44,8 +46,6 @@
             this.mMenu = new System.Windows.Forms.MenuStrip();
             this.mFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mFileOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.ckSuccess = new System.Windows.Forms.CheckBox();
-            this.ckAutoinc = new System.Windows.Forms.CheckBox();
             this.tTabs.SuspendLayout();
             this.tScripts.SuspendLayout();
             this.tOptions.SuspendLayout();
@@ -142,6 +142,28 @@
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Скрипт";
             // 
+            // ckAutoinc
+            // 
+            this.ckAutoinc.AutoSize = true;
+            this.ckAutoinc.Location = new System.Drawing.Point(375, 315);
+            this.ckAutoinc.Name = "ckAutoinc";
+            this.ckAutoinc.Size = new System.Drawing.Size(146, 17);
+            this.ckAutoinc.TabIndex = 5;
+            this.ckAutoinc.Text = "Автоинкремент номера";
+            this.ckAutoinc.UseVisualStyleBackColor = true;
+            // 
+            // ckSuccess
+            // 
+            this.ckSuccess.AutoSize = true;
+            this.ckSuccess.Checked = true;
+            this.ckSuccess.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ckSuccess.Location = new System.Drawing.Point(375, 338);
+            this.ckSuccess.Name = "ckSuccess";
+            this.ckSuccess.Size = new System.Drawing.Size(204, 17);
+            this.ckSuccess.TabIndex = 4;
+            this.ckSuccess.Text = "Только по успешному завершению";
+            this.ckSuccess.UseVisualStyleBackColor = true;
+            // 
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -208,34 +230,14 @@
             this.mFile.Name = "mFile";
             this.mFile.Size = new System.Drawing.Size(48, 20);
             this.mFile.Text = "Файл";
+            this.mFile.Visible = false;
             // 
             // mFileOpen
             // 
             this.mFileOpen.Name = "mFileOpen";
-            this.mFileOpen.Size = new System.Drawing.Size(130, 22);
+            this.mFileOpen.Size = new System.Drawing.Size(180, 22);
             this.mFileOpen.Text = "Открыть...";
-            // 
-            // ckSuccess
-            // 
-            this.ckSuccess.AutoSize = true;
-            this.ckSuccess.Checked = true;
-            this.ckSuccess.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckSuccess.Location = new System.Drawing.Point(375, 338);
-            this.ckSuccess.Name = "ckSuccess";
-            this.ckSuccess.Size = new System.Drawing.Size(204, 17);
-            this.ckSuccess.TabIndex = 4;
-            this.ckSuccess.Text = "Только по успешному завершению";
-            this.ckSuccess.UseVisualStyleBackColor = true;
-            // 
-            // ckAutoinc
-            // 
-            this.ckAutoinc.AutoSize = true;
-            this.ckAutoinc.Location = new System.Drawing.Point(375, 315);
-            this.ckAutoinc.Name = "ckAutoinc";
-            this.ckAutoinc.Size = new System.Drawing.Size(146, 17);
-            this.ckAutoinc.TabIndex = 5;
-            this.ckAutoinc.Text = "Автоинкремент номера";
-            this.ckAutoinc.UseVisualStyleBackColor = true;
+            this.mFileOpen.Click += new System.EventHandler(this.mFileOpen_Click);
             // 
             // fMain
             // 

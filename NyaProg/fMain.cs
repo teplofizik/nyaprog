@@ -246,7 +246,7 @@ namespace NyaProg
 
         private void InitDirs()
         {
-            if (!Directory.Exists(".//Base")) Directory.CreateDirectory(".//Base");
+            if (!Directory.Exists("Base")) Directory.CreateDirectory("Base");
         }
 
         private void fMain_Load(object sender, EventArgs e)
@@ -354,7 +354,13 @@ namespace NyaProg
             if (OptionsControls != null)
             {
                 foreach (var O in OptionsControls)
-                    O.Increment();
+                {
+                    if(O.Increment())
+                    {
+                        if(O.ID != null)
+                            PrState.Env.SetPreference(O.ID, O.Value);
+                    }
+                }
             }
         }
 
@@ -413,6 +419,11 @@ namespace NyaProg
         {
             PrState.Cancelled = true;
             PrState.Env.Save("config.xml");
+        }
+
+        private void mFileOpen_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -18,6 +18,11 @@ namespace Programmer.Options
         /// </summary>
         public string Name;
 
+        /// <summary>
+        /// Может ли автоувеличиваться
+        /// </summary>
+        public bool Autoincrement = true;
+
         public Option(string N)
         {
             Name = N;

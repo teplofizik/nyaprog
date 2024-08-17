@@ -25,13 +25,13 @@ namespace Programmer.Environment
         /// <summary>
         /// Предпочтения
         /// </summary>
-        public string Preferences = ".\\Base\\pref.xml";
+        public string Preferences = System.IO.Path.Combine("Base", "pref.xml");
 
         public Config()
         {
-            ProgToolsets.Add(".\\Tools\\");
-            CustToolsets.Add(".\\Tools\\Custom\\");
-            Projects.Add(".\\Projects\\");
+            ProgToolsets.Add("Tools");
+            CustToolsets.Add(System.IO.Path.Combine("Tools", "Custom"));
+            Projects.Add("Projects");
         }
 
         public void Load(string FileName)
