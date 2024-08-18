@@ -312,7 +312,10 @@ namespace NyaProg
                        StartStep(e.Action + 1);
                }
                else
+               {
+                   SetStatus(Color.Green, "Успешно выполнено!");
                    Completed(true);
+               }
            });
         }
 
