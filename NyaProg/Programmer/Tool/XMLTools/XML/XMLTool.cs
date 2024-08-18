@@ -27,6 +27,11 @@ namespace Programmer.Tool.XMLTools.XML
         public string ToolName = "";
 
         /// <summary>
+        /// Интерпретатор (python, mono и т.д.)
+        /// </summary>
+        public string Interpreter = "";
+
+        /// <summary>
         /// Путь к программе
         /// </summary>
         public string ToolPath = "";
@@ -87,7 +92,14 @@ namespace Programmer.Tool.XMLTools.XML
 
                 try
                 {
-                    Result = ExternalExec.Exec(P, A.Command, Args, Rewrite);
+                    if (Interpreter.Length > 0)
+                    {
+                        Result = ExternalExec.Exec(Interpreter, $"{P} {A.Command}", Args, Rewrite);
+                    }
+                    else
+                    {
+                        Result = ExternalExec.Exec(P, A.Command, Args, Rewrite);
+                    }
                 }
                 catch (Exception Exc)
                 {

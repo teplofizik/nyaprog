@@ -11,8 +11,8 @@ namespace Programmer
     {
         static public ExternalToolResult Run(string File, string Args, string Dir)
         {
-            Console.WriteLine(File + " " + Args);
-            Log.WriteLine(File + " " + Args);
+            Console.WriteLine($"{File} {Args} Dir: {Dir}");
+            Log.WriteLine($"{File} {Args} Dir: {Dir}");
 
             //string ProgramPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             //string D = Directory.GetCurrentDirectory();

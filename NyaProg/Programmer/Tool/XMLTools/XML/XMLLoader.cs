@@ -115,6 +115,17 @@ namespace Programmer.Tool.XMLTools.XML
             if(O != null) T.Options.AddRange(O);
         }
 
+        private static string PreprocessPath(string Path)
+        {
+            string Root = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location));
+            string Soft = System.IO.Path.Combine(Root, "Soft");
+
+            Path = Path.Replace("{root}", Root);
+            Path = Path.Replace("{soft}", Soft);
+
+            return Path;
+        }
+
         public static bool Load(string FileName, XMLTool Tool, bool Custom)
         {
             XmlLoad X = new XmlLoad();
@@ -128,7 +139,8 @@ namespace Programmer.Tool.XMLTools.XML
                     switch (X.ElementName)
                     {
                         case "name": Tool.ToolName = X.GetAttribute("value"); break;
-                        case "path": Tool.ToolPath = X.GetAttribute("value"); break;
+                        case "path": Tool.ToolPath = PreprocessPath(X.GetAttribute("value")); break;
+                        case "interpreter": Tool.Interpreter = X.GetAttribute("value"); break;
                         case "actions": LoadActions(Tool, X.GetSubtree(), true); break;
                         case "tags": LoadTags(Tool, X.GetSubtree()); break;
                     }
@@ -138,7 +150,8 @@ namespace Programmer.Tool.XMLTools.XML
                     switch (X.ElementName)
                     {
                         case "name": Tool.ToolName = X.GetAttribute("value"); break;
-                        case "path": Tool.ToolPath = X.GetAttribute("value"); break;
+                        case "path": Tool.ToolPath = PreprocessPath(X.GetAttribute("value")); break;
+                        case "interpreter": Tool.Interpreter = X.GetAttribute("value"); break;
                         case "supported": LoadSupportedTypes(Tool, X.GetSubtree()); break;
                         case "actions": LoadActions(Tool, X.GetSubtree(), false); break;
                         case "options": LoadOptions(Tool, X.GetSubtree()); break;

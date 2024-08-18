@@ -40,12 +40,14 @@ namespace Programmer.Environment
         public ArgumentList GetArgs(UniTool T, Project.Project P, Script S, Project.Action A, ArgumentList Options)
         {
             var Res = new ArgumentList();
-            string Soft = Path.GetDirectoryName(Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location)) + "\\Soft";
+            string Root = Path.GetDirectoryName(Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location));
+            string Soft = Path.Combine(Root, "Soft");
 
             // Этап 0
             // Пропишем параметры проекта (путь)
             Res.Set("$dir", P.Dir);
             Res.Set("dir", P.Dir);
+            Res.Set("root", Root);
             Res.Set("soft", Soft);
 
             // Этап 1
