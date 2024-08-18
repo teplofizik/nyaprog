@@ -83,6 +83,8 @@ namespace Programmer.Project.XML
                             if (X.HasAttribute("comment")) In.Comment = X.GetAttribute("comment");
                             if (X.HasAttribute("default")) In.Default = X.GetAttribute("default");
                             if (X.HasAttribute("id")) In.ID = X.GetAttribute("id");
+                            if (X.HasAttribute("autoincrement"))
+                                In.Autoincrement = X.GetAttribute("autoincrement") != "0";
 
                             S.Input.Add(In);
                         }

@@ -13,15 +13,16 @@ namespace Programmer.Options.Types
     /// </summary>
     public class OptionInput : Option
     {
+        /// <summary
         /// <summary>
         /// Название параметра
         /// </summary>
-        public string ParamName = "";
+        public readonly string ParamName;
 
         /// <summary>
         /// Значение по умолчанию
         /// </summary>
-        public string Default = "";
+        public readonly string Default;
 
         /// <summary>
         /// Тип вводного параметра
@@ -39,12 +40,13 @@ namespace Programmer.Options.Types
             return A;
         }
 
-        public OptionInput(string Name, string ParamName, InputType Type, string Default, string ID) : base(Name)
+        public OptionInput(string Name, string ParamName, InputType Type, string Default, string ID, bool Autoincrement) : base(Name)
         {
             this.ParamName = ParamName;
             this.Default = Default;
             this.Type = Type;
             this.ID = ID;
+            this.Autoincrement = Autoincrement;
         }
     }
 }

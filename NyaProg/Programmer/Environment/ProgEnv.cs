@@ -17,7 +17,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Конфигурация
         /// </summary>
-        Config Conf = new Config();
+        public Config Conf = new Config();
 
         /// <summary>
         /// Список программаторов

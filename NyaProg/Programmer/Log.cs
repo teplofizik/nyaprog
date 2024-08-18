@@ -9,14 +9,21 @@ namespace Programmer
 {
     static class Log
     {
-        const string LogFileName = "log.txt";
+        public static string LogFileName = "log.txt";
 
         public static void WriteLine(string Text)
         {
-            using (StreamWriter sw = File.AppendText(LogFileName))
+            try
             {
-                //Debug.WriteLine(Text);
-                sw.WriteLine(Text);
+                using (StreamWriter sw = File.AppendText(LogFileName))
+                {
+                    //Debug.WriteLine(Text);
+                    sw.WriteLine(Text);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -24,13 +31,20 @@ namespace Programmer
         {
             if (Lines == null) return;
 
-            using (StreamWriter sw = File.AppendText(LogFileName))
+            try
             {
-                foreach (string Line in Lines)
+                using (StreamWriter sw = File.AppendText(LogFileName))
                 {
-                    //Debug.WriteLine(Line);
-                    sw.WriteLine(Line);
+                    foreach (string Line in Lines)
+                    {
+                        //Debug.WriteLine(Line);
+                        sw.WriteLine(Line);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
     }

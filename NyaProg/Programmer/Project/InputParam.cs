@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Programmer.Options.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,11 @@ namespace Programmer.Project
 {
     public class InputParam
     {
+        /// <summary>
+        /// Автоинкремент
+        /// </summary>
+        public bool Autoincrement = false;
+
         /// <summary>
         /// Название параметра
         /// </summary>

@@ -53,6 +53,9 @@ namespace Programmer.Options.XML
         {
             var O = new Types.OptionText(Name);
 
+            if (X.HasAttribute("autoincrement"))
+                O.Autoincrement = X.GetAttribute("autoincrement") != "0";
+
             if (X.HasAttribute("id"))
                 O.ID = X.GetAttribute("id");
 

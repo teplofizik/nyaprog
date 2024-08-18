@@ -55,10 +55,15 @@ namespace Programmer.Project
 
         public string GetID(Script Script)
         {
-            var ID = Script.Arguments.Get("id");
-            if (ID == null) ID = Script.Name;
+            if (Script != null)
+            {
+                var ID = Script.Arguments.Get("id");
+                if (ID == null) ID = Script.Name;
 
-            return $"project:{File}:{ID}";
+                return $"project:{File}:{ID}";
+            }
+            else
+                return "noscript";
         }
 
         public override string ToString()

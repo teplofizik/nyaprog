@@ -16,6 +16,7 @@ using Programmer.Tool;
 using Programmer.Options;
 using Programmer.Options.Types;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace NyaProg
 {
@@ -128,7 +129,7 @@ namespace NyaProg
                 var Input = PrState.Script.Input;
                 var IL = PrState.Env.InputTypes;
                 foreach(var I in Input)
-                    OptsProj.Add(new OptionInput(I.Name, I.Name, IL.GetInputType(I.Type), I.Default, I.ID));
+                    OptsProj.Add(new OptionInput(I.Name, I.Name, IL.GetInputType(I.Type), I.Default, I.ID, I.Autoincrement));
             }
 
             if (OptionsControls != null)
@@ -157,6 +158,8 @@ namespace NyaProg
                     if (OC.ID != null) PrState.Env.SetPreference(OC.ID, OC.Value);
                 }
             }
+
+            SaveIncrementFields();
         }
 
         private void ApplyOptions()
@@ -209,6 +212,7 @@ namespace NyaProg
                 ShowOptions();
                 ApplyOptions();
                 RebuildSteps();
+                InitIncrementFields();
 
                 if (S.Readme != null)
                     ScriptReadme = ComponentPlacer.PlaceReadme(gbOptions, S.Readme, 9, gbOptions.Width - 18, 58, 180);
@@ -221,6 +225,7 @@ namespace NyaProg
             else
             {
                 RebuildSteps();
+                InitIncrementFields();
                 OptionsControls = null;
                 ToolSelector = null;
                 StepsControls = null;
@@ -240,6 +245,8 @@ namespace NyaProg
         private void InitProgrammer()
         {
             PrState = new State("config.xml");
+            Log.LogFileName = PrState.Env.Conf.Log;
+
             PrState.ActionCompleted += PrState_ActionCompleted;
             UpdateProjList();
         }
@@ -364,6 +371,44 @@ namespace NyaProg
                             PrState.Env.SetPreference(O.ID, O.Value);
                     }
                 }
+            }
+        }
+
+        private bool HasIncrementableFields()
+        {
+            foreach (var OC in OptionsControls)
+            {
+                if (OC.Option.Autoincrement) return true;
+            }
+
+            return false;
+        }
+
+        private void SaveIncrementFields()
+        {
+            var PID = PrState.Project.GetID(PrState.Script);
+
+            PrState.Env.SetPreference($"{PID}:autoinc", ckAutoinc.Checked ? "enabled" : "disabled");
+            PrState.Env.SetPreference($"{PID}:success", ckSuccess.Checked ? "enabled" : "disabled");
+        }
+
+        private void InitIncrementFields()
+        {
+            var PID = PrState.Project.GetID(PrState.Script);
+
+            if (HasIncrementableFields())
+            {
+                ckAutoinc.Visible = true;
+                ckSuccess.Visible = true;
+                ckAutoinc.Checked = PrState.Env.GetPreference($"{PID}:autoinc") == "enabled";
+                ckSuccess.Checked = PrState.Env.GetPreference($"{PID}:success") == "enabled";
+            }
+            else
+            {
+                ckAutoinc.Visible = false;
+                ckSuccess.Visible = false;
+                ckAutoinc.Checked = false;
+                ckSuccess.Checked = false;
             }
         }
 

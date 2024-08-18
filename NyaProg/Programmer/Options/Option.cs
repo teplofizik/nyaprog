@@ -21,7 +21,7 @@ namespace Programmer.Options
         /// <summary>
         /// Может ли автоувеличиваться
         /// </summary>
-        public bool Autoincrement = true;
+        public bool Autoincrement = false;
 
         public Option(string N)
         {
