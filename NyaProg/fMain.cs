@@ -304,7 +304,7 @@ namespace NyaProg
                    Completed(false);
                    return;
                }
-               else if (e.Result.Result == ExecResultType.Error)
+               else if (e.Result.Result == ExecResultType.Warning)
                    SetStatus(Color.Yellow, e.Result.Message);
 
                if (PrState.Action < PrState.Script.Actions.Count - 1)

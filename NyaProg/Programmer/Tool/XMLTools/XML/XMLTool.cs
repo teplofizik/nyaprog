@@ -105,6 +105,10 @@ namespace Programmer.Tool.XMLTools.XML
                 {
                     return new ERError(Exc.Message);
                 }
+
+                if (Result.ExitCode != 0)
+                    return new ERError($"Process exited with code {Result.ExitCode}");
+
                 //string Output = ExternalTool.Run(P, Cmd, Dir);
                 if (Result == null) return new ERError("No output");
                 

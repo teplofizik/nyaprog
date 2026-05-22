@@ -55,9 +55,8 @@ namespace Programmer
             catch (Exception E)
             {
                 Log.WriteLine(E.Message);
+                return new ExternalToolResult(-1, new[] { $"Launch failed: {E.Message}" });
             }
-
-            return null;
         }
     }
 
