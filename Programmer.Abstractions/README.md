@@ -7,6 +7,33 @@
 
 ---
 
+## Документация
+
+- **SDK (этот файл):**
+  [IModule](#imodule--modulebase) ·
+  [ITool/ToolBase/CodedToolBase](#itool--toolbase--codedtoolbase) ·
+  [ICommand/CommandBase](#icommand--commandbase) ·
+  [CommandDescriptor/CommandParameter](#commanddescriptor--commandparameter) ·
+  [CommandResult](#commandresult--commandstatus) ·
+  [Сервисы хоста](#сервисы-хоста--imodulehost) ·
+  [Абстракции платформы](#абстракции-платформы-programmerplatform) ·
+  [Соглашения](#соглашения)
+- **[Формат `.etool`](../docs/etool.md):**
+  [структура](../docs/etool.md#общая-структура) ·
+  [опции](../docs/etool.md#опции-options--только-для-программаторов) ·
+  [команды](../docs/etool.md#команды-actions) ·
+  [детекторы](../docs/etool.md#детекторы-error--warning) ·
+  [outputs](../docs/etool.md#outputs)
+- **[Внешние команды и подстановки](../docs/external-commands.md):**
+  [сборка аргументов](../docs/external-commands.md#сборка-аргументов) ·
+  [подстановка {…}](../docs/external-commands.md#подстановка-имя) ·
+  [алиасы](../docs/external-commands.md#правила-перезаписи-алиасы) ·
+  [запуск процесса](../docs/external-commands.md#запуск-процесса) ·
+  [external](../docs/external-commands.md#нативная-команда-external)
+- **[Сетевые команды download/lookup](../NyaProg.Modules.Net/README.md)**
+
+---
+
 ## Слои
 
 ```

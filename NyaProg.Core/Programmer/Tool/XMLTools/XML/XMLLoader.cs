@@ -30,7 +30,7 @@ namespace Programmer.Tool.XMLTools.XML
             {
                 switch (X.ElementName)
                 {
-                    case "tag": T.ControllerTypes.Add(X.GetAttribute("value")); break;
+                    case "tag": T.Tags.Add(X.GetAttribute("value")); break;
                 }
             }
 
