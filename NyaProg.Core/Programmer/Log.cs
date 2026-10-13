@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Programmer
 {
-    static class Log
+    public static class Log
     {
         public static string LogFileName = "log.txt";
 

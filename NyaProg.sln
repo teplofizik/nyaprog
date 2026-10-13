@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NyaProg", "NyaProg\NyaProg.csproj", "{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Core", "NyaProg.Core\NyaProg.Core.csproj", "{FD9EF842-30CA-464E-BF55-94CFE934AAA0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Cli", "NyaProg.Cli\NyaProg.Cli.csproj", "{AE1341FF-8F21-465F-BF27-F7F4889A30ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.App", "NyaProg\NyaProg.App.csproj", "{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF1740A2-6099-414F-B9E6-9CC04CE2DB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9EF842-30CA-464E-BF55-94CFE934AAA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9EF842-30CA-464E-BF55-94CFE934AAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9EF842-30CA-464E-BF55-94CFE934AAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9EF842-30CA-464E-BF55-94CFE934AAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE1341FF-8F21-465F-BF27-F7F4889A30ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1341FF-8F21-465F-BF27-F7F4889A30ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1341FF-8F21-465F-BF27-F7F4889A30ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1341FF-8F21-465F-BF27-F7F4889A30ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

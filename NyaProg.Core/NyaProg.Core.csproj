@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>NyaProg.Core</AssemblyName>
+    <RootNamespace>Programmer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <!-- Временно: TlMessages использует MessageBox. Убрать после введения IUserInterface. -->
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>

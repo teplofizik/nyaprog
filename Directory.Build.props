@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <!-- Сохраняем раскладку bin\Debug (без net48), чтобы локальные данные
+         (config.xml, Tools, Projects, Soft) остались на месте. -->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
+</Project>
