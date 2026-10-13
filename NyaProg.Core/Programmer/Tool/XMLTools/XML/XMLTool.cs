@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Extension.Argument;
+using Programmer.Modules;
 using Programmer.Options.Rewrite;
 
 namespace Programmer.Tool.XMLTools.XML
@@ -65,6 +67,21 @@ namespace Programmer.Tool.XMLTools.XML
         /// </summary>
         public string[] GetCommands() => Actions.Select(A => A.Name).ToArray();
 
+        /// <summary>
+        /// Схема параметров команды (из блока params описания).
+        /// </summary>
+        public CommandParameter[] GetCommandParameters(string Command)
+        {
+            var A = GetAction(Command);
+            if (A == null) return new CommandParameter[0];
+
+            var Res = new List<CommandParameter>();
+            foreach (var K in A.Defaults.Keys)
+                Res.Add(new CommandParameter(K, null, false, A.Defaults.Get(K)));
+
+            return Res.ToArray();
+        }
+
         private XMLToolAction GetAction(string Command)
         {
             foreach(var A in Actions)
@@ -121,12 +138,28 @@ namespace Programmer.Tool.XMLTools.XML
                 if (E != null) return new ERError(E);
 
                 var W = GetMessage(Result, A.WarningMask);
-                if (W != null) return new ERWarning(W);
 
-                return new EROk();
+                ExecResult Res = (W != null) ? (ExecResult)new ERWarning(W) : new EROk();
+                CollectOutputs(A, Result, Res.Outputs);
+                return Res;
             }
             else
                 return new ERError($"No available command '{Command}'");
+        }
+
+        /// <summary>
+        /// Извлечь выходные переменные из вывода утилиты.
+        /// </summary>
+        private static void CollectOutputs(XMLToolAction A, ExternalToolResult R, ArgumentList Outputs)
+        {
+            foreach (var O in A.Outputs)
+            {
+                if (string.IsNullOrEmpty(O.Name) || string.IsNullOrEmpty(O.Pattern)) continue;
+
+                var M = Regex.Match(R.Result, O.Pattern, RegexOptions.IgnoreCase);
+                if (M.Success && (M.Groups.Count > O.Group))
+                    Outputs.Set(O.Name, M.Groups[O.Group].Value);
+            }
         }
     }
 }

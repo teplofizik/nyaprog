@@ -46,6 +46,11 @@ namespace Programmer.Tool
         public virtual string[] GetCommands() => new string[0];
 
         /// <summary>
+        /// Схема параметров команды.
+        /// </summary>
+        public virtual CommandParameter[] GetCommandParameters(string Command) => new CommandParameter[0];
+
+        /// <summary>
         /// Список поддерживаемых архитектур
         /// </summary>
         /// <returns></returns>

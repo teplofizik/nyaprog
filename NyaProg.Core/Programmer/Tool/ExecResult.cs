@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Extension.Argument;
+
 namespace Programmer.Tool
 {
     public class ExecResult
@@ -10,6 +12,11 @@ namespace Programmer.Tool
         public ExecResultType Result;
 
         public string Message;
+
+        /// <summary>
+        /// Выходные переменные команды (извлечённые значения и т.п.).
+        /// </summary>
+        public ArgumentList Outputs = new ArgumentList();
 
         public ExecResult(ExecResultType R, string Text)
         {

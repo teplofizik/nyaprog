@@ -58,9 +58,12 @@ namespace Programmer.Environment
 
             // Этап 2
             // Аргументы из программатора, если они есть (дефолтные)
-            foreach (var O in T.GetOptions())
+            if (T != null)
             {
+                foreach (var O in T.GetOptions())
+                {
 
+                }
             }
 
             // Этап 3
@@ -97,9 +100,23 @@ namespace Programmer.Environment
             {
                 // Сформируем таблицу параметров
                 var FullArgs = GetArgs(T, P, S, A, Options);
-                var Ctx = new CommandContext(Command, FullArgs, P.Dir, E);
 
-                return Map(Cmd.Execute(Ctx));
+                // Применим схему параметров команды (defaults/обязательность/тип)
+                string Error;
+                if (!CommandBinder.Bind(Cmd, FullArgs, E.InputTypes, out Error))
+                    return new ERError(Error);
+
+                var Ctx = new CommandContext(Command, FullArgs, P.Dir, E);
+                var R = Cmd.Execute(Ctx);
+
+                // Выходные переменные команды — в окружение запуска (для условий/следующих шагов)
+                if ((Options != null) && (R.Outputs != null))
+                {
+                    foreach (var K in R.Outputs.Keys)
+                        Options.Set(K, R.Outputs.Get(K));
+                }
+
+                return Map(R);
             }
             else
                 return new ERError($"Not available command: {Command}");

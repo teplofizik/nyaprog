@@ -30,7 +30,7 @@ namespace Programmer.Modules
 
             Id = $"legacy:{Tool.Name}";
             Cmds = Tool.GetCommands()
-                       .Select(N => (ICommand)new LegacyCommand(this, N))
+                       .Select(N => (ICommand)new LegacyCommand(this, N, Tool.GetCommandParameters(N)))
                        .ToArray();
         }
 
@@ -59,11 +59,15 @@ namespace Programmer.Modules
     {
         private readonly LegacyToolModule Module;
 
-        public LegacyCommand(LegacyToolModule Module, string Name)
+        public LegacyCommand(LegacyToolModule Module, string Name, CommandParameter[] Parameters)
         {
             this.Module = Module;
             Id = Name;
-            Descriptor = new CommandDescriptor($"{Module.Id}.{Name}") { Title = Name };
+            Descriptor = new CommandDescriptor($"{Module.Id}.{Name}")
+            {
+                Title = Name,
+                Parameters = Parameters ?? new CommandParameter[0]
+            };
         }
 
         public string Id { get; }
@@ -74,12 +78,16 @@ namespace Programmer.Modules
         {
             var R = Module.Exec(Id, Ctx.Args);
 
+            CommandResult Res;
             switch (R.Result)
             {
-                case ExecResultType.Ok: return CommandResult.Ok(R.Message);
-                case ExecResultType.Warning: return CommandResult.Warning(R.Message);
-                default: return CommandResult.Error(R.Message);
+                case ExecResultType.Ok: Res = CommandResult.Ok(R.Message); break;
+                case ExecResultType.Warning: Res = CommandResult.Warning(R.Message); break;
+                default: Res = CommandResult.Error(R.Message); break;
             }
+
+            Res.Outputs.Append(R.Outputs);
+            return Res;
         }
     }
 }

@@ -26,7 +26,10 @@ namespace Programmer.Tool.XMLTools.XML
 
         // Определение предупреждений в выводе утилиты
         public List<XMLResultDetector> WarningMask = new List<XMLResultDetector>();
-        
+
+        // Извлечение выходных переменных из вывода утилиты
+        public List<XMLOutput> Outputs = new List<XMLOutput>();
+
         // Доступные опции
         public ArgumentList Defaults = new ArgumentList();
     }

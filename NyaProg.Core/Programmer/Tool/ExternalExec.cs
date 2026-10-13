@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
+using Programmer.Modules;
 using Programmer.Options.Rewrite;
 using Extension.Argument;
 
@@ -10,61 +10,31 @@ namespace Programmer.Tool
 {
     static class ExternalExec
     {
-        private static string[] GetParams(string Command)
-        {
-            var Match = Regex.Match(Command, @"\{([^};]*)\}");
-            var Res = new List<string>();
-
-            for (int i = 1; i < Match.Groups.Count; i++)
-            {
-                var G = Match.Groups[i].Value;
-
-                Res.Add(G);
-            }
-            return Res.ToArray();
-        }
-
         /// <summary>
-        /// Обработка командной строки
+        /// Обработка командной строки: подстановка {name} с учётом правил перезаписи.
         /// </summary>
-        /// <param name="Command"></param>
-        /// <param name="Args"></param>
-        /// <returns></returns>
         private static string ProcessCommand(string Command, ArgumentList Args, OptRewrite[] Rewrite)
         {
-            var Params = GetParams(Command);
-
-            while (Params.Length > 0)
+            return CommandTemplating.Process(Command, K =>
             {
-                foreach (var K in Params)
+                var Res = Args.Get(K);
+                if (Res == null)
                 {
-                    var Res = Args.Get(K);
-                    if (Res == null)
+                    // Такого параметра нет, проверим переназначение
+                    foreach (var R in Rewrite)
                     {
-                        // Такого параметра нет, проверим переназначение
-                        foreach (var R in Rewrite)
+                        if (R.Check(K))
                         {
-                            if (R.Check(K))
-                            {
-                                Res = R.GetValue(K, Args);
-                                break;
-                            }
+                            Res = R.GetValue(K, Args);
+                            break;
                         }
                     }
-                    if (Res == null)
-                    {
-                        // Увы, но заменять не на что, генерируем исключение
-                        throw new InvalidOperationException($"no argument for param {{{K}}}: {Command}");
-                    }
-                    Command = Command.Replace($"{{{K}}}", Res);
                 }
 
-                Params = GetParams(Command);
-            }
-
-            return Command;
+                return Res;
+            });
         }
-        
+
         /// <summary>
         /// Выполнить внешнее ПО
         /// </summary>

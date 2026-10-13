@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
+    <!-- Встроенные кодовые инструменты. При появлении хостинга плагинов (Фаза 3)
+         эта ссылка снимается в пользу discovery. -->
+    <ProjectReference Include="..\NyaProg.Modules.Internal\NyaProg.Modules.Internal.csproj" />
+    <ProjectReference Include="..\NyaProg.Modules.Net\NyaProg.Modules.Net.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 
 using Extension.Argument;
+using Programmer.Modules;
 using Programmer.Tool.XMLTools.XML;
 using Programmer.Options.Rewrite;
 
@@ -51,6 +52,11 @@ namespace Programmer.Tool.XMLTools
         /// Список поддерживаемых команд.
         /// </summary>
         public override string[] GetCommands() => T.GetCommands();
+
+        /// <summary>
+        /// Схема параметров команды.
+        /// </summary>
+        public override CommandParameter[] GetCommandParameters(string Command) => T.GetCommandParameters(Command);
 
         /// <summary>
         /// Выполнить команду (с набором аргументов)

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Extension.Argument;
 using Programmer.Tool;
 using Programmer.Tool.Toolset;
 using Programmer.Project;
 using Programmer.Options.Rewrite;
 using Programmer.Modules;
+using Programmer.Modules.Internal;
+using Programmer.Modules.Net;
 using Programmer.Platform;
 using System.IO;
 using Programmer.Input;
@@ -29,7 +32,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Список утилит
         /// </summary>
-        ToolSet CustTS = new CustomToolset(null);
+        ToolSet CustTS = new CustomToolset();
 
         /// <summary>
         /// Список проектов
@@ -113,6 +116,38 @@ namespace Programmer.Environment
         /// </summary>
         public string Soft => Path.Combine(Root, "Soft");
 
+        /// <summary>
+        /// Запуск внешних процессов (IModuleHost).
+        /// </summary>
+        public IProcessRunner ProcessRunner { get; } = new SystemProcessRunner();
+
+        /// <summary>
+        /// Сетевые запросы (IModuleHost).
+        /// </summary>
+        public IHttpFetcher Http { get; } = new HttpFetcher();
+
+        /// <summary>
+        /// Файловые операции (IModuleHost).
+        /// </summary>
+        public IFileSystem Files { get; } = new FileSystem();
+
+        /// <summary>
+        /// Разрешить значение плейсхолдера с учётом правил перезаписи (алиасов).
+        /// </summary>
+        public string ResolveArgument(string Name, ArgumentList Args)
+        {
+            var Value = Args.Get(Name);
+            if (Value != null) return Value;
+
+            foreach (var R in OptionAlias)
+            {
+                if (R.Check(Name))
+                    return R.GetValue(Name, Args);
+            }
+
+            return null;
+        }
+
         /// **************************************************************
         /// Методы
         /// **************************************************************
@@ -139,7 +174,7 @@ namespace Programmer.Environment
             UnloadToolset();
 
             ProgTS = new ProgToolset();
-            CustTS = new CustomToolset(UI);
+            CustTS = new CustomToolset();
             
             foreach(var P in Conf.ProgToolsets)  ProgTS.Load(P);
             foreach (var P in Conf.CustToolsets) CustTS.Load(P);
@@ -155,6 +190,10 @@ namespace Programmer.Environment
 
             foreach (var T in ProgTS.Tools) RegisterTool(T, ToolKind.Programmer);
             foreach (var T in CustTS.Tools) RegisterTool(T, T.Kind);
+
+            // Встроенные кодовые инструменты (нативные ICommand).
+            foreach (var T in InternalModule.CreateAll()) CmdRegistry.Register(T);
+            foreach (var T in NetModule.CreateAll()) CmdRegistry.Register(T);
         }
 
         private void RegisterTool(UniTool T, ToolKind Kind)
@@ -248,22 +287,6 @@ namespace Programmer.Environment
             }
 
             return Tools.ToArray();
-        }
-
-        /// <summary>
-        /// Получить набор по названию команды
-        /// </summary>
-        /// <param name="Command"></param>
-        /// <returns></returns>
-        public UniTool GetToolByCommand(string Command)
-        {
-            foreach (var T in CustTS.Tools)
-            {
-                if (T.CmdAvail(Command))
-                    return T;
-            }
-
-            return null;
         }
 
         /// <summary>

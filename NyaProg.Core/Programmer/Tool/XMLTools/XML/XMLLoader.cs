@@ -90,6 +90,26 @@ namespace Programmer.Tool.XMLTools.XML
                             Subtree.Close();
                         }
                         break;
+                    case "outputs":
+                        {
+                            XmlLoad Subtree = X.GetSubtree();
+                            while (Subtree.Read())
+                            {
+                                switch (Subtree.ElementName)
+                                {
+                                    case "regex":
+                                        A.Outputs.Add(new XMLOutput
+                                        {
+                                            Name = Subtree.GetAttribute("name"),
+                                            Pattern = Subtree.GetAttribute("value"),
+                                            Group = Subtree.HasAttribute("group") ? Subtree.GetIntAttribute("group") : 1
+                                        });
+                                        break;
+                                }
+                            }
+                            Subtree.Close();
+                        }
+                        break;
                 }
             }
 
