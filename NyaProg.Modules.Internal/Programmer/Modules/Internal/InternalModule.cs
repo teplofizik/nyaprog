@@ -1,13 +1,19 @@
+using System.Collections.Generic;
+
 using Programmer.Modules;
 
 namespace Programmer.Modules.Internal
 {
     /// <summary>
-    /// Набор встроенных (кодовых) инструментов ядра.
+    /// Модуль встроенных (кодовых) инструментов ядра.
     /// </summary>
-    public static class InternalModule
+    public sealed class InternalModule : ModuleBase
     {
-        public static ITool[] CreateAll() => new ITool[]
+        public override string Id => "core.internal";
+
+        public override string Name => "Internal";
+
+        public override IEnumerable<ITool> GetTools() => new ITool[]
         {
             new FileOpsTool(),
             new MessageTool(),

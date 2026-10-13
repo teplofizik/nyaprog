@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>NyaProg.Hosting</AssemblyName>
+    <RootNamespace>NyaProg.Hosting</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
+    <ProjectReference Include="..\NyaProg.Core\NyaProg.Core.csproj" />
+  </ItemGroup>
+
+</Project>

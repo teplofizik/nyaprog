@@ -9,8 +9,6 @@ using Programmer.Tool.Toolset;
 using Programmer.Project;
 using Programmer.Options.Rewrite;
 using Programmer.Modules;
-using Programmer.Modules.Internal;
-using Programmer.Modules.Net;
 using Programmer.Platform;
 using System.IO;
 using Programmer.Input;
@@ -188,15 +186,28 @@ namespace Programmer.Environment
             CmdRegistry = new CommandRegistry();
             Modules = new Dictionary<UniTool, ITool>();
 
-            foreach (var T in ProgTS.Tools) RegisterTool(T, ToolKind.Programmer);
-            foreach (var T in CustTS.Tools) RegisterTool(T, T.Kind);
-
-            // Встроенные кодовые инструменты (нативные ICommand).
-            foreach (var T in InternalModule.CreateAll()) CmdRegistry.Register(T);
-            foreach (var T in NetModule.CreateAll()) CmdRegistry.Register(T);
+            foreach (var T in ProgTS.Tools) RegisterLegacy(T, ToolKind.Programmer);
+            foreach (var T in CustTS.Tools) RegisterLegacy(T, T.Kind);
         }
 
-        private void RegisterTool(UniTool T, ToolKind Kind)
+        /// <summary>
+        /// Зарегистрировать модуль (плагин) и его инструменты.
+        /// </summary>
+        public void RegisterModule(IModule Module)
+        {
+            if (Module == null) return;
+
+            Module.Initialize(this);
+            foreach (var T in Module.GetTools())
+                CmdRegistry.Register(T);
+        }
+
+        /// <summary>
+        /// Зарегистрировать отдельный инструмент.
+        /// </summary>
+        public void RegisterTool(ITool Tool) => CmdRegistry.Register(Tool);
+
+        private void RegisterLegacy(UniTool T, ToolKind Kind)
         {
             var M = new LegacyToolModule(T, Kind, OptRewriteRules);
             CmdRegistry.Register(M);

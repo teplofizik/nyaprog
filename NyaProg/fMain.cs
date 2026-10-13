@@ -15,6 +15,7 @@ using Programmer.Controls.Mappers;
 using Programmer.Tool;
 using Programmer.Options;
 using Programmer.Options.Types;
+using NyaProg.Hosting;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -246,6 +247,8 @@ namespace NyaProg
         {
             PrState = new State("config.xml", new WinFormsUserInterface());
             Log.LogFileName = PrState.Env.Conf.Log;
+
+            PluginHost.Load(PrState.Env, PrState.Env.Conf.Plugins);
 
             PrState.ActionCompleted += PrState_ActionCompleted;
             UpdateProjList();

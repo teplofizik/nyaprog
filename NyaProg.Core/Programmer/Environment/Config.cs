@@ -30,6 +30,11 @@ namespace Programmer.Environment
         public List<string> Projects = new List<string>();
 
         /// <summary>
+        /// Пути к каталогам с DLL-плагинами
+        /// </summary>
+        public List<string> Plugins = new List<string>();
+
+        /// <summary>
         /// Предпочтения
         /// </summary>
         public string Preferences = System.IO.Path.Combine("Base", "pref.xml");
@@ -56,6 +61,7 @@ namespace Programmer.Environment
             if (ProgToolsets.Count == 0) ProgToolsets.Add(Tools);
             if (CustToolsets.Count == 0) CustToolsets.Add(System.IO.Path.Combine(Tools, "Custom"));
             if (Projects.Count == 0) Projects.Add(System.IO.Path.Combine(PreprocessPath("{root}"), "Projects"));
+            if (Plugins.Count == 0) Plugins.Add(System.IO.Path.Combine(PreprocessPath("{root}"), "plugins"));
         }
 
         private void LoadDirs(XmlLoad X, List<string> Dirs)
@@ -79,6 +85,7 @@ namespace Programmer.Environment
             ProgToolsets.Clear();
             CustToolsets.Clear();
             Projects.Clear();
+            Plugins.Clear();
 
             while (X.Read())
             {
@@ -88,6 +95,7 @@ namespace Programmer.Environment
                     case "toolkits": LoadDirs(X.GetSubtree(), ProgToolsets); break;
                     case "custom": LoadDirs(X.GetSubtree(), CustToolsets); break;
                     case "projects": LoadDirs(X.GetSubtree(), Projects); break;
+                    case "plugins": LoadDirs(X.GetSubtree(), Plugins); break;
                 }
             }
 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 
 using Extension.Argument;
+using NyaProg.Hosting;
 using Programmer.Environment;
 using Programmer.Modules;
 using Programmer.Project;
@@ -32,6 +33,7 @@ namespace NyaProg.Cli
 
             var Env = new ProgEnv();
             Env.Load(ConfigFile);
+            PluginHost.Load(Env, Env.Conf.Plugins);
 
             if ((args.Length >= 3) && (args[1] == "--exec"))
                 return ExecCommand(Env, args[2], args.Skip(3).ToArray());

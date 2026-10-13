@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
     <ProjectReference Include="..\NyaProg.Core\NyaProg.Core.csproj" />
+    <ProjectReference Include="..\NyaProg.Hosting\NyaProg.Hosting.csproj" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 
@@ -22,5 +23,22 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+
+  <!-- Встроенные модули: только сборка; сами DLL деплоятся в plugins. -->
+  <ItemGroup>
+    <ProjectReference Include="..\NyaProg.Modules.Internal\NyaProg.Modules.Internal.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Modules.Net\NyaProg.Modules.Net.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Plugins.Sample\NyaProg.Plugins.Sample.csproj" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+  <Target Name="CopyPlugins" AfterTargets="Build">
+    <ItemGroup>
+      <PluginFiles Include="..\NyaProg.Modules.Internal\bin\$(Configuration)\*.dll" Exclude="..\NyaProg.Modules.Internal\bin\$(Configuration)\Programmer.Abstractions.dll" />
+      <PluginFiles Include="..\NyaProg.Modules.Net\bin\$(Configuration)\*.dll" Exclude="..\NyaProg.Modules.Net\bin\$(Configuration)\Programmer.Abstractions.dll" />
+      <PluginFiles Include="..\NyaProg.Plugins.Sample\bin\$(Configuration)\NyaProg.Plugins.Sample.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(OutDir)plugins" />
+    <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(OutDir)plugins" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

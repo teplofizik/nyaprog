@@ -1,13 +1,19 @@
+using System.Collections.Generic;
+
 using Programmer.Modules;
 
 namespace Programmer.Modules.Net
 {
     /// <summary>
-    /// Сетевые инструменты: download (файл) и lookup (значения в переменные).
+    /// Модуль сетевых инструментов: download (файл) и lookup (значения в переменные).
     /// </summary>
-    public static class NetModule
+    public sealed class NetModule : ModuleBase
     {
-        public static ITool[] CreateAll() => new ITool[]
+        public override string Id => "core.net";
+
+        public override string Name => "Net";
+
+        public override IEnumerable<ITool> GetTools() => new ITool[]
         {
             new NetTool()
         };
@@ -15,7 +21,7 @@ namespace Programmer.Modules.Net
 
     public sealed class NetTool : CodedToolBase
     {
-        public NetTool() : base("core.net", "Net")
+        public NetTool() : base("core.net.tool", "Net")
         {
             AddCommand(new DownloadCommand());
             AddCommand(new LookupCommand());
