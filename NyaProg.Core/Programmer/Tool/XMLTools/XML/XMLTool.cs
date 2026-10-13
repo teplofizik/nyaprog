@@ -60,6 +60,11 @@ namespace Programmer.Tool.XMLTools.XML
         
         public bool CmdAvail(string Command) => Actions.Exists(A => (A.Name == Command));
 
+        /// <summary>
+        /// Список поддерживаемых команд.
+        /// </summary>
+        public string[] GetCommands() => Actions.Select(A => A.Name).ToArray();
+
         private XMLToolAction GetAction(string Command)
         {
             foreach(var A in Actions)

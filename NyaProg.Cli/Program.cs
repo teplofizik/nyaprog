@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using Programmer.Environment;
+using Programmer.Modules;
 
 namespace NyaProg.Cli
 {
@@ -36,6 +38,15 @@ namespace NyaProg.Cli
                 foreach (var S in P.Scripts)
                     Console.WriteLine($"      - {S.Name} ({S.Actions.Count} steps)");
             }
+
+            // Реестр команд (Фаза 1).
+            Console.WriteLine($"Registry tools: {Env.Commands.Tools.Count}");
+            foreach (var T in Env.Commands.Tools)
+                Console.WriteLine($"  [{T.Kind}] {T.Name}: {string.Join(", ", T.GetCommands().Select(C => C.Id))}");
+
+            ICommand Cmd;
+            foreach (var Name in new[] { "copy", "message", "wflash", "bincvt" })
+                Console.WriteLine($"  resolve '{Name}': {(Env.Commands.TryResolve(Name, out Cmd) ? Cmd.Descriptor.Id : "<none>")}");
 
             return 0;
         }

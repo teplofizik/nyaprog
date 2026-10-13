@@ -48,6 +48,11 @@ namespace Programmer.Tool.XMLTools
         public override bool CmdAvail(string Command) => T.CmdAvail(Command);
 
         /// <summary>
+        /// Список поддерживаемых команд.
+        /// </summary>
+        public override string[] GetCommands() => T.GetCommands();
+
+        /// <summary>
         /// Выполнить команду (с набором аргументов)
         /// </summary>
         /// <param name="Command"></param>

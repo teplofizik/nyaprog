@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Extension.Argument;
+using Programmer.Modules;
 using Programmer.Options.Rewrite;
 
 namespace Programmer.Tool.InternalTools
@@ -16,6 +17,16 @@ namespace Programmer.Tool.InternalTools
         {
             this.Commands = Commands;
         }
+
+        /// <summary>
+        /// Встроенные инструменты.
+        /// </summary>
+        public override ToolKind Kind => ToolKind.Internal;
+
+        /// <summary>
+        /// Список поддерживаемых команд.
+        /// </summary>
+        public override string[] GetCommands() => Commands;
 
         /// <summary>
         /// Внутренние инструменты по умолчанию доступны

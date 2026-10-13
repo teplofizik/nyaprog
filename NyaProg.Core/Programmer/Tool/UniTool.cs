@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Extension.Argument;
+using Programmer.Modules;
 using Programmer.Options.Rewrite;
 
 namespace Programmer.Tool
@@ -29,10 +30,20 @@ namespace Programmer.Tool
         public string Name;
 
         /// <summary>
+        /// Роль инструмента (переопределяется для встроенных утилит).
+        /// </summary>
+        public virtual ToolKind Kind => ToolKind.Utility;
+
+        /// <summary>
         /// Список тегов
         /// </summary>
         /// <returns></returns>
         public string[] GetTags() => Tags.ToArray();
+
+        /// <summary>
+        /// Список поддерживаемых команд (для реестра).
+        /// </summary>
+        public virtual string[] GetCommands() => new string[0];
 
         /// <summary>
         /// Список поддерживаемых архитектур

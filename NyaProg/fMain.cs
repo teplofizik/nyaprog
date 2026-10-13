@@ -244,7 +244,7 @@ namespace NyaProg
 
         private void InitProgrammer()
         {
-            PrState = new State("config.xml");
+            PrState = new State("config.xml", new WinFormsUserInterface());
             Log.LogFileName = PrState.Env.Conf.Log;
 
             PrState.ActionCompleted += PrState_ActionCompleted;

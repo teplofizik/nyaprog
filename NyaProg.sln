@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Programmer.Abstractions", "Programmer.Abstractions\Programmer.Abstractions.csproj", "{922C284C-5B49-42C3-98BD-96E3EF98A209}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Core", "NyaProg.Core\NyaProg.Core.csproj", "{FD9EF842-30CA-464E-BF55-94CFE934AAA0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Cli", "NyaProg.Cli\NyaProg.Cli.csproj", "{AE1341FF-8F21-465F-BF27-F7F4889A30ED}"
@@ -27,6 +29,10 @@ Global
 		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCDAB5FD-412E-4F32-A2FF-A71A0F72F607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{922C284C-5B49-42C3-98BD-96E3EF98A209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{922C284C-5B49-42C3-98BD-96E3EF98A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{922C284C-5B49-42C3-98BD-96E3EF98A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{922C284C-5B49-42C3-98BD-96E3EF98A209}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

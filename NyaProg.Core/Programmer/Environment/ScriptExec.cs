@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Extension.Argument;
+using Programmer.Modules;
 using Programmer.Project;
 using Programmer.Tool;
 using System.IO;
@@ -87,28 +88,34 @@ namespace Programmer.Environment
         public ExecResult Exec(ProgEnv E, UniTool T, Project.Project P, Script S, Project.Action A, ArgumentList Options)
         {
             var Command = A.Command;
-            UniTool ExecT = null;
 
-            // Проверим, относится ли это к программатору
-            if (T.CmdAvail(Command))
-                ExecT = T;
-            else
-            {
-                // Это не команда программатору, поищем в библиотеке утилит
-                var Tool = E.GetToolByCommand(Command);
-                if (Tool != null) ExecT = Tool;
-            }
+            // Команда выбранного программатора имеет приоритет; иначе ищем по реестру.
+            var Preferred = E.GetModule(T);
 
-            if (ExecT != null)
+            ICommand Cmd;
+            if (E.Commands.TryResolve(Command, Preferred, out Cmd))
             {
-                // Есть такая команда в библиотеке
                 // Сформируем таблицу параметров
                 var FullArgs = GetArgs(T, P, S, A, Options);
+                var Ctx = new CommandContext(Command, FullArgs, P.Dir, E);
 
-                return ExecT.Exec(Command, FullArgs, E.OptRewriteRules);
+                return Map(Cmd.Execute(Ctx));
             }
             else
                 return new ERError($"Not available command: {Command}");
+        }
+
+        /// <summary>
+        /// Преобразовать результат команды к legacy-формату.
+        /// </summary>
+        private static ExecResult Map(CommandResult R)
+        {
+            switch (R.Status)
+            {
+                case CommandStatus.Ok: return new EROk();
+                case CommandStatus.Warning: return new ERWarning(R.Message);
+                default: return new ERError(R.Message);
+            }
         }
     }
 }

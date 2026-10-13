@@ -6,6 +6,7 @@ using System.Text;
 
 using Programmer.Project;
 using Programmer.Tool;
+using Programmer.Platform;
 using System.Threading;
 using Extension.Argument;
 
@@ -126,9 +127,9 @@ namespace Programmer.Environment
         /// Конструктор с указанием файла конфигурации
         /// </summary>
         /// <param name="Config"></param>
-        public State(string Config)
+        public State(string Config, IUserInterface UI = null)
         {
-            Env = new ProgEnv();
+            Env = new ProgEnv(UI);
             if (Config != null)
                 Env.Load(Config);
         }

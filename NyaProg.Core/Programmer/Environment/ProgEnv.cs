@@ -7,12 +7,14 @@ using Programmer.Tool;
 using Programmer.Tool.Toolset;
 using Programmer.Project;
 using Programmer.Options.Rewrite;
+using Programmer.Modules;
+using Programmer.Platform;
 using System.IO;
 using Programmer.Input;
 
 namespace Programmer.Environment
 {
-    public class ProgEnv
+    public class ProgEnv : IModuleHost
     {
         /// <summary>
         /// Конфигурация
@@ -27,7 +29,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Список утилит
         /// </summary>
-        ToolSet CustTS = new CustomToolset();
+        ToolSet CustTS = new CustomToolset(null);
 
         /// <summary>
         /// Список проектов
@@ -48,6 +50,29 @@ namespace Programmer.Environment
         /// Перезапись параметров
         /// </summary>
         List<OptRewrite> OptionAlias = new List<OptRewrite>();
+
+        /// <summary>
+        /// Взаимодействие с пользователем (передаётся извне).
+        /// </summary>
+        public IUserInterface UI { get; }
+
+        /// <summary>
+        /// Реестр команд.
+        /// </summary>
+        CommandRegistry CmdRegistry = new CommandRegistry();
+
+        /// <summary>
+        /// Соответствие legacy-инструментов их модулям (для приоритета в реестре).
+        /// </summary>
+        Dictionary<UniTool, ITool> Modules = new Dictionary<UniTool, ITool>();
+
+        /// <summary>
+        /// Конструктор. UI опционален — по умолчанию headless-заглушка.
+        /// </summary>
+        public ProgEnv(IUserInterface UI = null)
+        {
+            this.UI = UI ?? new NullUserInterface();
+        }
 
         /// **************************************************************
         /// Свойства
@@ -72,6 +97,21 @@ namespace Programmer.Environment
         /// Библиотека поддерживаемых типов пользовательского ввода
         /// </summary>
         public InputTypeLibrary InputTypes => InTypes;
+
+        /// <summary>
+        /// Реестр команд (IModuleHost).
+        /// </summary>
+        public ICommandRegistry Commands => CmdRegistry;
+
+        /// <summary>
+        /// Корневой каталог приложения ({root}) — каталог сборки.
+        /// </summary>
+        public string Root => Path.GetDirectoryName(Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location));
+
+        /// <summary>
+        /// Каталог Soft ({soft}).
+        /// </summary>
+        public string Soft => Path.Combine(Root, "Soft");
 
         /// **************************************************************
         /// Методы
@@ -99,10 +139,38 @@ namespace Programmer.Environment
             UnloadToolset();
 
             ProgTS = new ProgToolset();
-            CustTS = new CustomToolset();
+            CustTS = new CustomToolset(UI);
             
             foreach(var P in Conf.ProgToolsets)  ProgTS.Load(P);
             foreach (var P in Conf.CustToolsets) CustTS.Load(P);
+        }
+
+        /// <summary>
+        /// Построить реестр команд из загруженных инструментов.
+        /// </summary>
+        protected void BuildRegistry()
+        {
+            CmdRegistry = new CommandRegistry();
+            Modules = new Dictionary<UniTool, ITool>();
+
+            foreach (var T in ProgTS.Tools) RegisterTool(T, ToolKind.Programmer);
+            foreach (var T in CustTS.Tools) RegisterTool(T, T.Kind);
+        }
+
+        private void RegisterTool(UniTool T, ToolKind Kind)
+        {
+            var M = new LegacyToolModule(T, Kind, OptRewriteRules);
+            CmdRegistry.Register(M);
+            Modules[T] = M;
+        }
+
+        /// <summary>
+        /// Модуль (<see cref="ITool"/>) для legacy-инструмента (для приоритета в реестре).
+        /// </summary>
+        public ITool GetModule(UniTool T)
+        {
+            ITool M;
+            return ((T != null) && Modules.TryGetValue(T, out M)) ? M : null;
         }
 
         /// <summary>
@@ -151,6 +219,7 @@ namespace Programmer.Environment
             LoadToolset();
             LoadProjects();
             LoadOptRewrite();
+            BuildRegistry();
             Pref.Load(Conf.Preferences);
         }
 

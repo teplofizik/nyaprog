@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 using Extension.Argument;
 using Programmer.Options.Rewrite;
+using Programmer.Platform;
 
 namespace Programmer.Tool.InternalTools
 {
@@ -15,7 +15,12 @@ namespace Programmer.Tool.InternalTools
     /// </summary>
     class TlMessages : TlBase
     {
-        public TlMessages() : base("Messages", new string[] { "message", "question" }) { }
+        private readonly IUserInterface UI;
+
+        public TlMessages(IUserInterface UI) : base("Messages", new string[] { "message", "question" })
+        {
+            this.UI = UI ?? new NullUserInterface();
+        }
 
         protected override ExecResult Exec(string Command, string Dir, string Option, ArgumentList Args, OptRewrite[] Rewrite)
         {
@@ -29,7 +34,7 @@ namespace Programmer.Tool.InternalTools
         
         protected ExecResult Question(string Dir, string Option)
         {
-            bool Result = MessageBox.Show(Option, "Вопрос", MessageBoxButtons.YesNo) == DialogResult.Yes;
+            bool Result = UI.Question(Option, "Вопрос");
 
             if(Result)
                 return new EROk();
@@ -39,7 +44,7 @@ namespace Programmer.Tool.InternalTools
 
         protected ExecResult Message(string Dir, string Option)
         {
-            MessageBox.Show(Option, "Сообщение");
+            UI.Message(Option, "Сообщение");
             return new EROk();
         }
         
