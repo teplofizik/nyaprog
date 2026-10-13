@@ -75,18 +75,18 @@ namespace Programmer.Controls
         /// <param name="Actions"></param>
         /// <param name="M"></param>
         /// <returns></returns>
-        public static StepControl[] PlaceSteps(Control Base, Project.Action[] Actions, StepMapper M)
+        public static StepControl[] PlaceSteps(Control Base, Project.Step[] Steps, StepMapper M)
         {
-            var Steps = new List<StepControl>();
+            var Res = new List<StepControl>();
             M.Reset();
-            foreach (var A in Actions)
+            foreach (var St in Steps)
             {
-                var S = M.CreateNextControl(A.Comment, A) as StepControl;
-                Steps.Add(S);
-                Base.Controls.Add(S);
+                var C = M.CreateNextControl(St.Title, St) as StepControl;
+                Res.Add(C);
+                Base.Controls.Add(C);
             }
 
-            return Steps.ToArray();
+            return Res.ToArray();
         }
 
         /// <summary>
@@ -206,6 +206,23 @@ namespace Programmer.Controls
         public static ComboBox PlaceComboBox(Control Base, object[] Items, object Tag)
         {
             return PlaceComboBox(Base, Items, Tag, 0, 0, Base.Width, Base.Height);
+        }
+
+        public static CheckBox PlaceCheckBox(Control Base, string Text, bool Checked, object Tag)
+        {
+            var CB = new CheckBox();
+
+            CB.Text = Text;
+            CB.Checked = Checked;
+            CB.AutoSize = false;
+            CB.Width = Base.Width;
+            CB.Height = Base.Height;
+            CB.Left = 0;
+            CB.Top = 0;
+            CB.Tag = Tag;
+
+            Base.Controls.Add(CB);
+            return CB;
         }
     }
 }

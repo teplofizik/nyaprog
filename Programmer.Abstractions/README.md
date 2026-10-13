@@ -30,6 +30,14 @@
   [алиасы](../docs/external-commands.md#правила-перезаписи-алиасы) ·
   [запуск процесса](../docs/external-commands.md#запуск-процесса) ·
   [external](../docs/external-commands.md#нативная-команда-external)
+- **[Формат `.nyap` — прошивочный проект](../docs/nyap.md):**
+  [структура проекта](../docs/nyap.md#структура-проекта) ·
+  [скрипт](../docs/nyap.md#скрипт-script) ·
+  [поле ввода](../docs/nyap.md#поле-ввода-input) ·
+  [шаги](../docs/nyap.md#шаги-steps) ·
+  [set](../docs/nyap.md#присвоение-set) ·
+  [ветвление if/else](../docs/nyap.md#ветвление-if--else) ·
+  [условия](../docs/nyap.md#условия-выражения)
 - **[Сетевые команды download/lookup](../NyaProg.Modules.Net/README.md)**
 
 ---

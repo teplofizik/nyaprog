@@ -44,6 +44,11 @@ namespace Programmer.Environment
         public Script Script;
 
         /// <summary>
+        /// План выполнения: шаги с развёрнутыми ветвлениями и применёнными условиями.
+        /// </summary>
+        public List<Step> Plan = new List<Step>();
+
+        /// <summary>
         /// Выбранный выполнятор скрипта
         /// </summary>
         public ScriptExec Executer;
@@ -97,6 +102,7 @@ namespace Programmer.Environment
         {
             Action = 0;
             Script = S;
+            Plan = new List<Step>();
             if (S != null)
             {
                 Executer = new ScriptExec();
@@ -139,7 +145,31 @@ namespace Programmer.Environment
         /// </summary>
         public void ActionThread()
         {
-            var Result = Executer.Exec(Env, Tool, Project, Script, Script.Actions[Action], CompiledArgs);
+            var St = (Action < Plan.Count) ? Plan[Action] : null;
+
+            ExecResult Result;
+
+            var Set = St as SetStep;
+            if (Set != null)
+            {
+                // Присвоение переменной окружения (значение — шаблон).
+                if (CompiledArgs == null) CompiledArgs = new ArgumentList();
+
+                try
+                {
+                    var V = Modules.CommandTemplating.Process(Set.Value ?? "", N => Env.ResolveArgument(N, CompiledArgs));
+                    CompiledArgs.Set(Set.Name, V);
+                    Result = new EROk();
+                }
+                catch (Exception E)
+                {
+                    Result = new ERError(E.Message);
+                }
+            }
+            else if (St is Project.Action)
+                Result = Executer.Exec(Env, Tool, Project, Script, (Project.Action)St, CompiledArgs);
+            else
+                Result = new ERError("Invalid step");
 
             Debug.WriteLine(String.Format("   {0:s}: {1:s}", (Result.Result != ExecResultType.Error) ? "OK" : "FAIL", Result.Message));
             ActionCompleted?.Invoke(this, new ActionEventArgs(Action, Result));
@@ -158,7 +188,7 @@ namespace Programmer.Environment
         {
             Action = Index;
             Cancelled = false;
-            if (Index < Script.Actions.Count)
+            if (Index < Plan.Count)
             {
                 Thread Thr = new Thread(ActionThread);
                 Thr.Start();

@@ -51,7 +51,7 @@ namespace NyaProg
             Options.Set("input", "123456789");
             Options.Append(Tool.GetDefaultOptionsValues());
 
-            foreach (var A in Script.Actions)
+            foreach (var A in Script.Steps.OfType<Programmer.Project.Action>())
             {
                 var Res = SE.Exec(E, Tool, P, Script, A, Options);
                 if (Res.Result == ExecResultType.Error)
@@ -179,12 +179,12 @@ namespace NyaProg
             ComponentPlacer.CleanContainer(gbSteps);
 
             var S = PrState.Script;
-            if(S != null)
+            if (S != null)
             {
-                var Actions = S.GetActions(PrState);
+                PrState.Plan = S.GetSteps(PrState);
 
                 StepsControls = ComponentPlacer.PlaceSteps(gbSteps,
-                                                           Actions.ToArray(),
+                                                           PrState.Plan.ToArray(),
                                                            new StepMapper(9, 25));
             }
         }
@@ -310,7 +310,7 @@ namespace NyaProg
                else if (e.Result.Result == ExecResultType.Warning)
                    SetStatus(Color.Yellow, e.Result.Message);
 
-               if (PrState.Action < PrState.Script.Actions.Count - 1)
+                if (PrState.Action < PrState.Plan.Count - 1)
                {
                    if (PrState.Cancelled)
                    {
@@ -336,17 +336,16 @@ namespace NyaProg
         /// <param name="Text"></param>
         private void SetStepResult(int Index, bool Process, ExecResult R)
         {
-            if(StepsControls != null)
+            if ((StepsControls == null) || (Index < 0) || (Index >= PrState.Plan.Count)) return;
+
+            var Target = PrState.Plan[Index];
+            foreach (var S in StepsControls)
             {
-                foreach (var S in StepsControls)
+                if (ReferenceEquals(S.Tag, Target))
                 {
-                    var A = S.Tag as Programmer.Project.Action;
-                    if (A == PrState.Script.Actions[Index])
-                    {
-                        S.Process = Process;
-                        S.Result = R;
-                        S.Invalidate();
-                    }
+                    S.Process = Process;
+                    S.Result = R;
+                    S.Invalidate();
                 }
             }
         }

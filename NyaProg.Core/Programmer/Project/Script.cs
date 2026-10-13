@@ -50,9 +50,9 @@ namespace Programmer.Project
         public List<Options.Option> Options = new List<Options.Option>();
 
         /// <summary>
-        /// Список действий
+        /// Список шагов (дерево: команды, set, if)
         /// </summary>
-        public List<Action> Actions = new List<Action>();
+        public List<Step> Steps = new List<Step>();
 
         /// <summary>
         /// Параметр для ввода пользователем
@@ -68,28 +68,33 @@ namespace Programmer.Project
         }
 
         /// <summary>
-        /// Получить этапы программирования в зависимости от программатора 
-        /// (бутлоадер например, не может записать самого себя)
+        /// Построить план этапов: развернуть ветвления (if/else) по текущему
+        /// окружению и отфильтровать шаги по их условиям.
         /// </summary>
-        /// <param name="E"></param>
+        /// <param name="S"></param>
         /// <returns></returns>
-        public Action[] GetActions(State S)
+        public List<Step> GetSteps(State S)
         {
-            var Acts = new List<Action>();
+            var Res = new List<Step>();
+            Flatten(Steps, S, Res);
+            return Res;
+        }
 
-            var SE = new ScriptExec();
-            foreach(var A in Actions)
+        private static void Flatten(List<Step> In, State S, List<Step> Out)
+        {
+            foreach (var St in In)
             {
-                if (A.Cond == null)
-                    Acts.Add(A);
-                else
-                {
-                    if(ConditionChecker.Check(A.Cond, S))
-                        Acts.Add(A);
-                }
-            }
+                if (St == null) continue;
 
-            return Acts.ToArray();
+                var If = St as IfStep;
+                if (If != null)
+                {
+                    var Branch = ConditionChecker.Check(If.Condition, S) ? If.Then : If.Else;
+                    Flatten(Branch, S, Out);
+                }
+                else
+                    Out.Add(St);
+            }
         }
     }
 }

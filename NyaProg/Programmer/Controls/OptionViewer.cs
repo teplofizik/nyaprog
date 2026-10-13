@@ -111,6 +111,8 @@ namespace Programmer.Controls
                     return (EditControl as TextBox).Text;
                 else if (O.GetType() == typeof(OptionList))
                     return (EditControl as ComboBox).Text;
+                else if (O.GetType() == typeof(OptionBool))
+                    return (EditControl as CheckBox).Checked ? "1" : "0";
             }
             return "";
         }
@@ -138,6 +140,11 @@ namespace Programmer.Controls
                     int Index = CB.SelectedIndex;
 
                     AL.Append(OL.Items[Index].Values);
+                }
+                else if (O.GetType() == typeof(OptionBool))
+                {
+                    var OB = O as OptionBool;
+                    AL.Set(OB.ParamName, (EditControl as CheckBox).Checked ? OB.Value : "");
                 }
             }
             return AL;
@@ -190,6 +197,16 @@ namespace Programmer.Controls
                     if (OL.Items.Length > 0)
                         CB.SelectedIndex = 0;
                 }
+                else if (O.GetType() == typeof(OptionBool))
+                {
+                    var OB = O as OptionBool;
+                    var CB = EditControl as CheckBox;
+
+                    if (Value != null)
+                        CB.Checked = (Value != "0") && !string.Equals(Value, "false", StringComparison.OrdinalIgnoreCase);
+                    else
+                        CB.Checked = OB.Default;
+                }
             }
         }
 
@@ -211,6 +228,12 @@ namespace Programmer.Controls
                     var OL = O as OptionList;
                     EditControl = ComponentPlacer.PlaceComboBox(this, OL.Items, O);
                     (EditControl as ComboBox).SelectedIndexChanged += OptionViewer_SelectedIndexChanged;
+                }
+                else if (O.GetType() == typeof(OptionBool))
+                {
+                    var OB = O as OptionBool;
+                    EditControl = ComponentPlacer.PlaceCheckBox(this, OB.Name, OB.Default, O);
+                    (EditControl as CheckBox).CheckedChanged += OptionViewer_CheckedChanged;
                 }
                 else if(O.GetType() == typeof(OptionInput))
                 {
@@ -235,6 +258,11 @@ namespace Programmer.Controls
         }
 
         private void OptionViewer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnChange?.Invoke(this, new EventArgs());
+        }
+
+        private void OptionViewer_CheckedChanged(object sender, EventArgs e)
         {
             OnChange?.Invoke(this, new EventArgs());
         }

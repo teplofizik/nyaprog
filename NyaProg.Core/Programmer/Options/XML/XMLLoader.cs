@@ -75,11 +75,31 @@ namespace Programmer.Options.XML
             if (X.HasAttribute("id"))
                 O.ID = X.GetAttribute("id");
 
-            var Def = X.GetAttribute("default");
+            var Def = X.GetAttribute("default") ?? X.GetAttribute("val");
             if (Def != null) O.Default = Def;
 
             var N = X.GetAttribute("name");
             if (N != null) O.ParamName = N;
+
+            return O;
+        }
+
+        private static Types.OptionBool LoadBool(string Name, XmlLoad X)
+        {
+            var O = new Types.OptionBool(Name);
+
+            if (X.HasAttribute("id"))
+                O.ID = X.GetAttribute("id");
+
+            var Def = X.GetAttribute("default");
+            if (Def != null)
+                O.Default = (Def != "0") && !string.Equals(Def, "false", StringComparison.OrdinalIgnoreCase);
+
+            var N = X.GetAttribute("name");
+            if (N != null) O.ParamName = N;
+
+            var V = X.GetAttribute("val");
+            if (V != null) O.Value = V;
 
             return O;
         }
@@ -94,6 +114,7 @@ namespace Programmer.Options.XML
                     case "list": Res.Add(LoadList(X.GetAttribute("label"), X.GetSubtree())); break;
                     case "text": Res.Add(LoadText(X.GetAttribute("label"), X)); break;
                     case "hidden": Res.Add(LoadHidden(X.GetAttribute("label"), X)); break;
+                    case "bool": Res.Add(LoadBool(X.GetAttribute("label"), X)); break;
                 }
             }
 

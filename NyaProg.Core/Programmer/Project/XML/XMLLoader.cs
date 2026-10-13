@@ -22,27 +22,65 @@ namespace Programmer.Project.XML
             if (O != null) P.Options.AddRange(O);
         }
 
-        private static void LoadActions(Script S, XmlLoad X)
+        private static void LoadSteps(Script S, XmlLoad X)
         {
             while (X.Read())
             {
-                var A = new Action(X.ElementName);
-
-                string[] Args = X.GetAttributeNames();
-                foreach(var Arg in Args)
-                {
-                    switch(Arg)
-                    {
-                        case "comment": A.Comment = X.GetAttribute(Arg); break;
-                        case "cond": A.Cond = X.GetAttribute(Arg); break;
-                        default:        A.Arguments.Set(Arg, X.GetAttribute(Arg)); break;
-                    }
-                }
-
-                S.Actions.Add(A);
+                var St = LoadStep(X);
+                if (St != null) S.Steps.Add(St);
             }
 
             X.Close();
+        }
+
+        private static Step LoadStep(XmlLoad X)
+        {
+            var Name = X.ElementName;
+
+            // Присвоение переменной
+            if (Name == "set")
+            {
+                return new SetStep
+                {
+                    Name = X.GetAttribute("name"),
+                    Value = X.GetAttribute("value"),
+                    Comment = X.GetAttribute("comment")
+                };
+            }
+
+            // Ветвление
+            if (Name == "if")
+            {
+                var If = new IfStep
+                {
+                    Condition = X.GetAttribute("cond"),
+                    Comment = X.GetAttribute("comment")
+                };
+
+                var Sub = X.GetSubtree();
+                var Cur = If.Then;
+                while (Sub.Read())
+                {
+                    if (Sub.ElementName == "else") { Cur = If.Else; continue; }
+                    Cur.Add(LoadStep(Sub));
+                }
+                Sub.Close();
+
+                return If;
+            }
+
+            // Обычная команда
+            var A = new Action(Name);
+            foreach (var Arg in X.GetAttributeNames())
+            {
+                switch (Arg)
+                {
+                    case "comment": A.Comment = X.GetAttribute(Arg); break;
+                    default: A.Arguments.Set(Arg, X.GetAttribute(Arg)); break;
+                }
+            }
+
+            return A;
         }
 
         private static string LoadFromFile(Project P, string FN)
@@ -89,7 +127,7 @@ namespace Programmer.Project.XML
                             S.Input.Add(In);
                         }
                         break;
-                    case "steps": LoadActions(S, X.GetSubtree()); break;
+                    case "steps": LoadSteps(S, X.GetSubtree()); break;
                     case "type": S.Arch.Add(X.GetAttribute("value")); break;
                     case "readme":
                         if (X.HasAttribute("file"))

@@ -8,22 +8,14 @@ using Extension.Argument;
 namespace Programmer.Project
 {
     /// <summary>
-    /// Описывает одно действие
+    /// Шаг-команда: выполнить команду с аргументами.
     /// </summary>
-    public class Action
+    public class Action : Step
     {
-        /// <summary>
-        /// Описание действия (для пользователя)
-        /// </summary>
-        public string Comment;
-
         /// <summary>
         /// Команда
         /// </summary>
         public string Command;
-
-        // Условие доступности опции (если указано
-        public string Cond;
 
         /// <summary>
         /// Аргументы
@@ -34,5 +26,7 @@ namespace Programmer.Project
         {
             this.Command = Command;
         }
+
+        public override string Title => Comment ?? Command;
     }
 }

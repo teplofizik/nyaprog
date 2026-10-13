@@ -6,6 +6,7 @@ using Extension.Argument;
 using NyaProg.Hosting;
 using Programmer.Environment;
 using Programmer.Modules;
+using Programmer.Platform;
 using Programmer.Project;
 using Programmer.Tool;
 
@@ -38,7 +39,76 @@ namespace NyaProg.Cli
             if ((args.Length >= 3) && (args[1] == "--exec"))
                 return ExecCommand(Env, args[2], args.Skip(3).ToArray());
 
+            if ((args.Length >= 3) && (args[1] == "--run"))
+            {
+                var ScriptIdx = (args.Length > 3) ? ParseInt(args[3], 0) : 0;
+                var Overrides = (args.Length > 4) ? args.Skip(4).ToArray() : new string[0];
+                return RunScript(Env, args[2], ScriptIdx, Overrides);
+            }
+
             Dump(Env);
+            return 0;
+        }
+
+        static int ParseInt(string Text, int Default)
+        {
+            int V;
+            return int.TryParse(Text, out V) ? V : Default;
+        }
+
+        static int RunScript(ProgEnv Env, string ProjectArg, int ScriptIdx, string[] Overrides)
+        {
+            var P = Env.Projects.FirstOrDefault(X =>
+                (X.Name == ProjectArg) || ((X.File != null) && X.File.EndsWith(ProjectArg)));
+
+            if (P == null) { Console.WriteLine($"project not found: {ProjectArg}"); return 2; }
+            if ((ScriptIdx < 0) || (ScriptIdx >= P.Scripts.Count)) { Console.WriteLine("bad script index"); return 2; }
+
+            var S = P.Scripts[ScriptIdx];
+
+            // Окружение запуска: опции + ввод по умолчанию + переопределения
+            var Args = new ArgumentList();
+            foreach (var O in P.Options) Args.Append(O.GetDefault());
+            foreach (var O in S.Options) Args.Append(O.GetDefault());
+            foreach (var I in S.Input) Args.Set(I.Name, I.Default);
+            foreach (var Ov in Overrides)
+            {
+                var Eq = Ov.IndexOf('=');
+                if (Eq > 0) Args.Set(Ov.Substring(0, Eq), Ov.Substring(Eq + 1));
+            }
+
+            // Состояние для вычисления условий
+            var St = new State(null, new NullUserInterface()) { Env = Env, Project = P };
+            St.SelectScript(S);
+            St.CompiledArgs = Args;
+
+            var Plan = S.GetSteps(St);
+            Console.WriteLine($"script '{S.Name}': plan {Plan.Count} steps");
+
+            var SE = new ScriptExec();
+            foreach (var Step in Plan)
+            {
+                var Set = Step as SetStep;
+                if (Set != null)
+                {
+                    var V = CommandTemplating.Process(Set.Value ?? "", N => Env.ResolveArgument(N, Args));
+                    Args.Set(Set.Name, V);
+                    Console.WriteLine($"  set {Set.Name} = {V}");
+                    continue;
+                }
+
+                var A = Step as Programmer.Project.Action;
+                if (A == null) continue;
+
+                var R = SE.Exec(Env, null, P, S, A, Args);
+                Console.WriteLine($"  {A.Command}: {R.Result} {R.Message}");
+                if (R.Result == ExecResultType.Error) return 1;
+            }
+
+            Console.WriteLine("environment:");
+            foreach (var K in Args.Keys)
+                Console.WriteLine($"  {K} = {Args.Get(K)}");
+
             return 0;
         }
 
@@ -79,7 +149,7 @@ namespace NyaProg.Cli
             {
                 Console.WriteLine($"  * {P.Name} ({P.Scripts.Count} scripts)");
                 foreach (var S in P.Scripts)
-                    Console.WriteLine($"      - {S.Name} ({S.Actions.Count} steps)");
+                    Console.WriteLine($"      - {S.Name} ({S.Steps.Count} steps)");
             }
 
             Console.WriteLine($"Registry tools: {Env.Commands.Tools.Count}");
