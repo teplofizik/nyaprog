@@ -13,6 +13,7 @@
     <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
     <ProjectReference Include="..\NyaProg.Core\NyaProg.Core.csproj" />
     <ProjectReference Include="..\NyaProg.Hosting\NyaProg.Hosting.csproj" />
+    <ProjectReference Include="..\NyaProg.Presentation\NyaProg.Presentation.csproj" />
   </ItemGroup>
 
   <!-- Встроенные модули: только сборка; сами DLL деплоятся в plugins. -->

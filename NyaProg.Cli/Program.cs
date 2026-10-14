@@ -39,6 +39,9 @@ namespace NyaProg.Cli
             if ((args.Length >= 3) && (args[1] == "--exec"))
                 return ExecCommand(Env, args[2], args.Skip(3).ToArray());
 
+            if ((args.Length >= 2) && (args[1] == "--projects"))
+                return ListProjects(Env, (args.Length > 2) ? args[2] : null);
+
             if ((args.Length >= 3) && (args[1] == "--list"))
                 return ListItems(Env, args[2]);
 
@@ -50,6 +53,20 @@ namespace NyaProg.Cli
             }
 
             Dump(Env);
+            return 0;
+        }
+
+        static int ListProjects(ProgEnv Env, string Search)
+        {
+            var S = new NyaProg.Presentation.Session(Env);
+            S.Projects.Search = Search ?? "";
+
+            var Items = S.Projects.Items();
+            Console.WriteLine($"projects: {Items.Count}");
+
+            foreach (var C in Items)
+                Console.WriteLine($"  {C.Name} | {C.Date} | targets={C.TargetCount} | ctrl=[{string.Join(",", C.ControllerTypes)}] | tags=[{string.Join(",", C.Tags)}] | photo={(C.PhotoPath ?? "-")}");
+
             return 0;
         }
 

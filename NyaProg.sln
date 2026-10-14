@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Modules.Net", "NyaP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Hosting", "NyaProg.Hosting\NyaProg.Hosting.csproj", "{79742EBA-3723-47CA-BC22-889EADDA188C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Presentation", "NyaProg.Presentation\NyaProg.Presentation.csproj", "{1FCD97CC-3011-4834-B692-180DB793B819}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Plugins.Sample", "NyaProg.Plugins.Sample\NyaProg.Plugins.Sample.csproj", "{0C6AC53A-C7EE-40D2-ABD2-E32CDEB9EB4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Core", "NyaProg.Core\NyaProg.Core.csproj", "{FD9EF842-30CA-464E-BF55-94CFE934AAA0}"
@@ -57,6 +59,10 @@ Global
 		{0C6AC53A-C7EE-40D2-ABD2-E32CDEB9EB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C6AC53A-C7EE-40D2-ABD2-E32CDEB9EB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C6AC53A-C7EE-40D2-ABD2-E32CDEB9EB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FCD97CC-3011-4834-B692-180DB793B819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FCD97CC-3011-4834-B692-180DB793B819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FCD97CC-3011-4834-B692-180DB793B819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FCD97CC-3011-4834-B692-180DB793B819}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

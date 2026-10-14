@@ -139,6 +139,14 @@ namespace Programmer.Environment
             if (Config != null)
                 Env.Load(Config);
         }
+
+        /// <summary>
+        /// Состояние поверх уже загруженного окружения (используется слоем представления).
+        /// </summary>
+        public State(ProgEnv Env)
+        {
+            this.Env = Env;
+        }
         
         /// <summary>
         /// Прошивка выполняется в параллельном потоке

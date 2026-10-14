@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>NyaProg.Presentation</AssemblyName>
+    <RootNamespace>NyaProg.Presentation</RootNamespace>
+    <Description>UI-независимый слой представления NyaProg (модели экранов).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
+    <ProjectReference Include="..\NyaProg.Core\NyaProg.Core.csproj" />
+  </ItemGroup>
+
+</Project>

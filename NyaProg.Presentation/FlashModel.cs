@@ -1,0 +1,244 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Extension.Argument;
+using Programmer.Environment;
+using Programmer.Options;
+using Programmer.Options.Types;
+using Programmer.Project;
+using Programmer.Tool;
+
+namespace NyaProg.Presentation
+{
+    /// <summary>
+    /// Модель экрана прошивки конкретной цели: программатор, опции, план шагов, запуск.
+    /// </summary>
+    public sealed class FlashModel
+    {
+        private readonly Session Session;
+
+        public Project Project { get; }
+
+        public Target Target { get; }
+
+        public IReadOnlyList<UniTool> Programmers { get; private set; } = new UniTool[0];
+
+        public UniTool Programmer { get; private set; }
+
+        public IReadOnlyList<OptionModel> Options { get; private set; } = new OptionModel[0];
+
+        public IReadOnlyList<StepItem> Steps { get; private set; } = new StepItem[0];
+
+        public string Status { get; private set; } = "";
+
+        public bool Running { get; private set; }
+
+        public bool Cancelled { get; private set; }
+
+        /// <summary>План/состояние изменились.</summary>
+        public event System.Action Changed;
+
+        /// <summary>Прогон завершён: true — успешно.</summary>
+        public event System.Action<bool> Completed;
+
+        public FlashModel(Session Session, Project Project, Target Target)
+        {
+            this.Session = Session;
+            this.Project = Project;
+            this.Target = Target;
+
+            Session.State.ActionCompleted += OnActionCompleted;
+            Build();
+        }
+
+        public string PhotoPath => PhotoResolver.Resolve(Project.Dir, Target.Photo);
+
+        public string Readme => Target.Readme;
+
+        /// <summary>Собрать программаторы, опции и план.</summary>
+        public void Build()
+        {
+            var State = Session.State;
+
+            State.Project = Project;
+            State.SelectTarget(Target);
+
+            Programmers = Session.Env.GetToolsByArch(State.Arch);
+
+            // Программатор из кэша (предпочтения)
+            var Pref = Session.Env.GetPreference(Project.GetID(Target));
+            Programmer = (Pref != null) ? Programmers.FirstOrDefault(T => T.Name == Pref) : null;
+            if ((Programmer == null) && (Programmers.Count > 0))
+                Programmer = Programmers[0];
+
+            State.Tool = Programmer;
+
+            BuildOptions();
+            ApplyOptions();
+            RebuildPlan();
+        }
+
+        public void SelectProgrammer(UniTool Tool)
+        {
+            Programmer = Tool;
+            Session.State.Tool = Tool;
+            Session.Env.SetPreference(Project.GetID(Target), Tool?.Name ?? "");
+
+            BuildOptions();
+            ApplyOptions();
+            RebuildPlan();
+            Changed?.Invoke();
+        }
+
+        /// <summary>Пересчитать план шагов (после смены опций/программатора).</summary>
+        public void RebuildPlan()
+        {
+            var State = Session.State;
+            State.Plan = Target.GetSteps(State);
+
+            var Items = new List<StepItem>();
+            foreach (var S in State.Plan) Items.Add(new StepItem(S));
+            Steps = Items;
+
+            Changed?.Invoke();
+        }
+
+        public void ApplyOptions()
+        {
+            var State = Session.State;
+            State.CompiledArgs = new ArgumentList();
+
+            if (Programmer != null) State.CompiledArgs.Append(Programmer.GetDefaultOptionsValues());
+            State.CompiledArgs.Append(Project.GetDefaultOptionsValues());
+            State.CompiledArgs.Append(Target.GetDefaultOptionsValues());
+
+            foreach (var M in Options)
+                State.CompiledArgs.Append(M.Args);
+        }
+
+        public void Start()
+        {
+            if (Running) return;
+
+            ApplyOptions();
+            SavePreferences();
+
+            foreach (var S in Steps)
+            {
+                S.Running = false;
+                S.Result = null;
+                S.Ok = null;
+            }
+
+            Status = "";
+            Running = true;
+            Cancelled = false;
+            Changed?.Invoke();
+
+            StartStep(0);
+        }
+
+        public void Cancel()
+        {
+            Cancelled = true;
+        }
+
+        public void Detach()
+        {
+            Session.State.ActionCompleted -= OnActionCompleted;
+        }
+
+        private void BuildOptions()
+        {
+            var Opts = new List<OptionModel>();
+
+            if (Programmer != null)
+                foreach (var O in Programmer.GetOptions())
+                    Opts.Add(OptionModel.FromOption(O));
+
+            foreach (var O in Project.Options) Opts.Add(OptionModel.FromOption(O));
+            foreach (var O in Target.Options) Opts.Add(OptionModel.FromOption(O));
+
+            var IL = Session.Env.InputTypes;
+            foreach (var I in Target.Input)
+                Opts.Add(OptionModel.FromOption(new OptionInput(I.Name, I.Name, IL.GetInputType(I.Type), I.Default, I.ID, I.Autoincrement)));
+
+            foreach (var M in Opts)
+                if (M.ID != null) M.SetPreference(Session.Env.GetPreference(M.ID));
+
+            Options = Opts;
+        }
+
+        private void StartStep(int Index)
+        {
+            if (Index >= Session.State.Plan.Count)
+            {
+                Finish(true);
+                return;
+            }
+
+            if ((Index >= 0) && (Index < Steps.Count)) Steps[Index].Running = true;
+            Session.State.RunAction(Index);
+            Changed?.Invoke();
+        }
+
+        private void OnActionCompleted(object Sender, ActionEventArgs E)
+        {
+            var Item = ((E.Action >= 0) && (E.Action < Steps.Count)) ? Steps[E.Action] : null;
+            if (Item != null)
+            {
+                Item.Running = false;
+                Item.Result = E.Result.Message;
+                Item.Ok = (E.Result.Result != ExecResultType.Error);
+            }
+
+            if (E.Result.Result == ExecResultType.Error)
+            {
+                Status = E.Result.Message;
+                Finish(false);
+                return;
+            }
+
+            if (Session.State.Action < Session.State.Plan.Count - 1)
+            {
+                if (Cancelled)
+                {
+                    Status = "Отменено";
+                    Finish(false);
+                }
+                else
+                    StartStep(Session.State.Action + 1);
+            }
+            else
+            {
+                Status = "Успешно выполнено!";
+                Finish(true);
+            }
+        }
+
+        private void Finish(bool Success)
+        {
+            Running = false;
+
+            if (Success && Options.Any(M => M.Autoincrement))
+                Autoincrement();
+
+            Changed?.Invoke();
+            Completed?.Invoke(Success);
+        }
+
+        private void Autoincrement()
+        {
+            foreach (var M in Options)
+                if (M.Increment() && (M.ID != null))
+                    Session.Env.SetPreference(M.ID, M.Preference);
+        }
+
+        private void SavePreferences()
+        {
+            foreach (var M in Options)
+                if (M.ID != null) Session.Env.SetPreference(M.ID, M.Preference);
+        }
+    }
+}
