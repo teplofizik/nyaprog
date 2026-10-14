@@ -4,6 +4,7 @@ using System.IO;
 
 using Programmer.Modules;
 using Programmer.Options.Rewrite;
+using Programmer.Platform;
 using Extension.Argument;
 
 namespace Programmer.Tool
@@ -36,21 +37,17 @@ namespace Programmer.Tool
         }
 
         /// <summary>
-        /// Выполнить внешнее ПО
+        /// Выполнить внешнее ПО через переданный раннер процессов.
         /// </summary>
-        /// <param name="Program"></param>
-        /// <param name="ProgArgs"></param>
-        /// <param name="Args"></param>
-        /// <param name="Rewrite"></param>
-        /// <returns></returns>
-        public static ExternalToolResult Exec(string Program, string ProgArgs, ArgumentList Args, OptRewrite[] Rewrite)
+        public static ProcessResult Exec(string Program, string ProgArgs, ArgumentList Args,
+                                         OptRewrite[] Rewrite, IProcessRunner Process)
         {
             var CmdPath = ProcessCommand(Program, Args, Rewrite);
             var CmdArgs = ProcessCommand(ProgArgs, Args, Rewrite);
 
             string Dir = Args.Get("$dir");
-            
-            return ExternalTool.Run(CmdPath, CmdArgs, Dir);
+
+            return Process.Run(CmdPath, CmdArgs, Dir);
         }
     }
 }

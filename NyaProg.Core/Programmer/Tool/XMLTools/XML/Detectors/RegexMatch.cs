@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using Programmer.Platform;
+
 namespace Programmer.Tool.XMLTools.XML.Detectors
 {
     public class RegexMatch : XMLResultDetector
@@ -14,23 +16,17 @@ namespace Programmer.Tool.XMLTools.XML.Detectors
         {
             this.Pattern = Mask;
         }
-        
-        protected override string Check(ExternalToolResult R)
+
+        protected override string Check(ProcessResult R)
         {
-            foreach (var L in R.Lines)
-            {
-                var match = Regex.Matches(R.Result, Pattern, RegexOptions.IgnoreCase);
-                if (match.Count > 0)
-                {
-                    var Text = "";
-                    foreach (Match M in match)
-                        Text += M.Value + "\n";
+            var Match = Regex.Matches(R.Output ?? "", Pattern, RegexOptions.IgnoreCase);
+            if (Match.Count == 0) return null;
 
-                    return Text;
-                }
-            }
+            var Text = "";
+            foreach (Match M in Match)
+                Text += M.Value + "\n";
 
-            return null;
+            return Text;
         }
     }
 }

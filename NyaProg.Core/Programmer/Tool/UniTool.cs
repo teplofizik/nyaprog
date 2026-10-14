@@ -6,6 +6,7 @@ using System.Text;
 using Extension.Argument;
 using Programmer.Modules;
 using Programmer.Options.Rewrite;
+using Programmer.Platform;
 
 namespace Programmer.Tool
 {
@@ -83,7 +84,7 @@ namespace Programmer.Tool
         /// <param name="Command"></param>
         /// <param name="Args"></param>
         /// <returns></returns>
-        public abstract ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite);
+        public abstract ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite, IProcessRunner Process);
 
         /// <summary>
         /// Поддерживается ли команда этим набором

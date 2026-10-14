@@ -37,31 +37,6 @@ namespace NyaProg
             InitializeComponent();
         }
 
-        private void Test()
-        {
-            var E = PrState.Env;
-
-            var P = E.Projects[0];
-            var Script = P.Scripts[1];
-            var SE = new ScriptExec();
-            var Arch = SE.GetScriptArch(P, Script);
-            var Tools = E.GetToolsByArch(Arch);
-            var Tool = Tools[0];
-            var Options = new Extension.Argument.ArgumentList();
-            Options.Set("input", "123456789");
-            Options.Append(Tool.GetDefaultOptionsValues());
-
-            foreach (var A in Script.Steps.OfType<Programmer.Project.Action>())
-            {
-                var Res = SE.Exec(E, Tool, P, Script, A, Options);
-                if (Res.Result == ExecResultType.Error)
-                {
-                    Log.WriteLine($"Error: {Res.Message}");
-                    break;
-                }
-            }
-        }
-
         private void UpdateProjList()
         {
             cbProject.BeginUpdate();

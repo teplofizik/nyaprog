@@ -6,6 +6,7 @@ using System.Text;
 using Extension.Argument;
 using Programmer.Options;
 using Programmer.Options.Rewrite;
+using Programmer.Platform;
 using Programmer.Tool;
 
 namespace Programmer.Modules
@@ -48,7 +49,7 @@ namespace Programmer.Modules
 
         public bool SupportsArch(string[] Arch) => Tool.IsSupportedArch(Arch);
 
-        internal ExecResult Exec(string Command, ArgumentList Args) => Tool.Exec(Command, Args, Rewrite);
+        internal ExecResult Exec(string Command, ArgumentList Args, IProcessRunner Process) => Tool.Exec(Command, Args, Rewrite, Process);
     }
 
     /// <summary>
@@ -76,7 +77,7 @@ namespace Programmer.Modules
 
         public CommandResult Execute(CommandContext Ctx)
         {
-            var R = Module.Exec(Id, Ctx.Args);
+            var R = Module.Exec(Id, Ctx.Args, Ctx.Host.ProcessRunner);
 
             CommandResult Res;
             switch (R.Result)

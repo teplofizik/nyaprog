@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Extension.Argument;
 using Programmer.Modules;
 using Programmer.Options.Rewrite;
+using Programmer.Platform;
 
 namespace Programmer.Tool.XMLTools.XML
 {
@@ -48,10 +49,8 @@ namespace Programmer.Tool.XMLTools.XML
         /// </summary>
         public List<Options.Option> Options = new List<Options.Option>();
         
-        private string GetMessage(ExternalToolResult Result, List<XMLResultDetector> Mask)
+        private string GetMessage(ProcessResult Result, List<XMLResultDetector> Mask)
         {
-            var T = Result.Result.Split(new char[] { '\n', '\r' });
-            
             foreach (var M in Mask)
             {
                 var R = M.Get(Result);
@@ -100,63 +99,50 @@ namespace Programmer.Tool.XMLTools.XML
         /// <param name="Args"></param>
         /// <param name="Rewrite"></param>
         /// <returns></returns>
-        public ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite)
+        public ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite, IProcessRunner Process)
         {
             var A = GetAction(Command);
-            if (A != null)
-            {
-                //var Cmd = ProcessCommand(A.Command, Args, Rewrite);
-
-                string Dir = Args.Get("$dir");
-                string P = (A.CustomToolPath != null) ? A.CustomToolPath : ToolPath;
-                if (!File.Exists(P)) return new ERError($"No specified path for tool: {P}");
-                ExternalToolResult Result;
-
-                try
-                {
-                    if (Interpreter.Length > 0)
-                    {
-                        Result = ExternalExec.Exec(Interpreter, $"{P} {A.Command}", Args, Rewrite);
-                    }
-                    else
-                    {
-                        Result = ExternalExec.Exec(P, A.Command, Args, Rewrite);
-                    }
-                }
-                catch (Exception Exc)
-                {
-                    return new ERError(Exc.Message);
-                }
-
-                if (Result.ExitCode != 0)
-                    return new ERError($"Process exited with code {Result.ExitCode}");
-
-                //string Output = ExternalTool.Run(P, Cmd, Dir);
-                if (Result == null) return new ERError("No output");
-                
-                var E = GetMessage(Result, A.ErrorMask);
-                if (E != null) return new ERError(E);
-
-                var W = GetMessage(Result, A.WarningMask);
-
-                ExecResult Res = (W != null) ? (ExecResult)new ERWarning(W) : new EROk();
-                CollectOutputs(A, Result, Res.Outputs);
-                return Res;
-            }
-            else
+            if (A == null)
                 return new ERError($"No available command '{Command}'");
+
+            string P = (A.CustomToolPath != null) ? A.CustomToolPath : ToolPath;
+            if (!File.Exists(P)) return new ERError($"No specified path for tool: {P}");
+
+            ProcessResult Result;
+            try
+            {
+                Result = (Interpreter.Length > 0)
+                       ? ExternalExec.Exec(Interpreter, $"{P} {A.Command}", Args, Rewrite, Process)
+                       : ExternalExec.Exec(P, A.Command, Args, Rewrite, Process);
+            }
+            catch (Exception Exc)
+            {
+                return new ERError(Exc.Message);
+            }
+
+            if (Result == null) return new ERError("No output");
+            if (Result.ExitCode != 0) return new ERError($"Process exited with code {Result.ExitCode}");
+
+            var E = GetMessage(Result, A.ErrorMask);
+            if (E != null) return new ERError(E);
+
+            var W = GetMessage(Result, A.WarningMask);
+
+            ExecResult Res = (W != null) ? (ExecResult)new ERWarning(W) : new EROk();
+            CollectOutputs(A, Result, Res.Outputs);
+            return Res;
         }
 
         /// <summary>
         /// Извлечь выходные переменные из вывода утилиты.
         /// </summary>
-        private static void CollectOutputs(XMLToolAction A, ExternalToolResult R, ArgumentList Outputs)
+        private static void CollectOutputs(XMLToolAction A, ProcessResult R, ArgumentList Outputs)
         {
             foreach (var O in A.Outputs)
             {
                 if (string.IsNullOrEmpty(O.Name) || string.IsNullOrEmpty(O.Pattern)) continue;
 
-                var M = Regex.Match(R.Result, O.Pattern, RegexOptions.IgnoreCase);
+                var M = Regex.Match(R.Output ?? "", O.Pattern, RegexOptions.IgnoreCase);
                 if (M.Success && (M.Groups.Count > O.Group))
                     Outputs.Set(O.Name, M.Groups[O.Group].Value);
             }

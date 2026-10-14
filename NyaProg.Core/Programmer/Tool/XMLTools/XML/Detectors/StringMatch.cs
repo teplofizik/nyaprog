@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Programmer.Platform;
+
 namespace Programmer.Tool.XMLTools.XML.Detectors
 {
     public class StringMatch : XMLResultDetector
@@ -14,9 +16,11 @@ namespace Programmer.Tool.XMLTools.XML.Detectors
             this.Mask = Mask;
         }
 
-        protected override string Check(ExternalToolResult R)
+        protected override string Check(ProcessResult R)
         {
-            foreach (var L in R.Lines)
+            var Lines = (R.Output ?? "").Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var L in Lines)
             {
                 if (L.IndexOf(Mask) >= 0)
                     return L;

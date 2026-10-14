@@ -9,7 +9,6 @@ namespace Programmer.XMLFile
     class XmlSave
     {
         private XmlWriter F;
-        private bool Is4man = true;
 
         public XmlSave(string FileName)
         {

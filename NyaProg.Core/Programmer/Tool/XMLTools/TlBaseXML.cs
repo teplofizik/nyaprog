@@ -6,6 +6,7 @@ using System.Text;
 
 using Extension.Argument;
 using Programmer.Modules;
+using Programmer.Platform;
 using Programmer.Tool.XMLTools.XML;
 using Programmer.Options.Rewrite;
 
@@ -64,6 +65,6 @@ namespace Programmer.Tool.XMLTools
         /// <param name="Command"></param>
         /// <param name="Args"></param>
         /// <returns></returns>
-        public override ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite) => T.Exec(Command, Args, Rewrite);
+        public override ExecResult Exec(string Command, ArgumentList Args, OptRewrite[] Rewrite, IProcessRunner Process) => T.Exec(Command, Args, Rewrite, Process);
     }
 }
