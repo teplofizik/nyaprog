@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworks>net48;net8.0</TargetFrameworks>
     <AssemblyName>NyaProg.Hosting</AssemblyName>
     <RootNamespace>NyaProg.Hosting</RootNamespace>
+    <!-- Мультитаргет: разводим вывод по TFM (иначе net48/net8.0 столкнутся). -->
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

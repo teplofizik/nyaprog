@@ -93,20 +93,20 @@ namespace Programmer.Controls
         /// Размещение кнопок выбора скрипта
         /// </summary>
         /// <param name="Base"></param>
-        /// <param name="Scripts"></param>
+        /// <param name="Targets"></param>
         /// <param name="M"></param>
         /// <param name="OnClick"></param>
         /// <returns></returns>
-        public static Button[] PlaceScripts(Control Base, Script[] Scripts, ButtonMapper M, Action<Script> OnClick)
+        public static Button[] PlaceTargets(Control Base, Target[] Targets, ButtonMapper M, Action<Target> OnClick)
         {
             var Buttons = new List<Button>();
             M.Reset();
-            foreach(var S in Scripts)
+            foreach(var S in Targets)
             {
                 var B = M.CreateNextControl(S.Name, S) as Button;
                 B.Click += new EventHandler(delegate (Object o, EventArgs a)
                 {
-                    var BS = (o as Button).Tag as Script;
+                    var BS = (o as Button).Tag as Target;
                     OnClick(BS);
                 });
 
@@ -121,7 +121,7 @@ namespace Programmer.Controls
         /// Размещение кнопки
         /// </summary>
         /// <param name="Base"></param>
-        /// <param name="Scripts"></param>
+        /// <param name="Targets"></param>
         /// <param name="M"></param>
         /// <param name="OnClick"></param>
         /// <returns></returns>

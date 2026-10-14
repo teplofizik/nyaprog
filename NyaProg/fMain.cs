@@ -29,7 +29,7 @@ namespace NyaProg
         OptionViewer[] OptionsControls;
         ComboBox ToolSelector;
         TextBox ProjReadme;
-        TextBox ScriptReadme;
+        TextBox TargetReadme;
 
 
         public fMain()
@@ -51,7 +51,7 @@ namespace NyaProg
         {
             ToolSelector = ComponentPlacer.PlaceComboBox(gbOptions, Tools, null, 15, 25, 220, 22);
 
-            var Pref = PrState.Env.GetPreference(PrState.Project.GetID(PrState.Script));
+            var Pref = PrState.Env.GetPreference(PrState.Project.GetID(PrState.Target));
             PrState.Tool = null;
             if (Pref != null)
             {
@@ -98,11 +98,11 @@ namespace NyaProg
 
             if (PrState.Tool != null) OptsTool.AddRange(PrState.Tool.GetOptions());
             if (PrState.Project != null) OptsProj.AddRange(PrState.Project.Options);
-            if (PrState.Script != null)
+            if (PrState.Target != null)
             {
-                OptsProj.AddRange(PrState.Script.Options);
+                OptsProj.AddRange(PrState.Target.Options);
 
-                var Input = PrState.Script.Input;
+                var Input = PrState.Target.Input;
                 var IL = PrState.Env.InputTypes;
                 foreach(var I in Input)
                     OptsProj.Add(new OptionInput(I.Name, I.Name, IL.GetInputType(I.Type), I.Default, I.ID, I.Autoincrement));
@@ -139,7 +139,7 @@ namespace NyaProg
         {
             // Сохраним выбор программатора для проекта
             if (PrState.Project != null)
-                PrState.Env.SetPreference(PrState.Project.GetID(PrState.Script), PrState.Tool.Name);
+                PrState.Env.SetPreference(PrState.Project.GetID(PrState.Target), PrState.Tool.Name);
             if (OptionsControls != null)
             {
                 foreach (var OC in OptionsControls)
@@ -166,7 +166,7 @@ namespace NyaProg
         {
             ComponentPlacer.CleanContainer(gbSteps);
 
-            var S = PrState.Script;
+            var S = PrState.Target;
             if (S != null)
             {
                 PrState.Plan = S.GetSteps(PrState);
@@ -177,21 +177,21 @@ namespace NyaProg
             }
         }
 
-        private void SelectScript(Script S)
+        private void SelectTarget(Target S)
         {
             if(OptionsControls != null)
                 ComponentPlacer.Remove(gbOptions, OptionsControls);
-            if (ScriptReadme != null)
+            if (TargetReadme != null)
             {
-                ComponentPlacer.Remove(gbOptions, new Control[] { ScriptReadme });
-                ScriptReadme = null;
+                ComponentPlacer.Remove(gbOptions, new Control[] { TargetReadme });
+                TargetReadme = null;
             }
             if (ToolSelector != null)
             {
                 ToolSelector.SelectedIndexChanged -= ToolSelector_SelectedIndexChanged;
                 ComponentPlacer.Remove(gbOptions, new Control[] { ToolSelector });
             }
-            PrState.SelectScript(S);
+            PrState.SelectTarget(S);
             lResult.Text = "";
 
             if (S != null)
@@ -204,9 +204,9 @@ namespace NyaProg
                 InitIncrementFields();
 
                 if (S.Readme != null)
-                    ScriptReadme = ComponentPlacer.PlaceReadme(gbOptions, S.Readme, 9, gbOptions.Width - 18, 58, 180);
+                    TargetReadme = ComponentPlacer.PlaceReadme(gbOptions, S.Readme, 9, gbOptions.Width - 18, 58, 180);
                 else if (PrState.Project.Readme != null)
-                    ScriptReadme = ComponentPlacer.PlaceReadme(gbOptions, PrState.Project.Readme, 9, gbOptions.Width - 18, 58, 180);
+                    TargetReadme = ComponentPlacer.PlaceReadme(gbOptions, PrState.Project.Readme, 9, gbOptions.Width - 18, 58, 180);
 
                 gbOptions.Text = S.Name;
                 tTabs.SelectedTab = tOptions;
@@ -218,17 +218,17 @@ namespace NyaProg
                 OptionsControls = null;
                 ToolSelector = null;
                 StepsControls = null;
-                tTabs.SelectedTab = tScripts;
+                tTabs.SelectedTab = tTargets;
             }
         }
 
-        private void UpdateScripts()
+        private void UpdateTargets()
         {
-            ComponentPlacer.CleanContainer(gbScripts);
-            ComponentPlacer.PlaceScripts(gbScripts,
-                                         PrState.Project.Scripts.ToArray(),
+            ComponentPlacer.CleanContainer(gbTargets);
+            ComponentPlacer.PlaceTargets(gbTargets,
+                                         PrState.Project.Targets.ToArray(),
                                          new ButtonMapper(9, 25),
-                                         S => SelectScript(S));
+                                         S => SelectTarget(S));
         }
 
         private void InitProgrammer()
@@ -264,19 +264,19 @@ namespace NyaProg
             PrState.SelectProject(cbProject.SelectedItem as Project);
             Text = $"NyaProg - {PrState.Project.Name}. {PrState.Project.Description}";
             // Если скрипт один, то откроем его. 
-            UpdateScripts();
-            if (PrState.Project.Scripts.Count == 1)
-                SelectScript(PrState.Project.Scripts[0]);
+            UpdateTargets();
+            if (PrState.Project.Targets.Count == 1)
+                SelectTarget(PrState.Project.Targets[0]);
             else
-                SelectScript(null);
+                SelectTarget(null);
 
             if(PrState.Project.Readme != null)
-                ProjReadme = ComponentPlacer.PlaceReadme(gbScripts, PrState.Project.Readme, 9, gbScripts.Width - 18, 9, 220);
+                ProjReadme = ComponentPlacer.PlaceReadme(gbTargets, PrState.Project.Readme, 9, gbTargets.Width - 18, 9, 220);
         }
         
         private void bBack_Click(object sender, EventArgs e)
         {
-            SelectScript(null);
+            SelectTarget(null);
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace NyaProg
 
         private void SaveIncrementFields()
         {
-            var PID = PrState.Project.GetID(PrState.Script);
+            var PID = PrState.Project.GetID(PrState.Target);
 
             PrState.Env.SetPreference($"{PID}:autoinc", ckAutoinc.Checked ? "enabled" : "disabled");
             PrState.Env.SetPreference($"{PID}:success", ckSuccess.Checked ? "enabled" : "disabled");
@@ -384,7 +384,7 @@ namespace NyaProg
 
         private void InitIncrementFields()
         {
-            var PID = PrState.Project.GetID(PrState.Script);
+            var PID = PrState.Project.GetID(PrState.Target);
 
             if (HasIncrementableFields())
             {

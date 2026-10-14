@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>NyaProg.Cli</AssemblyName>
     <RootNamespace>NyaProg.Cli</RootNamespace>
+    <!-- Кроссплатформенный headless-раннер (Windows/Linux/macOS). -->
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 
   <ItemGroup>

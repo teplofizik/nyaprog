@@ -12,7 +12,7 @@ namespace Programmer.Project
     /// <summary>
     /// Описывает набор команд для выполнения какого-то действия
     /// </summary>
-    public class Script
+    public class Target
     {
         /// <summary>
         /// Название скрипта

@@ -14,7 +14,7 @@ namespace Programmer.Environment
     /// <summary>
     /// Выполнение скрипта
     /// </summary>
-    public class ScriptExec
+    public class TargetExec
     {
         /// <summary>
         /// Получить тип архитектуры, под какую надо искать программатор
@@ -22,7 +22,7 @@ namespace Programmer.Environment
         /// <param name="P"></param>
         /// <param name="S"></param>
         /// <returns></returns>
-        public string[] GetScriptArch(Project.Project P, Script S)
+        public string[] GetTargetArch(Project.Project P, Target S)
         {
             if (S.Arch.Count > 0)
                 return S.Arch.ToArray();
@@ -38,7 +38,7 @@ namespace Programmer.Environment
         /// <param name="S">Скрипт</param>
         /// <param name="Options">Опции программатора (из доступных к выбору пользователя) и пользовательский ввод</param>
         /// <returns></returns>
-        public ArgumentList GetArgs(UniTool T, Project.Project P, Script S, Project.Action A, ArgumentList Options)
+        public ArgumentList GetArgs(UniTool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
         {
             var Res = new ArgumentList();
             string Root = Path.GetDirectoryName(Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location));
@@ -88,7 +88,7 @@ namespace Programmer.Environment
         /// <param name="S">Скрипт</param>
         /// <param name="Options">Опции программатора (из доступных к выбору пользователя) и пользовательский ввод</param>
         /// <returns></returns>
-        public ExecResult Exec(ProgEnv E, UniTool T, Project.Project P, Script S, Project.Action A, ArgumentList Options)
+        public ExecResult Exec(ProgEnv E, UniTool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
         {
             var Command = A.Command;
 

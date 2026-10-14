@@ -9,7 +9,7 @@ namespace Programmer.Environment
     /// <summary>
     /// Группа, объединяющая несколько скриптов
     /// </summary>
-    public class ScriptGroup
+    public class TargetGroup
     {
         /// <summary>
         /// Название категории
@@ -19,9 +19,9 @@ namespace Programmer.Environment
         /// <summary>
         /// Скрипт
         /// </summary>
-        public List<Script> Scripts = new List<Script>();
+        public List<Target> Targets = new List<Target>();
 
-        public ScriptGroup(string Name)
+        public TargetGroup(string Name)
         {
             this.Name = Name;
         }

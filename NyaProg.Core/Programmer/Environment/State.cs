@@ -36,12 +36,12 @@ namespace Programmer.Environment
         /// <summary>
         /// Скрипты, раз
         /// </summary>
-        public List<ScriptGroup> Groups = new List<ScriptGroup>();
+        public List<TargetGroup> Groups = new List<TargetGroup>();
 
         /// <summary>
         /// Выбранный скрипт
         /// </summary>
-        public Script Script;
+        public Target Target;
 
         /// <summary>
         /// План выполнения: шаги с развёрнутыми ветвлениями и применёнными условиями.
@@ -51,7 +51,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Выбранный выполнятор скрипта
         /// </summary>
-        public ScriptExec Executer;
+        public TargetExec Executer;
 
         /// <summary>
         /// Выбранный программатор
@@ -61,7 +61,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Выбранные архитектуры (для выбора программаторов)
         /// </summary>
-        public string[] Arch => (Executer != null) ? Executer.GetScriptArch(Project, Script) : new string[] { };
+        public string[] Arch => (Executer != null) ? Executer.GetTargetArch(Project, Target) : new string[] { };
 
         /// <summary>
         /// Номер шага
@@ -85,12 +85,12 @@ namespace Programmer.Environment
         public void SelectProject(Project.Project P)
         {
             Project = P;
-            Groups = new List<ScriptGroup>();
+            Groups = new List<TargetGroup>();
 
-            foreach (var S in P.Scripts)
+            foreach (var S in P.Targets)
             {
-                var SG = GetScriptGroup(S.Cathegory);
-                SG.Scripts.Add(S);
+                var SG = GetTargetGroup(S.Cathegory);
+                SG.Targets.Add(S);
             }
         }
 
@@ -98,14 +98,14 @@ namespace Programmer.Environment
         /// Выбрать проект
         /// </summary>
         /// <param name="P"></param>
-        public void SelectScript(Script S)
+        public void SelectTarget(Target S)
         {
             Action = 0;
-            Script = S;
+            Target = S;
             Plan = new List<Step>();
             if (S != null)
             {
-                Executer = new ScriptExec();
+                Executer = new TargetExec();
             }
             else
                 Executer = null;
@@ -116,7 +116,7 @@ namespace Programmer.Environment
         /// </summary>
         /// <param name="Name"></param>
         /// <returns></returns>
-        private ScriptGroup GetScriptGroup(string Name)
+        private TargetGroup GetTargetGroup(string Name)
         {
             foreach (var G in Groups)
             {
@@ -124,7 +124,7 @@ namespace Programmer.Environment
                     return G;
             }
 
-            var NG = new ScriptGroup(Name);
+            var NG = new TargetGroup(Name);
             Groups.Add(NG);
             return NG;
         }
@@ -167,7 +167,7 @@ namespace Programmer.Environment
                 }
             }
             else if (St is Project.Action)
-                Result = Executer.Exec(Env, Tool, Project, Script, (Project.Action)St, CompiledArgs);
+                Result = Executer.Exec(Env, Tool, Project, Target, (Project.Action)St, CompiledArgs);
             else
                 Result = new ERError("Invalid step");
 
@@ -181,7 +181,7 @@ namespace Programmer.Environment
 
             if (Tool != null) CompiledArgs.Append(Tool.GetDefaultOptionsValues());
             if (Project != null) CompiledArgs.Append(Project.GetDefaultOptionsValues());
-            if (Script != null) CompiledArgs.Append(Script.GetDefaultOptionsValues());
+            if (Target != null) CompiledArgs.Append(Target.GetDefaultOptionsValues());
         }
 
         public void RunAction(int Index)

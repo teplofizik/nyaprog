@@ -2,6 +2,7 @@ using System;
 using System.IO;
 
 using Programmer.Modules;
+using Programmer.Platform;
 
 namespace Programmer.Modules.Internal
 {
@@ -26,15 +27,16 @@ namespace Programmer.Modules.Internal
 
         protected static string Dir(CommandContext Ctx) => Ctx.WorkingDir ?? Ctx.Args.Get("$dir") ?? "";
 
-        protected static bool CompareFile(string A, string B)
+        /// <summary>Итоговый путь в проекте (Dir + имя файла).</summary>
+        protected static string InProject(CommandContext Ctx, string File) =>
+            Path.Combine(Dir(Ctx), Path.GetFileName(File));
+
+        protected static bool CompareFile(IFileSystem FS, string A, string B)
         {
-            if (!File.Exists(A) || !File.Exists(B)) return false;
+            if (!FS.Exists(A) || !FS.Exists(B)) return false;
 
-            var AI = new FileInfo(A);
-            var BI = new FileInfo(B);
-
-            if (AI.Length != BI.Length) return false;
-            if (AI.LastWriteTimeUtc.CompareTo(BI.LastWriteTimeUtc) != 0) return false;
+            if (FS.GetLength(A) != FS.GetLength(B)) return false;
+            if (FS.GetLastWriteTimeUtc(A).CompareTo(FS.GetLastWriteTimeUtc(B)) != 0) return false;
 
             return true;
         }
@@ -46,20 +48,20 @@ namespace Programmer.Modules.Internal
 
         public override CommandResult Execute(CommandContext Ctx)
         {
+            var FS = Ctx.Host.Files;
             var Option = Source(Ctx);
 
-            if (!File.Exists(Option))
+            if (!FS.Exists(Option))
                 return CommandResult.Error("No source file");
 
-            var NewFn = Dir(Ctx) + Path.GetFileName(Option);
+            var NewFn = InProject(Ctx, Option);
 
             try
             {
-                if (CompareFile(NewFn, Option))
+                if (CompareFile(FS, NewFn, Option))
                     return CommandResult.Warning("Files are equal");
 
-                File.Delete(NewFn);
-                File.Copy(Option, NewFn);
+                FS.Copy(Option, NewFn, true);
                 return CommandResult.Ok();
             }
             catch (Exception E)
@@ -75,20 +77,20 @@ namespace Programmer.Modules.Internal
 
         public override CommandResult Execute(CommandContext Ctx)
         {
+            var FS = Ctx.Host.Files;
             var Option = Source(Ctx);
 
-            if (!File.Exists(Option))
+            if (!FS.Exists(Option))
                 return CommandResult.Error("No source file");
 
-            var NewFn = Dir(Ctx) + Path.GetFileName(Option);
+            var NewFn = InProject(Ctx, Option);
 
             try
             {
-                if (CompareFile(NewFn, Option))
+                if (CompareFile(FS, NewFn, Option))
                     return CommandResult.Warning("Files are equal");
 
-                File.Delete(Option);
-                File.Copy(NewFn, Option);
+                FS.Copy(NewFn, Option, true);
                 return CommandResult.Ok();
             }
             catch (Exception E)
@@ -104,14 +106,15 @@ namespace Programmer.Modules.Internal
 
         public override CommandResult Execute(CommandContext Ctx)
         {
+            var FS = Ctx.Host.Files;
             var Option = Source(Ctx);
 
-            if (!File.Exists(Option))
+            if (!FS.Exists(Option))
                 return CommandResult.Ok();
 
             try
             {
-                File.Delete(Option);
+                FS.Delete(Option);
                 return CommandResult.Ok();
             }
             catch (Exception E)

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 using Programmer.Platform;
@@ -10,6 +11,10 @@ namespace Programmer
     public sealed class FileSystem : IFileSystem
     {
         public bool Exists(string Path) => File.Exists(Path);
+
+        public long GetLength(string Path) => new FileInfo(Path).Length;
+
+        public DateTime GetLastWriteTimeUtc(string Path) => new FileInfo(Path).LastWriteTimeUtc;
 
         public string ReadAllText(string Path) => File.ReadAllText(Path);
 

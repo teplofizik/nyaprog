@@ -32,7 +32,7 @@
   [external](../docs/external-commands.md#нативная-команда-external)
 - **[Формат `.nyap` — прошивочный проект](../docs/nyap.md):**
   [структура проекта](../docs/nyap.md#структура-проекта) ·
-  [скрипт](../docs/nyap.md#скрипт-script) ·
+  [цель (контроллер)](../docs/nyap.md#цель-target) ·
   [поле ввода](../docs/nyap.md#поле-ввода-input) ·
   [шаги](../docs/nyap.md#шаги-steps) ·
   [set](../docs/nyap.md#присвоение-set) ·

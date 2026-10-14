@@ -1,3 +1,5 @@
+using System;
+
 namespace Programmer.Platform
 {
     /// <summary>
@@ -6,6 +8,10 @@ namespace Programmer.Platform
     public interface IFileSystem
     {
         bool Exists(string Path);
+
+        long GetLength(string Path);
+
+        DateTime GetLastWriteTimeUtc(string Path);
 
         string ReadAllText(string Path);
 

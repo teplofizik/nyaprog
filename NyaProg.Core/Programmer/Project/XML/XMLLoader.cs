@@ -10,7 +10,7 @@ namespace Programmer.Project.XML
 {
     static class XMLLoader
     {
-        private static void LoadOptions(Script S, XmlLoad X)
+        private static void LoadOptions(Target S, XmlLoad X)
         {
             var O = Options.XML.XMLLoader.LoadOptions(X);
             if (O != null) S.Options.AddRange(O);
@@ -22,7 +22,7 @@ namespace Programmer.Project.XML
             if (O != null) P.Options.AddRange(O);
         }
 
-        private static void LoadSteps(Script S, XmlLoad X)
+        private static void LoadSteps(Target S, XmlLoad X)
         {
             while (X.Read())
             {
@@ -99,10 +99,10 @@ namespace Programmer.Project.XML
             return null;
         }
         
-        private static void LoadScript(Project P, XmlLoad X)
+        private static void LoadTarget(Project P, XmlLoad X)
         {
-            Script S = new Script();
-            P.Scripts.Add(S);
+            Target S = new Target();
+            P.Targets.Add(S);
 
             while (X.Read())
             {
@@ -110,8 +110,7 @@ namespace Programmer.Project.XML
                 {
                     case "cathegory": S.Cathegory = X.GetAttribute("value"); break;
                     case "name": S.Name = X.GetAttribute("value"); break;
-                    case "photo": /* TODO */ 
-                        break;
+                    case "photo": S.Photo = X.GetAttribute("value"); break;
                     case "options": LoadOptions(S, X.GetSubtree()); break;
                     case "input":
                         {
@@ -156,9 +155,12 @@ namespace Programmer.Project.XML
                 switch (X.ElementName)
                 {
                     case "description": P.Description = X.GetAttribute("value"); break;
+                    case "date": P.Date = X.GetAttribute("value"); break;
+                    case "photo": P.Photo = X.GetAttribute("value"); break;
                     case "options": LoadOptions(P, X.GetSubtree()); break;
                     case "name": P.Name = X.GetAttribute("value"); break;
-                    case "script": LoadScript(P, X.GetSubtree()); break;
+                    case "script":
+                    case "target": LoadTarget(P, X.GetSubtree()); break;
                     case "tag": P.Tags.Add(X.GetAttribute("value")); break;
                     case "type": P.Arch.Add(X.GetAttribute("value")); break;
                     case "readme":

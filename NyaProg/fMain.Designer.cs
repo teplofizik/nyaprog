@@ -32,8 +32,8 @@
             this.cbProject = new System.Windows.Forms.ComboBox();
             this.gbSteps = new System.Windows.Forms.GroupBox();
             this.tTabs = new System.Windows.Forms.TabControl();
-            this.tScripts = new System.Windows.Forms.TabPage();
-            this.gbScripts = new System.Windows.Forms.GroupBox();
+            this.tTargets = new System.Windows.Forms.TabPage();
+            this.gbTargets = new System.Windows.Forms.GroupBox();
             this.tOptions = new System.Windows.Forms.TabPage();
             this.lResult = new System.Windows.Forms.Label();
             this.gbOptions = new System.Windows.Forms.GroupBox();
@@ -47,7 +47,7 @@
             this.mFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tTabs.SuspendLayout();
-            this.tScripts.SuspendLayout();
+            this.tTargets.SuspendLayout();
             this.tOptions.SuspendLayout();
             this.gbOptions.SuspendLayout();
             this.mMenu.SuspendLayout();
@@ -73,7 +73,7 @@
             // 
             // tTabs
             // 
-            this.tTabs.Controls.Add(this.tScripts);
+            this.tTabs.Controls.Add(this.tTargets);
             this.tTabs.Controls.Add(this.tOptions);
             this.tTabs.Location = new System.Drawing.Point(12, 64);
             this.tTabs.Name = "tTabs";
@@ -81,28 +81,28 @@
             this.tTabs.Size = new System.Drawing.Size(596, 517);
             this.tTabs.TabIndex = 2;
             // 
-            // tScripts
+            // tTargets
             // 
-            this.tScripts.Controls.Add(this.gbScripts);
-            this.tScripts.Location = new System.Drawing.Point(4, 22);
-            this.tScripts.Name = "tScripts";
-            this.tScripts.Padding = new System.Windows.Forms.Padding(3);
-            this.tScripts.Size = new System.Drawing.Size(588, 491);
-            this.tScripts.TabIndex = 0;
-            this.tScripts.Text = "Выбор скрипта";
-            this.tScripts.UseVisualStyleBackColor = true;
+            this.tTargets.Controls.Add(this.gbTargets);
+            this.tTargets.Location = new System.Drawing.Point(4, 22);
+            this.tTargets.Name = "tTargets";
+            this.tTargets.Padding = new System.Windows.Forms.Padding(3);
+            this.tTargets.Size = new System.Drawing.Size(588, 491);
+            this.tTargets.TabIndex = 0;
+            this.tTargets.Text = "Выбор скрипта";
+            this.tTargets.UseVisualStyleBackColor = true;
             // 
-            // gbScripts
+            // gbTargets
             // 
-            this.gbScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.gbTargets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbScripts.Location = new System.Drawing.Point(3, 3);
-            this.gbScripts.Name = "gbScripts";
-            this.gbScripts.Size = new System.Drawing.Size(579, 407);
-            this.gbScripts.TabIndex = 0;
-            this.gbScripts.TabStop = false;
-            this.gbScripts.Text = "Доступные варианты действий";
+            this.gbTargets.Location = new System.Drawing.Point(3, 3);
+            this.gbTargets.Name = "gbTargets";
+            this.gbTargets.Size = new System.Drawing.Size(579, 407);
+            this.gbTargets.TabIndex = 0;
+            this.gbTargets.TabStop = false;
+            this.gbTargets.Text = "Доступные варианты действий";
             // 
             // tOptions
             // 
@@ -256,7 +256,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.fMain_FormClosing);
             this.Load += new System.EventHandler(this.fMain_Load);
             this.tTabs.ResumeLayout(false);
-            this.tScripts.ResumeLayout(false);
+            this.tTargets.ResumeLayout(false);
             this.tOptions.ResumeLayout(false);
             this.gbOptions.ResumeLayout(false);
             this.gbOptions.PerformLayout();
@@ -272,11 +272,11 @@
         private System.Windows.Forms.ComboBox cbProject;
         private System.Windows.Forms.GroupBox gbSteps;
         private System.Windows.Forms.TabControl tTabs;
-        private System.Windows.Forms.TabPage tScripts;
+        private System.Windows.Forms.TabPage tTargets;
         private System.Windows.Forms.TabPage tOptions;
         private System.Windows.Forms.Button bOpen;
         private System.Windows.Forms.Button bBack;
-        private System.Windows.Forms.GroupBox gbScripts;
+        private System.Windows.Forms.GroupBox gbTargets;
         private System.Windows.Forms.GroupBox gbOptions;
         private System.Windows.Forms.Button bStart;
         private System.Windows.Forms.MenuStrip mMenu;

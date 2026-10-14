@@ -34,6 +34,16 @@ namespace Programmer.Project
         public string File;
 
         /// <summary>
+        /// Дата создания (строка, как указано в описании проекта)
+        /// </summary>
+        public string Date;
+
+        /// <summary>
+        /// Изображение проекта (путь относительно каталога проекта)
+        /// </summary>
+        public string Photo;
+
+        /// <summary>
         /// Список тегов
         /// </summary>
         public List<string> Tags = new List<string>();
@@ -46,19 +56,19 @@ namespace Programmer.Project
         /// <summary>
         /// Список алгоритмов прошивки
         /// </summary>
-        public List<Script> Scripts = new List<Script>();
+        public List<Target> Targets = new List<Target>();
 
         /// <summary>
         /// Опции
         /// </summary>
         public List<Options.Option> Options = new List<Options.Option>();
 
-        public string GetID(Script Script)
+        public string GetID(Target Target)
         {
-            if (Script != null)
+            if (Target != null)
             {
-                var ID = Script.Arguments.Get("id");
-                if (ID == null) ID = Script.Name;
+                var ID = Target.Arguments.Get("id");
+                if (ID == null) ID = Target.Name;
 
                 return $"project:{File}:{ID}";
             }
