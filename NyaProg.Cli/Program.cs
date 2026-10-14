@@ -39,6 +39,9 @@ namespace NyaProg.Cli
             if ((args.Length >= 3) && (args[1] == "--exec"))
                 return ExecCommand(Env, args[2], args.Skip(3).ToArray());
 
+            if ((args.Length >= 3) && (args[1] == "--list"))
+                return ListItems(Env, args[2]);
+
             if ((args.Length >= 3) && (args[1] == "--run"))
             {
                 var ScriptIdx = (args.Length > 3) ? ParseInt(args[3], 0) : 0;
@@ -47,6 +50,20 @@ namespace NyaProg.Cli
             }
 
             Dump(Env);
+            return 0;
+        }
+
+        static int ListItems(ProgEnv Env, string Source)
+        {
+            var Items = Env.GetListItems(Source, new ArgumentList());
+            Console.WriteLine($"list '{Source}': {Items.Count} items");
+
+            foreach (var I in Items)
+            {
+                var Vals = string.Join(", ", I.Values.Keys.Select(K => $"{K}={I.Values.Get(K)}"));
+                Console.WriteLine($"  {I.Label} -> {Vals}");
+            }
+
             return 0;
         }
 
@@ -65,6 +82,10 @@ namespace NyaProg.Cli
             if ((ScriptIdx < 0) || (ScriptIdx >= P.Scripts.Count)) { Console.WriteLine("bad script index"); return 2; }
 
             var S = P.Scripts[ScriptIdx];
+
+            // Динамические опции — наполнить списки из поставщиков
+            foreach (var O in P.Options.Concat(S.Options).OfType<Programmer.Options.Types.OptionDynamic>())
+                O.Items = Env.GetListItems(O.Source, new ArgumentList());
 
             // Окружение запуска: опции + ввод по умолчанию + переопределения
             var Args = new ArgumentList();

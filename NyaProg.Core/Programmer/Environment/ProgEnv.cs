@@ -301,6 +301,29 @@ namespace Programmer.Environment
         }
 
         /// <summary>
+        /// Получить список значений динамической опции у команды-поставщика.
+        /// </summary>
+        public IReadOnlyList<CommandItem> GetListItems(string Source, ArgumentList Args)
+        {
+            if (string.IsNullOrEmpty(Source)) return new CommandItem[0];
+
+            ICommand Cmd;
+            if (!CmdRegistry.TryResolve(Source, out Cmd)) return new CommandItem[0];
+
+            try
+            {
+                var Ctx = new CommandContext(Source, Args ?? new ArgumentList(), Root, this);
+                var R = Cmd.Execute(Ctx);
+                return ((R != null) && (R.Items != null)) ? R.Items : new CommandItem[0];
+            }
+            catch (Exception E)
+            {
+                Log.WriteLine($"GetListItems('{Source}'): {E.Message}");
+                return new CommandItem[0];
+            }
+        }
+
+        /// <summary>
         /// Установить предпочтения
         /// </summary>
         /// <param name="ID"></param>

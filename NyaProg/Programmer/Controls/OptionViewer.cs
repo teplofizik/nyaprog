@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using Programmer.Options;
 using Programmer.Options.Types;
+using Programmer.Modules;
 using Extension.Argument;
 
 namespace Programmer.Controls
@@ -16,6 +17,11 @@ namespace Programmer.Controls
     public partial class OptionViewer : UserControl
     {
         public event EventHandler OnChange;
+
+        /// <summary>
+        /// Запрос на обновление списка (для динамических опций).
+        /// </summary>
+        public Action RefreshItems;
 
         private Option InternalOption;
         private Control EditControl;
@@ -113,6 +119,8 @@ namespace Programmer.Controls
                     return (EditControl as ComboBox).Text;
                 else if (O.GetType() == typeof(OptionBool))
                     return (EditControl as CheckBox).Checked ? "1" : "0";
+                else if (O.GetType() == typeof(OptionDynamic))
+                    return (EditControl as ComboBox).Text;
             }
             return "";
         }
@@ -145,6 +153,15 @@ namespace Programmer.Controls
                 {
                     var OB = O as OptionBool;
                     AL.Set(OB.ParamName, (EditControl as CheckBox).Checked ? OB.Value : "");
+                }
+                else if (O.GetType() == typeof(OptionDynamic))
+                {
+                    var OD = O as OptionDynamic;
+                    var CB = (EditControl as ComboBox);
+                    var Idx = CB.SelectedIndex;
+
+                    if ((Idx >= 0) && (Idx < OD.Items.Count))
+                        AL.Append(OD.Items[Idx].Values);
                 }
             }
             return AL;
@@ -207,7 +224,45 @@ namespace Programmer.Controls
                     else
                         CB.Checked = OB.Default;
                 }
+                else if (O.GetType() == typeof(OptionDynamic))
+                {
+                    var OD = O as OptionDynamic;
+                    var CB = EditControl as ComboBox;
+                    var Label = (Value != null) ? Value : OD.DefaultLabel;
+                    var Idx = 0;
+
+                    if (Label != null)
+                        for (int i = 0; i < OD.Items.Count; i++)
+                            if (OD.Items[i].Label == Label) { Idx = i; break; }
+
+                    if (OD.Items.Count > 0) CB.SelectedIndex = Idx;
+                }
             }
+        }
+
+        /// <summary>
+        /// Обновить список динамической опции (после повторного запроса к поставщику).
+        /// </summary>
+        public void SetItems(IReadOnlyList<CommandItem> Items)
+        {
+            var OD = InternalOption as OptionDynamic;
+            if (OD == null) return;
+
+            OD.Items = Items ?? new CommandItem[0];
+
+            var CB = EditControl as ComboBox;
+            if (CB == null) return;
+
+            var Cur = CB.Text;
+            CB.Items.Clear();
+            CB.Items.AddRange(OD.Items.ToArray());
+
+            var Idx = 0;
+            if (!string.IsNullOrEmpty(Cur))
+                for (int i = 0; i < OD.Items.Count; i++)
+                    if (OD.Items[i].Label == Cur) { Idx = i; break; }
+
+            if (OD.Items.Count > 0) CB.SelectedIndex = Idx;
         }
 
         private void SetupOption()
@@ -234,6 +289,22 @@ namespace Programmer.Controls
                     var OB = O as OptionBool;
                     EditControl = ComponentPlacer.PlaceCheckBox(this, OB.Name, OB.Default, O);
                     (EditControl as CheckBox).CheckedChanged += OptionViewer_CheckedChanged;
+                }
+                else if (O.GetType() == typeof(OptionDynamic))
+                {
+                    var OD = O as OptionDynamic;
+                    EditControl = ComponentPlacer.PlaceComboBox(this, OD.Items.ToArray(), O);
+                    (EditControl as ComboBox).SelectedIndexChanged += OptionViewer_SelectedIndexChanged;
+
+                    EditControl.Width -= EditControl.Height;
+                    ComponentPlacer.PlaceButton(this,
+                                                EditControl,
+                                                EditControl.Width,
+                                                0,
+                                                EditControl.Height,
+                                                EditControl.Height,
+                                                "⟳",
+                                                EC => RefreshItems?.Invoke());
                 }
                 else if(O.GetType() == typeof(OptionInput))
                 {

@@ -136,12 +136,25 @@ namespace NyaProg
             if (OptionsControls != null)
                 ComponentPlacer.Remove(gbOptions, OptionsControls);
 
+            // Динамические списки — подгружаем значения у команд-поставщиков
+            var DynArgs = PrState.CompiledArgs ?? new Extension.Argument.ArgumentList();
+            foreach (var O in OptsTool.Concat(OptsProj).OfType<OptionDynamic>())
+                O.Items = PrState.Env.GetListItems(O.Source, DynArgs);
+
             OptViewers.AddRange(ComponentPlacer.PlaceOptions(gbOptions, OptsTool.ToArray(), new OptionMapper(15, 25+22+8, 220), OnOptionChange));
             OptViewers.AddRange(ComponentPlacer.PlaceOptions(gbOptions, OptsProj.ToArray(), new OptionMapper(gbOptions.Width - 208, 25, 200), OnOptionChange));
 
             foreach (var O in OptViewers)
             {
                 if(O.ID != null) O.SetDefault(PrState.Env.GetPreference(O.ID));
+            }
+
+            // Кнопка обновления у динамических опций
+            foreach (var V in OptViewers)
+            {
+                var OD = V.Option as OptionDynamic;
+                if (OD != null)
+                    V.RefreshItems = () => V.SetItems(PrState.Env.GetListItems(OD.Source, PrState.CompiledArgs ?? new Extension.Argument.ArgumentList()));
             }
 
             OptionsControls = OptViewers.ToArray();

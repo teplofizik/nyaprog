@@ -84,6 +84,25 @@ namespace Programmer.Options.XML
             return O;
         }
 
+        private static Types.OptionDynamic LoadDynamic(string Name, XmlLoad X)
+        {
+            var O = new Types.OptionDynamic(Name);
+
+            if (X.HasAttribute("id"))
+                O.ID = X.GetAttribute("id");
+
+            var N = X.GetAttribute("name");
+            if (N != null) O.ParamName = N;
+
+            var S = X.GetAttribute("source");
+            if (S != null) O.Source = S;
+
+            var D = X.GetAttribute("default");
+            if (D != null) O.DefaultLabel = D;
+
+            return O;
+        }
+
         private static Types.OptionBool LoadBool(string Name, XmlLoad X)
         {
             var O = new Types.OptionBool(Name);
@@ -115,6 +134,7 @@ namespace Programmer.Options.XML
                     case "text": Res.Add(LoadText(X.GetAttribute("label"), X)); break;
                     case "hidden": Res.Add(LoadHidden(X.GetAttribute("label"), X)); break;
                     case "bool": Res.Add(LoadBool(X.GetAttribute("label"), X)); break;
+                    case "dynamic": Res.Add(LoadDynamic(X.GetAttribute("label"), X)); break;
                 }
             }
 
