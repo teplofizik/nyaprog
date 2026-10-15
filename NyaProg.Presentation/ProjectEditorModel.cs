@@ -17,6 +17,7 @@ namespace NyaProg.Presentation
     {
         public string Name = "";
         public string Device = "";
+        public string Type = "";
         public string Photo = "";
         public List<StepEdit> Steps = new List<StepEdit>();
     }
@@ -57,6 +58,7 @@ namespace NyaProg.Presentation
                 {
                     Name = T.Name ?? "",
                     Device = T.Arguments.Get("device") ?? "",
+                    Type = (T.Arch.Count > 0) ? T.Arch[0] : "",
                     Photo = T.Photo ?? ""
                 };
 
@@ -99,6 +101,7 @@ namespace NyaProg.Presentation
             {
                 var T = new Target { Name = TE.Name, Photo = (TE.Photo.Length > 0) ? TE.Photo : null };
 
+                if (!string.IsNullOrEmpty(TE.Type)) T.Arch.Add(TE.Type);
                 if (!string.IsNullOrEmpty(TE.Device)) T.Arguments.Set("device", TE.Device);
 
                 foreach (var SE in TE.Steps)

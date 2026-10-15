@@ -37,6 +37,9 @@ namespace NyaProg.App.Modern.ViewModels
 
         public ICommand SaveCommand { get; }
 
+        private string mStatus = "";
+        public string Status { get => mStatus; private set => Set(ref mStatus, value); }
+
         public PreferencesViewModel(Session Session)
         {
             this.Session = Session;
@@ -71,6 +74,8 @@ namespace NyaProg.App.Modern.ViewModels
                 Session.Env.SetPreference(Prefs.ArchProgrammer(I.Arch), I.Selected?.Name ?? "");
 
             Session.Env.Save(Session.Env.Conf.Preferences);
+
+            Status = "Сохранено";
         }
     }
 }

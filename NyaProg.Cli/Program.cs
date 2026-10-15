@@ -48,6 +48,12 @@ namespace NyaProg.Cli
             if ((args.Length >= 3) && (args[1] == "--mkproject"))
                 return MakeProject(args[2]);
 
+            if (args.Length >= 2 && args[1] == "--mkctl")
+                return MakeControllers();
+
+            if (args.Length >= 2 && args[1] == "--saveprefs")
+                return SavePrefs(Env);
+
             if ((args.Length >= 3) && (args[1] == "--list"))
                 return ListItems(Env, args[2]);
 
@@ -72,6 +78,34 @@ namespace NyaProg.Cli
 
             foreach (var C in Items)
                 Console.WriteLine($"  {C.Name} | {C.Date} | targets={C.TargetCount} | ctrl=[{string.Join(",", C.ControllerTypes)}] | tags=[{string.Join(",", C.Tags)}] | photo={(C.PhotoPath ?? "-")}");
+
+            return 0;
+        }
+
+        static int SavePrefs(ProgEnv Env)
+        {
+            Env.SetPreference("test.key", "test.value");
+            Env.Save(Env.Conf.Preferences);
+
+            var P = System.IO.Path.GetFullPath(Env.Conf.Preferences);
+            Console.WriteLine($"prefs: {P} exists={System.IO.File.Exists(P)}");
+
+            return 0;
+        }
+
+        static int MakeControllers()
+        {
+            var Dir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "nyap_ctl");
+            System.IO.Directory.CreateDirectory(Dir);
+            var File = System.IO.Path.Combine(Dir, "controllers.xml");
+
+            var C = new Programmer.Project.ControllerCatalog();
+            C.Entries.Add(new Programmer.Project.ControllerEntry("STM32F107", "stm32"));
+            C.Entries.Add(new Programmer.Project.ControllerEntry("16F1503", "pic"));
+            C.Save(File);
+
+            var C2 = Programmer.Project.ControllerCatalog.Load(File);
+            Console.WriteLine($"catalog saved/loaded: {C2.Entries.Count} -> {string.Join(", ", C2.Entries.Select(E => E.Name + "/" + E.Type))}");
 
             return 0;
         }

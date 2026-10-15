@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NyaProg.App.Modern.ControllersWindow"
+        Title="Список контроллеров" Width="560" Height="480"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="14">
+
+    <TextBlock Grid.Row="0" Text="Контроллеры (название и тип для выбора программатора)"
+               FontWeight="Bold" Margin="0,0,0,8" />
+
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid ColumnDefinitions="*,180,Auto" Margin="0,3">
+              <TextBox Grid.Column="0" Text="{Binding Name, Mode=TwoWay}" />
+              <TextBox Grid.Column="1" Text="{Binding Type, Mode=TwoWay}" Margin="6,0,0,0" />
+              <Button Grid.Column="2" Content="✕" Margin="6,0,0,0" Click="OnRemove" />
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+      <Button Content="+ Контроллер" Click="OnAdd" />
+      <Button Content="Сохранить" MinWidth="110" HorizontalAlignment="Right" Click="OnSave" />
+      <Button Content="Закрыть" MinWidth="110" Click="OnClose" />
+    </StackPanel>
+
+  </Grid>
+</Window>

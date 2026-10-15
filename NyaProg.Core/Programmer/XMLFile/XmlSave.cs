@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -12,6 +13,10 @@ namespace Programmer.XMLFile
 
         public XmlSave(string FileName)
         {
+            var Dir = Path.GetDirectoryName(Path.GetFullPath(FileName));
+            if (!string.IsNullOrEmpty(Dir) && !Directory.Exists(Dir))
+                Directory.CreateDirectory(Dir);
+
             XmlWriterSettings settings = new XmlWriterSettings();
 
             {

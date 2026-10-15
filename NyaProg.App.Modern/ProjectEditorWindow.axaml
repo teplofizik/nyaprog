@@ -28,7 +28,10 @@
         </Grid>
 
         <TextBlock Text="Фото (имя файла в папке проекта)" />
-        <TextBox Text="{Binding Photo, Mode=TwoWay}" />
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBox Grid.Column="0" Text="{Binding Photo, Mode=TwoWay}" />
+          <Button Grid.Column="1" Content="Выбрать фото…" Margin="6,0,0,0" Click="OnPickProjectPhoto" />
+        </Grid>
 
         <TextBlock Text="Цели (контроллеры)" FontWeight="Bold" Margin="0,10,0,0" />
 
@@ -49,14 +52,22 @@
                       <TextBox Text="{Binding Name, Mode=TwoWay}" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Spacing="2">
-                      <TextBlock Text="Контроллер (device)" />
-                      <TextBox Text="{Binding Device, Mode=TwoWay}" />
+                      <TextBlock Text="Контроллер (тип → программатор)" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <ComboBox Grid.Column="0" HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Controllers}"
+                                  SelectedItem="{Binding SelectedController, Mode=TwoWay}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Type}" VerticalAlignment="Center" Margin="6,0,0,0" />
+                      </Grid>
                     </StackPanel>
                   </Grid>
 
                   <StackPanel Spacing="2">
                     <TextBlock Text="Фото" />
-                    <TextBox Text="{Binding Photo, Mode=TwoWay}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBox Grid.Column="0" Text="{Binding Photo, Mode=TwoWay}" />
+                      <Button Grid.Column="1" Content="Выбрать фото…" Margin="6,0,0,0" Click="OnPickTargetPhoto" />
+                    </Grid>
                   </StackPanel>
 
                   <TextBlock Text="Шаги (команда, значение, подпись)" FontWeight="Bold" Margin="0,6,0,0" />
@@ -82,7 +93,10 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Button Content="+ Цель" HorizontalAlignment="Left" Click="OnAddTarget" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Content="+ Цель" Click="OnAddTarget" />
+          <Button Content="Список контроллеров…" Click="OnControllers" />
+        </StackPanel>
 
       </StackPanel>
     </ScrollViewer>

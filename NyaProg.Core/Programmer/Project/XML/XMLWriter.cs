@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 
@@ -11,6 +12,10 @@ namespace Programmer.Project.XML
     {
         public static void Save(Project P, string FileName)
         {
+            var Dir = Path.GetDirectoryName(Path.GetFullPath(FileName));
+            if (!string.IsNullOrEmpty(Dir) && !Directory.Exists(Dir))
+                Directory.CreateDirectory(Dir);
+
             var Settings = new XmlWriterSettings
             {
                 Indent = true,
