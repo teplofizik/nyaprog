@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NyaProg.App.Modern.PreferencesWindow"
+        Title="Настройки" Width="540" Height="440"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="14">
+
+    <TextBlock Grid.Row="0" Text="Программатор по умолчанию для типа контроллера"
+               FontWeight="Bold" Margin="0,0,0,8" />
+
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl ItemsSource="{Binding Items}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid ColumnDefinitions="170,*" Margin="0,4">
+              <TextBlock Grid.Column="0" Text="{Binding Arch}" VerticalAlignment="Center" />
+              <ComboBox Grid.Column="1" Width="300" HorizontalAlignment="Left"
+                        ItemsSource="{Binding Programmers}"
+                        SelectedItem="{Binding Selected, Mode=TwoWay}" />
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                Spacing="8" Margin="0,12,0,0">
+      <Button Content="Сохранить" MinWidth="110" Click="OnSave" />
+      <Button Content="Закрыть" MinWidth="110" Click="OnClose" />
+    </StackPanel>
+
+  </Grid>
+</Window>

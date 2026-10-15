@@ -10,15 +10,18 @@
 
     <!-- Хлебные крошки: Список → Проект → Контроллер -->
     <Border Grid.Row="0" Background="#F0F0F0" Padding="12,8">
-      <StackPanel Orientation="Horizontal" Spacing="6">
-        <Button Content="Список" Command="{Binding HomeCommand}" IsVisible="{Binding !IsList}" />
-        <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasProject}" />
-        <Button Content="{Binding ProjectName}" Command="{Binding CrumbProjectCommand}"
-                IsVisible="{Binding HasProject}" IsEnabled="{Binding CanCrumbProject}" />
-        <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasTarget}" />
-        <TextBlock Text="{Binding TargetName}" VerticalAlignment="Center"
-                   FontWeight="Bold" IsVisible="{Binding HasTarget}" />
-      </StackPanel>
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Content="Настройки" Click="OnPrefs" />
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <Button Content="Список" Command="{Binding HomeCommand}" IsVisible="{Binding !IsList}" />
+          <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasProject}" />
+          <Button Content="{Binding ProjectName}" Command="{Binding CrumbProjectCommand}"
+                  IsVisible="{Binding HasProject}" IsEnabled="{Binding CanCrumbProject}" />
+          <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasTarget}" />
+          <TextBlock Text="{Binding TargetName}" VerticalAlignment="Center"
+                     FontWeight="Bold" IsVisible="{Binding HasTarget}" />
+        </StackPanel>
+      </DockPanel>
     </Border>
 
     <Grid Grid.Row="1">

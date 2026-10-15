@@ -66,17 +66,38 @@ namespace NyaProg.Presentation
 
             Programmers = Session.Env.GetToolsByArch(State.Arch);
 
-            // Программатор из кэша (предпочтения)
-            var Pref = Session.Env.GetPreference(Project.GetID(Target));
-            Programmer = (Pref != null) ? Programmers.FirstOrDefault(T => T.Name == Pref) : null;
-            if ((Programmer == null) && (Programmers.Count > 0))
-                Programmer = Programmers[0];
+            Programmer = FindProgrammer(State.Arch);
 
             State.Tool = Programmer;
 
             BuildOptions();
             ApplyOptions();
             RebuildPlan();
+        }
+
+        /// <summary>
+        /// Выбор программатора: кэш проекта → дефолт по типу контроллера → первый доступный.
+        /// </summary>
+        private UniTool FindProgrammer(string[] Arch)
+        {
+            var Pref = Session.Env.GetPreference(Project.GetID(Target));
+            if (Pref != null)
+            {
+                var T = Programmers.FirstOrDefault(X => X.Name == Pref);
+                if (T != null) return T;
+            }
+
+            foreach (var A in Arch)
+            {
+                var DA = Session.Env.GetPreference(Prefs.ArchProgrammer(A));
+                if (DA != null)
+                {
+                    var T = Programmers.FirstOrDefault(X => X.Name == DA);
+                    if (T != null) return T;
+                }
+            }
+
+            return (Programmers.Count > 0) ? Programmers[0] : null;
         }
 
         public void SelectProgrammer(UniTool Tool)
