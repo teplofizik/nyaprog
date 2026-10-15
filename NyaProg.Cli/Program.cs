@@ -42,6 +42,9 @@ namespace NyaProg.Cli
             if ((args.Length >= 2) && (args[1] == "--projects"))
                 return ListProjects(Env, (args.Length > 2) ? args[2] : null);
 
+            if ((args.Length >= 3) && (args[1] == "--flash"))
+                return FlashInfo(Env, args[2], (args.Length > 3) ? ParseInt(args[3], 0) : 0);
+
             if ((args.Length >= 3) && (args[1] == "--list"))
                 return ListItems(Env, args[2]);
 
@@ -66,6 +69,31 @@ namespace NyaProg.Cli
 
             foreach (var C in Items)
                 Console.WriteLine($"  {C.Name} | {C.Date} | targets={C.TargetCount} | ctrl=[{string.Join(",", C.ControllerTypes)}] | tags=[{string.Join(",", C.Tags)}] | photo={(C.PhotoPath ?? "-")}");
+
+            return 0;
+        }
+
+        static int FlashInfo(ProgEnv Env, string ProjectArg, int TargetIdx)
+        {
+            var S = new NyaProg.Presentation.Session(Env);
+            var P = Env.Projects.FirstOrDefault(X =>
+                (X.Name == ProjectArg) || ((X.File != null) && X.File.EndsWith(ProjectArg)));
+
+            if (P == null) { Console.WriteLine($"project not found: {ProjectArg}"); return 2; }
+            S.Open(P);
+
+            if ((TargetIdx < 0) || (TargetIdx >= P.Targets.Count)) { Console.WriteLine("bad target index"); return 2; }
+            S.Open(P.Targets[TargetIdx]);
+
+            var F = S.Flash;
+            Console.WriteLine($"flash '{P.Targets[TargetIdx].Name}': programmers={F.Programmers.Count}, options={F.Options.Count}, steps={F.Steps.Count}");
+
+            foreach (var Pr in F.Programmers)
+                Console.WriteLine($"  programmer: {Pr.Name} [{string.Join(",", Pr.GetSupportedArch())}]");
+            foreach (var O in F.Options)
+                Console.WriteLine($"  option: {O.Name} ({O.Kind})");
+            foreach (var St in F.Steps)
+                Console.WriteLine($"  step: {St.Title}");
 
             return 0;
         }

@@ -1,0 +1,15 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:NyaProg.App.Modern.Converters"
+             x:Class="NyaProg.App.Modern.App"
+             RequestedThemeVariant="Default">
+
+  <Application.Resources>
+    <conv:PathToBitmapConverter x:Key="PathToBitmap" />
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+  </Application.Styles>
+
+</Application>

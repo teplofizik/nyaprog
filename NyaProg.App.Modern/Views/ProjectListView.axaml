@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="NyaProg.App.Modern.Views.ProjectListView">
+
+  <Grid RowDefinitions="Auto,*" Margin="12">
+    <TextBox Grid.Row="0"
+             Watermark="Поиск проектов (имя, описание, тег, контроллер)…"
+             Text="{Binding Search, Mode=TwoWay}"
+             Margin="0,0,0,10" />
+
+    <ScrollViewer Grid.Row="1">
+      <ItemsControl ItemsSource="{Binding Projects}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Button Background="Transparent" BorderThickness="0" Padding="0" Margin="6"
+                    Click="OnCardClick">
+              <Border Width="280" Height="230" CornerRadius="8"
+                      BorderBrush="#33000000" BorderThickness="1"
+                      Background="#FAFAFA" Padding="10">
+                <Grid RowDefinitions="120,*">
+                  <Image Grid.Row="0" Stretch="Uniform"
+                         Source="{Binding PhotoPath, Converter={StaticResource PathToBitmap}}" />
+                  <StackPanel Grid.Row="1" Spacing="3" Margin="0,6,0,0">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"
+                               Opacity="0.7" FontSize="12" MaxHeight="34" />
+                    <TextBlock Text="{Binding Date}" Opacity="0.6" FontSize="11" />
+                    <ItemsControl ItemsSource="{Binding ControllerTypes}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border Background="#204080FF" CornerRadius="4"
+                                  Padding="6,1" Margin="0,2,4,0">
+                            <TextBlock Text="{Binding}" FontSize="11" />
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Grid>
+              </Border>
+            </Button>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

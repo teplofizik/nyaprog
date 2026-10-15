@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:NyaProg.App.Modern.Views"
+        x:Class="NyaProg.App.Modern.MainWindow"
+        Title="NyaProg"
+        Width="1024" Height="720"
+        WindowStartupLocation="CenterScreen">
+
+  <Grid RowDefinitions="Auto,*">
+
+    <!-- Хлебные крошки: Список → Проект → Контроллер -->
+    <Border Grid.Row="0" Background="#F0F0F0" Padding="12,8">
+      <StackPanel Orientation="Horizontal" Spacing="6">
+        <Button Content="Список" Command="{Binding HomeCommand}" IsVisible="{Binding !IsList}" />
+        <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasProject}" />
+        <Button Content="{Binding ProjectName}" Command="{Binding CrumbProjectCommand}"
+                IsVisible="{Binding HasProject}" IsEnabled="{Binding CanCrumbProject}" />
+        <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasTarget}" />
+        <TextBlock Text="{Binding TargetName}" VerticalAlignment="Center"
+                   FontWeight="Bold" IsVisible="{Binding HasTarget}" />
+      </StackPanel>
+    </Border>
+
+    <Grid Grid.Row="1">
+      <views:ProjectListView IsVisible="{Binding IsList}" />
+      <views:TargetSelectView IsVisible="{Binding IsTargets}" />
+      <Border IsVisible="{Binding IsFlash}">
+        <views:FlashView DataContext="{Binding Flash}" />
+      </Border>
+    </Grid>
+
+  </Grid>
+</Window>
