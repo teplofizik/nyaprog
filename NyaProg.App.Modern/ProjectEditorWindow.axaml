@@ -33,6 +33,9 @@
           <Button Grid.Column="1" Content="Выбрать фото…" Margin="6,0,0,0" Click="OnPickProjectPhoto" />
         </Grid>
 
+        <TextBlock Text="Документ (файл или URL)" />
+        <TextBox Text="{Binding Doc, Mode=TwoWay}" />
+
         <TextBlock Text="Цели (контроллеры)" FontWeight="Bold" Margin="0,10,0,0" />
 
         <ItemsControl ItemsSource="{Binding Targets}">
@@ -68,6 +71,11 @@
                       <TextBox Grid.Column="0" Text="{Binding Photo, Mode=TwoWay}" />
                       <Button Grid.Column="1" Content="Выбрать фото…" Margin="6,0,0,0" Click="OnPickTargetPhoto" />
                     </Grid>
+                  </StackPanel>
+
+                  <StackPanel Spacing="2">
+                    <TextBlock Text="Документ (файл или URL)" />
+                    <TextBox Text="{Binding Doc, Mode=TwoWay}" />
                   </StackPanel>
 
                   <TextBlock Text="Шаги (команда, значение, подпись)" FontWeight="Bold" Margin="0,6,0,0" />

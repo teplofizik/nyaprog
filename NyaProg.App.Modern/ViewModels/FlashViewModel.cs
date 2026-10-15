@@ -6,7 +6,7 @@ using Avalonia.Threading;
 
 using NyaProg.App.Modern.Mvvm;
 using NyaProg.Presentation;
-using Programmer.Tool;
+using Programmer.Modules;
 
 namespace NyaProg.App.Modern.ViewModels
 {
@@ -17,10 +17,10 @@ namespace NyaProg.App.Modern.ViewModels
         public ObservableCollection<OptionViewModel> Options { get; } = new ObservableCollection<OptionViewModel>();
         public ObservableCollection<StepViewModel> Steps { get; } = new ObservableCollection<StepViewModel>();
 
-        public IReadOnlyList<UniTool> Programmers => Model.Programmers;
+        public IReadOnlyList<ITool> Programmers => Model.Programmers;
 
-        private UniTool mProgrammer;
-        public UniTool Programmer
+        private ITool mProgrammer;
+        public ITool Programmer
         {
             get => mProgrammer;
             set
@@ -35,9 +35,12 @@ namespace NyaProg.App.Modern.ViewModels
         public bool Running => Model.Running;
         public string PhotoPath => Model.PhotoPath;
         public string Readme => Model.Readme;
+        public string Doc => Model.Doc;
+        public string ProjectDir => Model.Project.Dir;
+        public bool HasDoc => !string.IsNullOrEmpty(Model.Doc) || !string.IsNullOrEmpty(Model.Readme);
 
-        public ICommand StartCommand { get; }
-        public ICommand CancelCommand { get; }
+        public System.Windows.Input.ICommand StartCommand { get; }
+        public System.Windows.Input.ICommand CancelCommand { get; }
 
         public FlashViewModel(FlashModel Model)
         {
@@ -62,6 +65,9 @@ namespace NyaProg.App.Modern.ViewModels
             Raise(nameof(Running));
             Raise(nameof(PhotoPath));
             Raise(nameof(Readme));
+            Raise(nameof(Doc));
+            Raise(nameof(ProjectDir));
+            Raise(nameof(HasDoc));
 
             if (!SameOptions())
             {
@@ -82,6 +88,9 @@ namespace NyaProg.App.Modern.ViewModels
 
             return true;
         }
+
+        /// <summary>Обновить динамические списки (например, список портов).</summary>
+        public void RefreshDynamic() => Model.RefreshDynamic();
 
         private void OnOptionChanged()
         {

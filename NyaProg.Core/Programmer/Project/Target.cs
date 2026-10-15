@@ -35,6 +35,11 @@ namespace Programmer.Project
         public string Readme;
 
         /// <summary>
+        /// Документация: путь к файлу (относительно проекта) или URL.
+        /// </summary>
+        public string Doc;
+
+        /// <summary>
         /// Поддерживаемые способы прошивки (программаторами, бутлоадеры, и т.д. - если тип, указанный в проекте не подходит)
         /// </summary>
         public List<string> Arch = new List<string>();

@@ -19,6 +19,7 @@ namespace NyaProg.Presentation
         public string Device = "";
         public string Type = "";
         public string Photo = "";
+        public string Doc = "";
         public List<StepEdit> Steps = new List<StepEdit>();
     }
 
@@ -33,6 +34,7 @@ namespace NyaProg.Presentation
         public string Date = "";
         public string Type = "";
         public string Photo = "";
+        public string Doc = "";
         public string File;
         public string Dir;
         public List<TargetEdit> Targets = new List<TargetEdit>();
@@ -48,6 +50,7 @@ namespace NyaProg.Presentation
                 Date = P.Date ?? "",
                 Type = (P.Arch.Count > 0) ? P.Arch[0] : "",
                 Photo = P.Photo ?? "",
+                Doc = P.Doc ?? "",
                 File = P.File,
                 Dir = P.Dir
             };
@@ -59,7 +62,8 @@ namespace NyaProg.Presentation
                     Name = T.Name ?? "",
                     Device = T.Arguments.Get("device") ?? "",
                     Type = (T.Arch.Count > 0) ? T.Arch[0] : "",
-                    Photo = T.Photo ?? ""
+                    Photo = T.Photo ?? "",
+                    Doc = T.Doc ?? ""
                 };
 
                 foreach (var S in T.Steps)
@@ -91,6 +95,7 @@ namespace NyaProg.Presentation
                 Description = Description,
                 Date = Date,
                 Photo = (Photo.Length > 0) ? Photo : null,
+                Doc = (Doc.Length > 0) ? Doc : null,
                 File = File,
                 Dir = Dir
             };
@@ -99,7 +104,12 @@ namespace NyaProg.Presentation
 
             foreach (var TE in Targets)
             {
-                var T = new Target { Name = TE.Name, Photo = (TE.Photo.Length > 0) ? TE.Photo : null };
+                var T = new Target
+                {
+                    Name = TE.Name,
+                    Photo = (TE.Photo.Length > 0) ? TE.Photo : null,
+                    Doc = (TE.Doc.Length > 0) ? TE.Doc : null
+                };
 
                 if (!string.IsNullOrEmpty(TE.Type)) T.Arch.Add(TE.Type);
                 if (!string.IsNullOrEmpty(TE.Device)) T.Arguments.Set("device", TE.Device);

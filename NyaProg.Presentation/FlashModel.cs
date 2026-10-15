@@ -6,6 +6,7 @@ using Extension.Argument;
 using Programmer.Environment;
 using Programmer.Options;
 using Programmer.Options.Types;
+using Programmer.Modules;
 using Programmer.Project;
 using Programmer.Tool;
 
@@ -22,9 +23,9 @@ namespace NyaProg.Presentation
 
         public Target Target { get; }
 
-        public IReadOnlyList<UniTool> Programmers { get; private set; } = new UniTool[0];
+        public IReadOnlyList<ITool> Programmers { get; private set; } = new ITool[0];
 
-        public UniTool Programmer { get; private set; }
+        public ITool Programmer { get; private set; }
 
         public IReadOnlyList<OptionModel> Options { get; private set; } = new OptionModel[0];
 
@@ -54,7 +55,10 @@ namespace NyaProg.Presentation
 
         public string PhotoPath => PhotoResolver.Resolve(Project.Dir, Target.Photo);
 
-        public string Readme => Target.Readme;
+        public string Readme => !string.IsNullOrEmpty(Target.Readme) ? Target.Readme : Project.Readme;
+
+        /// <summary>Документация: файл (относительно проекта) или URL.</summary>
+        public string Doc => !string.IsNullOrEmpty(Target.Doc) ? Target.Doc : Project.Doc;
 
         /// <summary>Собрать программаторы, опции и план.</summary>
         public void Build()
@@ -78,7 +82,7 @@ namespace NyaProg.Presentation
         /// <summary>
         /// Выбор программатора: кэш проекта → дефолт по типу контроллера → первый доступный.
         /// </summary>
-        private UniTool FindProgrammer(string[] Arch)
+        private ITool FindProgrammer(string[] Arch)
         {
             var Pref = Session.Env.GetPreference(Project.GetID(Target));
             if (Pref != null)
@@ -100,7 +104,7 @@ namespace NyaProg.Presentation
             return (Programmers.Count > 0) ? Programmers[0] : null;
         }
 
-        public void SelectProgrammer(UniTool Tool)
+        public void SelectProgrammer(ITool Tool)
         {
             Programmer = Tool;
             Session.State.Tool = Tool;
@@ -130,7 +134,10 @@ namespace NyaProg.Presentation
             var State = Session.State;
             State.CompiledArgs = new ArgumentList();
 
-            if (Programmer != null) State.CompiledArgs.Append(Programmer.GetDefaultOptionsValues());
+            if (Programmer != null)
+                foreach (var O in Programmer.GetOptions())
+                    State.CompiledArgs.Append(O.GetDefault());
+
             State.CompiledArgs.Append(Project.GetDefaultOptionsValues());
             State.CompiledArgs.Append(Target.GetDefaultOptionsValues());
 
@@ -170,16 +177,32 @@ namespace NyaProg.Presentation
             Session.State.ActionCompleted -= OnActionCompleted;
         }
 
+        /// <summary>Наполнить динамические опции значениями от команд-поставщиков.</summary>
+        public void RefreshDynamic()
+        {
+            BuildOptions();
+            ApplyOptions();
+            RebuildPlan();
+            Changed?.Invoke();
+        }
+
         private void BuildOptions()
         {
+            var Raw = new List<Option>();
+            if (Programmer != null) Raw.AddRange(Programmer.GetOptions());
+            Raw.AddRange(Project.Options);
+            Raw.AddRange(Target.Options);
+
+            // Динамические списки — значения от поставщика (например, scan.ports)
+            foreach (var O in Raw)
+            {
+                var OD = O as OptionDynamic;
+                if (OD != null)
+                    OD.Items = Session.Env.GetListItems(OD.Source, Session.State.CompiledArgs ?? new ArgumentList());
+            }
+
             var Opts = new List<OptionModel>();
-
-            if (Programmer != null)
-                foreach (var O in Programmer.GetOptions())
-                    Opts.Add(OptionModel.FromOption(O));
-
-            foreach (var O in Project.Options) Opts.Add(OptionModel.FromOption(O));
-            foreach (var O in Target.Options) Opts.Add(OptionModel.FromOption(O));
+            foreach (var O in Raw) Opts.Add(OptionModel.FromOption(O));
 
             var IL = Session.Env.InputTypes;
             foreach (var I in Target.Input)

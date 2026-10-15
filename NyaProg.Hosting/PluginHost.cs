@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Programmer;
 using Programmer.Environment;
@@ -113,10 +114,35 @@ namespace NyaProg.Hosting
                     {
                         try { return Assembly.LoadFrom(P); } catch { }
                     }
+
+                    // RID-специфичные сборки (например, System.IO.Ports: runtimes/win/lib/net8.0/...)
+                    var Rt = Path.Combine(D, "runtimes", Rid());
+                    if (Directory.Exists(Rt))
+                    {
+                        var LibRoot = Path.Combine(Rt, "lib");
+                        if (Directory.Exists(LibRoot))
+                        {
+                            foreach (var Lib in Directory.GetDirectories(LibRoot))
+                            {
+                                var R = Path.Combine(Lib, Name);
+                                if (File.Exists(R))
+                                {
+                                    try { return Assembly.LoadFrom(R); } catch { }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 return null;
             };
+        }
+
+        private static string Rid()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return "win";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) return "osx";
+            return "linux";
         }
     }
 }

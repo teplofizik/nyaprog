@@ -63,11 +63,6 @@ namespace Programmer.Environment
         CommandRegistry CmdRegistry = new CommandRegistry();
 
         /// <summary>
-        /// Соответствие legacy-инструментов их модулям (для приоритета в реестре).
-        /// </summary>
-        Dictionary<UniTool, ITool> Modules = new Dictionary<UniTool, ITool>();
-
-        /// <summary>
         /// Конструктор. UI опционален — по умолчанию headless-заглушка.
         /// </summary>
         public ProgEnv(IUserInterface UI = null)
@@ -184,7 +179,6 @@ namespace Programmer.Environment
         protected void BuildRegistry()
         {
             CmdRegistry = new CommandRegistry();
-            Modules = new Dictionary<UniTool, ITool>();
 
             foreach (var T in ProgTS.Tools) RegisterLegacy(T, ToolKind.Programmer);
             foreach (var T in CustTS.Tools) RegisterLegacy(T, T.Kind);
@@ -209,18 +203,7 @@ namespace Programmer.Environment
 
         private void RegisterLegacy(UniTool T, ToolKind Kind)
         {
-            var M = new LegacyToolModule(T, Kind, OptRewriteRules);
-            CmdRegistry.Register(M);
-            Modules[T] = M;
-        }
-
-        /// <summary>
-        /// Модуль (<see cref="ITool"/>) для legacy-инструмента (для приоритета в реестре).
-        /// </summary>
-        public ITool GetModule(UniTool T)
-        {
-            ITool M;
-            return ((T != null) && Modules.TryGetValue(T, out M)) ? M : null;
+            CmdRegistry.Register(new LegacyToolModule(T, Kind, OptRewriteRules));
         }
 
         /// <summary>
@@ -292,16 +275,17 @@ namespace Programmer.Environment
 
         /// <summary>
         /// Список программаторов по списку поддерживаемых архитектур
+        /// (из реестра — включая плагины).
         /// </summary>
         /// <param name="Arch"></param>
         /// <returns></returns>
-        public UniTool[] GetToolsByArch(string[] Arch)
+        public ITool[] GetToolsByArch(string[] Arch)
         {
-            var Tools = new List<UniTool>();
+            var Tools = new List<ITool>();
 
-            foreach(var T in ProgTS.Tools)
+            foreach (var T in CmdRegistry.Tools)
             {
-                if (T.IsSupportedArch(Arch))
+                if ((T.Kind == ToolKind.Programmer) && T.SupportsArch(Arch))
                     Tools.Add(T);
             }
 

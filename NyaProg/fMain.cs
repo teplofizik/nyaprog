@@ -12,6 +12,7 @@ using Programmer.Controls;
 using Programmer.Environment;
 using Programmer.Project;
 using Programmer.Controls.Mappers;
+using Programmer.Modules;
 using Programmer.Tool;
 using Programmer.Options;
 using Programmer.Options.Types;
@@ -47,7 +48,7 @@ namespace NyaProg
             if (PrState.Env.Projects.Length > 0) cbProject.SelectedIndex = 0;
         }
 
-        private void ShowTools(UniTool[] Tools)
+        private void ShowTools(ITool[] Tools)
         {
             ToolSelector = ComponentPlacer.PlaceComboBox(gbOptions, Tools, null, 15, 25, 220, 22);
 
@@ -57,10 +58,10 @@ namespace NyaProg
             {
                 for(int i = 0; i < ToolSelector.Items.Count; i++)
                 {
-                    if ((ToolSelector.Items[i] as UniTool).Name.CompareTo(Pref) == 0)
+                    if ((ToolSelector.Items[i] as ITool).Name.CompareTo(Pref) == 0)
                     {
                         ToolSelector.SelectedIndex = i;
-                        PrState.Tool = ToolSelector.SelectedItem as UniTool;
+                        PrState.Tool = ToolSelector.SelectedItem as ITool;
                         break;
                     }
                 }
@@ -69,7 +70,7 @@ namespace NyaProg
             if ((PrState.Tool == null) && (Tools.Length > 0))
             {
                 ToolSelector.SelectedIndex = 0;
-                PrState.Tool = ToolSelector.SelectedItem as UniTool;
+                PrState.Tool = ToolSelector.SelectedItem as ITool;
             }
 
             ToolSelector.SelectedIndexChanged += ToolSelector_SelectedIndexChanged;
@@ -77,7 +78,7 @@ namespace NyaProg
 
         private void ToolSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PrState.Tool = ToolSelector.SelectedItem as UniTool;
+            PrState.Tool = ToolSelector.SelectedItem as ITool;
 
             ShowOptions();
             ApplyOptions();

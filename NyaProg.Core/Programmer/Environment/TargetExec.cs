@@ -38,7 +38,7 @@ namespace Programmer.Environment
         /// <param name="S">Скрипт</param>
         /// <param name="Options">Опции программатора (из доступных к выбору пользователя) и пользовательский ввод</param>
         /// <returns></returns>
-        public ArgumentList GetArgs(UniTool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
+        public ArgumentList GetArgs(Modules.ITool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
         {
             var Res = new ArgumentList();
             string Root = Path.GetDirectoryName(Path.GetFullPath(System.Reflection.Assembly.GetEntryAssembly().Location));
@@ -88,12 +88,12 @@ namespace Programmer.Environment
         /// <param name="S">Скрипт</param>
         /// <param name="Options">Опции программатора (из доступных к выбору пользователя) и пользовательский ввод</param>
         /// <returns></returns>
-        public ExecResult Exec(ProgEnv E, UniTool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
+        public ExecResult Exec(ProgEnv E, Modules.ITool T, Project.Project P, Target S, Project.Action A, ArgumentList Options)
         {
             var Command = A.Command;
 
             // Команда выбранного программатора имеет приоритет; иначе ищем по реестру.
-            var Preferred = E.GetModule(T);
+            var Preferred = T;
 
             ICommand Cmd;
             if (E.Commands.TryResolve(Command, Preferred, out Cmd))

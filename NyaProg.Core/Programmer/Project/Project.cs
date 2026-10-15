@@ -24,6 +24,11 @@ namespace Programmer.Project
         public string Readme;
 
         /// <summary>
+        /// Документация: путь к файлу (относительно проекта) или URL.
+        /// </summary>
+        public string Doc;
+
+        /// <summary>
         /// Папка, где лежит проект (устанавливается при загрузке)
         /// </summary>
         public string Dir;

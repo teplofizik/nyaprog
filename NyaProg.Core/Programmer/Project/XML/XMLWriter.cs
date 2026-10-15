@@ -33,6 +33,7 @@ namespace Programmer.Project.XML
                 if (!string.IsNullOrEmpty(P.Date)) Tag(W, "date", P.Date);
                 if (!string.IsNullOrEmpty(P.Description)) Tag(W, "description", P.Description);
                 if (!string.IsNullOrEmpty(P.Photo)) Tag(W, "photo", P.Photo);
+                if (!string.IsNullOrEmpty(P.Doc)) Tag(W, "doc", P.Doc);
 
                 foreach (var A in P.Arch) Tag(W, "type", A);
                 foreach (var T in P.Tags) Tag(W, "tag", T);
@@ -58,6 +59,7 @@ namespace Programmer.Project.XML
 
             Tag(W, "name", T.Name);
             if (!string.IsNullOrEmpty(T.Photo)) Tag(W, "photo", T.Photo);
+            if (!string.IsNullOrEmpty(T.Doc)) Tag(W, "doc", T.Doc);
             if (!string.IsNullOrEmpty(T.Cathegory)) Tag(W, "cathegory", T.Cathegory);
 
             foreach (var A in T.Arch) Tag(W, "type", A);

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
+using Programmer.Modules;
 using Programmer.Project;
 using Programmer.Tool;
 using Programmer.Platform;
@@ -56,7 +57,7 @@ namespace Programmer.Environment
         /// <summary>
         /// Выбранный программатор
         /// </summary>
-        public UniTool Tool;
+        public ITool Tool;
         
         /// <summary>
         /// Выбранные архитектуры (для выбора программаторов)
@@ -187,7 +188,9 @@ namespace Programmer.Environment
         {
             CompiledArgs = new ArgumentList();
 
-            if (Tool != null) CompiledArgs.Append(Tool.GetDefaultOptionsValues());
+            if (Tool != null)
+                foreach (var O in Tool.GetOptions())
+                    CompiledArgs.Append(O.GetDefault());
             if (Project != null) CompiledArgs.Append(Project.GetDefaultOptionsValues());
             if (Target != null) CompiledArgs.Append(Target.GetDefaultOptionsValues());
         }

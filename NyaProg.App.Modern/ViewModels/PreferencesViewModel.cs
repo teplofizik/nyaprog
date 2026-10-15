@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 using NyaProg.App.Modern.Mvvm;
 using NyaProg.Presentation;
-using Programmer.Tool;
+using Programmer.Modules;
 
 namespace NyaProg.App.Modern.ViewModels
 {
@@ -13,12 +13,12 @@ namespace NyaProg.App.Modern.ViewModels
     {
         public string Arch { get; }
 
-        public IReadOnlyList<UniTool> Programmers { get; }
+        public IReadOnlyList<ITool> Programmers { get; }
 
-        private UniTool mSelected;
-        public UniTool Selected { get => mSelected; set => Set(ref mSelected, value); }
+        private ITool mSelected;
+        public ITool Selected { get => mSelected; set => Set(ref mSelected, value); }
 
-        public ArchPrefItem(string Arch, IReadOnlyList<UniTool> Programmers, UniTool Selected)
+        public ArchPrefItem(string Arch, IReadOnlyList<ITool> Programmers, ITool Selected)
         {
             this.Arch = Arch;
             this.Programmers = Programmers;
@@ -35,7 +35,7 @@ namespace NyaProg.App.Modern.ViewModels
 
         public ObservableCollection<ArchPrefItem> Items { get; } = new ObservableCollection<ArchPrefItem>();
 
-        public ICommand SaveCommand { get; }
+        public System.Windows.Input.ICommand SaveCommand { get; }
 
         private string mStatus = "";
         public string Status { get => mStatus; private set => Set(ref mStatus, value); }

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>NyaProg.Plugins.Esp32</AssemblyName>
+    <RootNamespace>NyaProg.Plugins.Esp32</RootNamespace>
+    <!-- Зависимости (Esp32Flasher.Core, System.IO.Ports) должны попасть в output,
+         чтобы задеплоиться в plugins/. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
+    <PackageReference Include="Esp32Flasher.Core" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

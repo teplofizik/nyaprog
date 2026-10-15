@@ -66,6 +66,7 @@ namespace NyaProg.App.Modern.ViewModels
         public string Device { get => Model.Device; set { Model.Device = value; Raise(); } }
         public string Type { get => Model.Type; set { Model.Type = value; Raise(); } }
         public string Photo { get => Model.Photo; set { Model.Photo = value; Raise(); } }
+        public string Doc { get => Model.Doc; set { Model.Doc = value; Raise(); } }
 
         public void SetControllers(IReadOnlyList<ControllerEntry> Controllers)
         {
@@ -163,6 +164,7 @@ namespace NyaProg.App.Modern.ViewModels
         public string Date { get => Model.Date; set { Model.Date = value; Raise(); } }
         public string Type { get => Model.Type; set { Model.Type = value; Raise(); } }
         public string Photo { get => Model.Photo; set { Model.Photo = value; Raise(); } }
+        public string Doc { get => Model.Doc; set { Model.Doc = value; Raise(); } }
 
         public void SetProjectPhoto(string Source)
         {

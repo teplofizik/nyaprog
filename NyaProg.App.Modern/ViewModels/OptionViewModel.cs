@@ -33,6 +33,27 @@ namespace NyaProg.App.Modern.ViewModels
             set { if (Model.SelectedIndex != value) { Model.SelectedIndex = value; Changed?.Invoke(); } }
         }
 
+        /// <summary>Выбранный пункт (для привязки ComboBox — надёжнее SelectedIndex).</summary>
+        public CommandItem SelectedItem
+        {
+            get
+            {
+                if ((Model.Items == null) || (Model.SelectedIndex < 0) || (Model.SelectedIndex >= Model.Items.Count))
+                    return null;
+
+                return Model.Items[Model.SelectedIndex];
+            }
+            set
+            {
+                var Idx = -1;
+                if ((value != null) && (Model.Items != null))
+                    for (int i = 0; i < Model.Items.Count; i++)
+                        if (ReferenceEquals(Model.Items[i], value)) { Idx = i; break; }
+
+                if (Idx >= 0) SelectedIndex = Idx;
+            }
+        }
+
         public bool Checked
         {
             get => Model.Checked;

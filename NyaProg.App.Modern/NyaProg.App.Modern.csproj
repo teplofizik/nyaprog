@@ -27,6 +27,7 @@
     <ProjectReference Include="..\NyaProg.Modules.Internal\NyaProg.Modules.Internal.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Modules.Net\NyaProg.Modules.Net.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Plugins.Sample\NyaProg.Plugins.Sample.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Plugins.Esp32\NyaProg.Plugins.Esp32.csproj" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
   <Target Name="CopyPlugins" AfterTargets="Build">
@@ -36,7 +37,16 @@
       <PluginFiles Include="..\NyaProg.Plugins.Sample\bin\$(Configuration)\NyaProg.Plugins.Sample.dll" />
     </ItemGroup>
     <MakeDir Directories="$(OutDir)plugins" />
+    <!-- Убрать возможный устаревший корневой System.IO.Ports (нужен RID-вариант из runtimes/). -->
+    <Delete Files="$(OutDir)plugins\System.IO.Ports.dll" />
     <Copy SourceFiles="@(PluginFiles)" DestinationFolder="$(OutDir)plugins" SkipUnchangedFiles="true" />
+
+    <!-- ESP32: всё дерево (включая runtimes/), кроме корневых System.IO.Ports и Abstractions. -->
+    <ItemGroup>
+      <Esp32Files Include="..\NyaProg.Plugins.Esp32\bin\$(Configuration)\**\*.dll"
+                  Exclude="..\NyaProg.Plugins.Esp32\bin\$(Configuration)\Programmer.Abstractions.dll;..\NyaProg.Plugins.Esp32\bin\$(Configuration)\System.IO.Ports.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Esp32Files)" DestinationFiles="@(Esp32Files->'$(OutDir)plugins\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>

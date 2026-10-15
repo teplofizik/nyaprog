@@ -111,6 +111,7 @@ namespace Programmer.Project.XML
                     case "cathegory": S.Cathegory = X.GetAttribute("value"); break;
                     case "name": S.Name = X.GetAttribute("value"); break;
                     case "photo": S.Photo = X.GetAttribute("value"); break;
+                    case "doc": S.Doc = X.GetAttribute("value"); break;
                     case "options": LoadOptions(S, X.GetSubtree()); break;
                     case "input":
                         {
@@ -178,6 +179,7 @@ namespace Programmer.Project.XML
                     case "description": P.Description = X.GetAttribute("value"); break;
                     case "date": P.Date = X.GetAttribute("value"); break;
                     case "photo": P.Photo = X.GetAttribute("value"); break;
+                    case "doc": P.Doc = X.GetAttribute("value"); break;
                     case "options": LoadOptions(P, X.GetSubtree()); break;
                     case "name": P.Name = X.GetAttribute("value"); break;
                     case "script":

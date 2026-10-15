@@ -154,9 +154,9 @@ namespace NyaProg.Cli
             Console.WriteLine($"flash '{P.Targets[TargetIdx].Name}': programmers={F.Programmers.Count}, options={F.Options.Count}, steps={F.Steps.Count}");
 
             foreach (var Pr in F.Programmers)
-                Console.WriteLine($"  programmer: {Pr.Name} [{string.Join(",", Pr.GetSupportedArch())}]");
+                Console.WriteLine($"  programmer: {Pr.Name} [{string.Join(",", Pr.SupportedArch)}]");
             foreach (var O in F.Options)
-                Console.WriteLine($"  option: {O.Name} ({O.Kind})");
+                Console.WriteLine($"  option: {O.Name} ({O.Kind}) items={O.Items.Count}");
             foreach (var St in F.Steps)
                 Console.WriteLine($"  step: {St.Title}");
 
@@ -213,6 +213,11 @@ namespace NyaProg.Cli
             St.SelectTarget(S);
             St.CompiledArgs = Args;
 
+            // Выбор программатора по архитектуре цели (как в UI)
+            var Tools = Env.GetToolsByArch(St.Arch);
+            var Tool = (Tools.Length > 0) ? Tools[0] : null;
+            St.Tool = Tool;
+
             var Plan = S.GetSteps(St);
             Console.WriteLine($"script '{S.Name}': plan {Plan.Count} steps");
 
@@ -231,7 +236,7 @@ namespace NyaProg.Cli
                 var A = Step as Programmer.Project.Action;
                 if (A == null) continue;
 
-                var R = SE.Exec(Env, null, P, S, A, Args);
+                var R = SE.Exec(Env, Tool, P, S, A, Args);
                 Console.WriteLine($"  {A.Command}: {R.Result} {R.Message}");
                 if (R.Result == ExecResultType.Error) return 1;
             }
@@ -250,17 +255,26 @@ namespace NyaProg.Cli
             var S = new Target();
             var A = new PAction(Command);
 
+            Programmer.Modules.ITool Tool = null;
             foreach (var Arg in CmdArgs)
             {
                 var Eq = Arg.IndexOf('=');
                 if (Eq > 0)
-                    A.Arguments.Set(Arg.Substring(0, Eq), Arg.Substring(Eq + 1));
+                {
+                    var K = Arg.Substring(0, Eq);
+                    var V = Arg.Substring(Eq + 1);
+
+                    if (K == "tool")
+                        Tool = Env.Commands.Tools.FirstOrDefault(T => T.Name == V);
+                    else
+                        A.Arguments.Set(K, V);
+                }
                 else
                     A.Arguments.Set("value", Arg);
             }
 
             var Options = new ArgumentList();
-            var R = SE.Exec(Env, null, P, S, A, Options);
+            var R = SE.Exec(Env, Tool, P, S, A, Options);
 
             Console.WriteLine($"exec '{Command}': {R.Result} {R.Message}");
             foreach (var K in Options.Keys)

@@ -1,5 +1,8 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+
+using NyaProg.App.Modern.ViewModels;
 
 namespace NyaProg.App.Modern.Views
 {
@@ -8,5 +11,18 @@ namespace NyaProg.App.Modern.Views
         public FlashView() { InitializeComponent(); }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+        private void OnRefresh(object Sender, RoutedEventArgs E) =>
+            (DataContext as FlashViewModel)?.RefreshDynamic();
+
+        private void OnDocument(object Sender, RoutedEventArgs E)
+        {
+            var Vm = DataContext as FlashViewModel;
+            if (Vm == null) return;
+
+            var W = new DocumentWindow();
+            W.Setup(Vm.Title, Vm.Doc, Vm.ProjectDir, Vm.Readme);
+            W.ShowDialog(TopLevel.GetTopLevel(this) as Window);
+        }
     }
 }
