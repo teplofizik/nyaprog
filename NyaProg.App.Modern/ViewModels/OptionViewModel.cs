@@ -24,6 +24,10 @@ namespace NyaProg.App.Modern.ViewModels
         public bool IsList => (Model.Kind == OptionKind.List) || (Model.Kind == OptionKind.Dynamic);
         public bool IsBool => Model.Kind == OptionKind.Bool;
         public bool IsText => (Model.Kind == OptionKind.Text) || (Model.Kind == OptionKind.Input);
+        public bool IsDynamic => Model.Kind == OptionKind.Dynamic;
+
+        /// <summary>Обновить значения этой опции у поставщика (кнопка ↻).</summary>
+        public System.Action Refresh;
 
         public IReadOnlyList<CommandItem> Items => Model.Items;
 

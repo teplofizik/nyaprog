@@ -186,6 +186,16 @@ namespace NyaProg.Presentation
             Changed?.Invoke();
         }
 
+        /// <summary>Обновить значения одной динамической опции у её поставщика.</summary>
+        public void RefreshOption(OptionModel Model)
+        {
+            if ((Model == null) || (Model.Kind != OptionKind.Dynamic) || string.IsNullOrEmpty(Model.Source))
+                return;
+
+            Model.Items = Session.Env.GetListItems(Model.Source, Session.State.CompiledArgs ?? new ArgumentList());
+            Changed?.Invoke();
+        }
+
         private void BuildOptions()
         {
             var Raw = new List<Option>();

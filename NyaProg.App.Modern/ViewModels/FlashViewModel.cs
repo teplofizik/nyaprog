@@ -72,7 +72,12 @@ namespace NyaProg.App.Modern.ViewModels
             if (!SameOptions())
             {
                 Options.Clear();
-                foreach (var O in Model.Options) Options.Add(new OptionViewModel(O, OnOptionChanged));
+                foreach (var O in Model.Options)
+                {
+                    var Vm = new OptionViewModel(O, OnOptionChanged);
+                    Vm.Refresh = () => Model.RefreshOption(O);
+                    Options.Add(Vm);
+                }
             }
 
             Steps.Clear();

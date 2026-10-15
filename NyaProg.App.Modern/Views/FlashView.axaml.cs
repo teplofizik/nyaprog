@@ -12,8 +12,8 @@ namespace NyaProg.App.Modern.Views
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
-        private void OnRefresh(object Sender, RoutedEventArgs E) =>
-            (DataContext as FlashViewModel)?.RefreshDynamic();
+        private void OnRefreshOption(object Sender, RoutedEventArgs E) =>
+            ((Sender as Button)?.DataContext as OptionViewModel)?.Refresh?.Invoke();
 
         private void OnDocument(object Sender, RoutedEventArgs E)
         {

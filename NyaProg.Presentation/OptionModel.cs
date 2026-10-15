@@ -27,7 +27,10 @@ namespace NyaProg.Presentation
         public bool Autoincrement { get; private set; }
 
         // Данные
-        public IReadOnlyList<CommandItem> Items { get; private set; } = new CommandItem[0];
+        public IReadOnlyList<CommandItem> Items { get; set; } = new CommandItem[0];
+
+        /// <summary>Источник динамического списка (id команды-поставщика).</summary>
+        public string Source { get; private set; }
 
         public string BoolValue { get; private set; } = "1";
 
@@ -59,6 +62,7 @@ namespace NyaProg.Presentation
             if (OD != null)
             {
                 M.Kind = OptionKind.Dynamic;
+                M.Source = OD.Source;
                 M.Items = OD.Items ?? new CommandItem[0];
                 M.SelectedIndex = DefaultDynamicIndex(OD);
                 return M;
