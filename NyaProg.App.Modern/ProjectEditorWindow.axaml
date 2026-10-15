@@ -1,0 +1,97 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="NyaProg.App.Modern.ProjectEditorWindow"
+        Title="{Binding Title}"
+        Width="780" Height="660"
+        WindowStartupLocation="CenterOwner">
+
+  <Grid RowDefinitions="*,Auto" Margin="12">
+
+    <ScrollViewer Grid.Row="0">
+      <StackPanel Spacing="6">
+
+        <TextBlock Text="Название" FontWeight="Bold" />
+        <TextBox Text="{Binding Name, Mode=TwoWay}" />
+
+        <TextBlock Text="Описание" FontWeight="Bold" />
+        <TextBox Text="{Binding Description, Mode=TwoWay}" />
+
+        <Grid ColumnDefinitions="*,*">
+          <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,4,0">
+            <TextBlock Text="Дата" />
+            <TextBox Text="{Binding Date, Mode=TwoWay}" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Spacing="4">
+            <TextBlock Text="Тип контроллера" />
+            <TextBox Text="{Binding Type, Mode=TwoWay}" />
+          </StackPanel>
+        </Grid>
+
+        <TextBlock Text="Фото (имя файла в папке проекта)" />
+        <TextBox Text="{Binding Photo, Mode=TwoWay}" />
+
+        <TextBlock Text="Цели (контроллеры)" FontWeight="Bold" Margin="0,10,0,0" />
+
+        <ItemsControl ItemsSource="{Binding Targets}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="#33000000" BorderThickness="1" CornerRadius="6" Padding="8" Margin="0,4">
+                <StackPanel Spacing="4">
+
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Grid.Column="0" Text="Цель" FontWeight="Bold" />
+                    <Button Grid.Column="1" Content="Удалить цель" Click="OnRemoveTarget" />
+                  </Grid>
+
+                  <Grid ColumnDefinitions="*,*">
+                    <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,4,0">
+                      <TextBlock Text="Название" />
+                      <TextBox Text="{Binding Name, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Spacing="2">
+                      <TextBlock Text="Контроллер (device)" />
+                      <TextBox Text="{Binding Device, Mode=TwoWay}" />
+                    </StackPanel>
+                  </Grid>
+
+                  <StackPanel Spacing="2">
+                    <TextBlock Text="Фото" />
+                    <TextBox Text="{Binding Photo, Mode=TwoWay}" />
+                  </StackPanel>
+
+                  <TextBlock Text="Шаги (команда, значение, подпись)" FontWeight="Bold" Margin="0,6,0,0" />
+
+                  <ItemsControl ItemsSource="{Binding Steps}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <Grid ColumnDefinitions="140,*,150,Auto" Margin="0,2">
+                          <TextBox Grid.Column="0" Text="{Binding Command, Mode=TwoWay}" />
+                          <TextBox Grid.Column="1" Text="{Binding Value, Mode=TwoWay}" />
+                          <TextBox Grid.Column="2" Text="{Binding Comment, Mode=TwoWay}" />
+                          <Button Grid.Column="3" Content="✕" Click="OnRemoveStep" />
+                        </Grid>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+
+                  <Button Content="+ Шаг" HorizontalAlignment="Left" Click="OnAddStep" />
+
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Button Content="+ Цель" HorizontalAlignment="Left" Click="OnAddTarget" />
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"
+                Spacing="8" Margin="0,10,0,0">
+      <Button Content="Сохранить" MinWidth="120" Click="OnSave" />
+      <Button Content="Отмена" MinWidth="120" Click="OnCancel" />
+    </StackPanel>
+
+  </Grid>
+</Window>

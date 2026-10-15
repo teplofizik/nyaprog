@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using NyaProg.App.Modern.Mvvm;
 using NyaProg.Presentation;

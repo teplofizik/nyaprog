@@ -1,4 +1,4 @@
-namespace Programmer.Modules
+﻿namespace Programmer.Modules
 {
     /// <summary>
     /// База для инструментов, реализованных кодом (встроенные утилиты, DLL-плагины).

@@ -1,4 +1,5 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 using NyaProg.App.Modern.Mvvm;
@@ -97,6 +98,22 @@ namespace NyaProg.App.Modern.ViewModels
             CrumbProjectCommand = new RelayCommand(P => BackToTargets());
 
             RefreshProjects();
+        }
+
+        /// <summary>Обновить интерфейс после редактирования/создания проекта.</summary>
+        public void AfterEdit(bool Saved)
+        {
+            if (!Saved) return;
+
+            var Cur = Project;
+
+            RefreshProjects();
+
+            if (Cur != null)
+            {
+                var Card = Projects.FirstOrDefault(C => ReferenceEquals(C.Project, Cur.Project));
+                if (Card != null) OpenProject(Card);
+            }
         }
 
         private void RefreshProjects()

@@ -1,4 +1,4 @@
-using Extension.Argument;
+﻿using Extension.Argument;
 
 namespace Programmer.Options.Types
 {

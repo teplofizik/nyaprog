@@ -1,4 +1,4 @@
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
@@ -19,6 +19,30 @@ namespace NyaProg.App.Modern
 
             var W = new PreferencesWindow { DataContext = new PreferencesViewModel(Shell.Session) };
             await W.ShowDialog(this);
+        }
+
+        private async void OnCreateProject(object Sender, RoutedEventArgs E)
+        {
+            var Shell = DataContext as ShellViewModel;
+            if (Shell == null) return;
+
+            var Vm = new ProjectEditorViewModel(Shell.Session, null);
+            var W = new ProjectEditorWindow { DataContext = Vm };
+            await W.ShowDialog(this);
+
+            Shell.AfterEdit(Vm.Saved);
+        }
+
+        private async void OnEditProject(object Sender, RoutedEventArgs E)
+        {
+            var Shell = DataContext as ShellViewModel;
+            if ((Shell == null) || (Shell.Project == null)) return;
+
+            var Vm = new ProjectEditorViewModel(Shell.Session, Shell.Project.Project);
+            var W = new ProjectEditorWindow { DataContext = Vm };
+            await W.ShowDialog(this);
+
+            Shell.AfterEdit(Vm.Saved);
         }
     }
 }

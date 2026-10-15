@@ -1,4 +1,4 @@
-namespace Programmer.Modules
+﻿namespace Programmer.Modules
 {
     /// <summary>
     /// Роль инструмента. Раньше определялась каталогом загрузки (ProgTS/CustTS),

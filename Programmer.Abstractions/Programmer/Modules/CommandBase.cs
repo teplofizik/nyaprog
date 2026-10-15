@@ -1,4 +1,4 @@
-namespace Programmer.Modules
+﻿namespace Programmer.Modules
 {
     /// <summary>
     /// Необязательная база для команд: заполняет Id и Descriptor.

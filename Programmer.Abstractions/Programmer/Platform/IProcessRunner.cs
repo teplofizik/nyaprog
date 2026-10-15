@@ -1,4 +1,4 @@
-namespace Programmer.Platform
+﻿namespace Programmer.Platform
 {
     /// <summary>
     /// Запуск внешних процессов. Абстракция позволяет уйти от прямой зависимости

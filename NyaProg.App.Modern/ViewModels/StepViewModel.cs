@@ -1,4 +1,4 @@
-using Avalonia.Media;
+﻿using Avalonia.Media;
 
 using NyaProg.App.Modern.Mvvm;
 using NyaProg.Presentation;

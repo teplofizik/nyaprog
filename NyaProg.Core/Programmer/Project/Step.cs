@@ -1,4 +1,4 @@
-namespace Programmer.Project
+﻿namespace Programmer.Project
 {
     /// <summary>
     /// Шаг скрипта. Конкретные виды: <see cref="Action"/> (команда),

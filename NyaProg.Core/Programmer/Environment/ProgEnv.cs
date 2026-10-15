@@ -283,6 +283,14 @@ namespace Programmer.Environment
         }
 
         /// <summary>
+        /// Добавить проект в библиотеку (после создания).
+        /// </summary>
+        public void AddProject(Project.Project P)
+        {
+            if (P != null) Lib.Projects.Add(P);
+        }
+
+        /// <summary>
         /// Список программаторов по списку поддерживаемых архитектур
         /// </summary>
         /// <param name="Arch"></param>

@@ -1,4 +1,4 @@
-namespace NyaProg.Presentation
+﻿namespace NyaProg.Presentation
 {
     /// <summary>
     /// Ключи предпочтений (хранятся в БД настроек).

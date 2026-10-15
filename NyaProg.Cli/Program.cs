@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -45,6 +45,9 @@ namespace NyaProg.Cli
             if ((args.Length >= 3) && (args[1] == "--flash"))
                 return FlashInfo(Env, args[2], (args.Length > 3) ? ParseInt(args[3], 0) : 0);
 
+            if ((args.Length >= 3) && (args[1] == "--mkproject"))
+                return MakeProject(args[2]);
+
             if ((args.Length >= 3) && (args[1] == "--list"))
                 return ListItems(Env, args[2]);
 
@@ -69,6 +72,34 @@ namespace NyaProg.Cli
 
             foreach (var C in Items)
                 Console.WriteLine($"  {C.Name} | {C.Date} | targets={C.TargetCount} | ctrl=[{string.Join(",", C.ControllerTypes)}] | tags=[{string.Join(",", C.Tags)}] | photo={(C.PhotoPath ?? "-")}");
+
+            return 0;
+        }
+
+        static int MakeProject(string Name)
+        {
+            var M = new NyaProg.Presentation.ProjectEditorModel
+            {
+                Name = Name,
+                Type = "stm32",
+                Description = "Тестовый проект (создан CLI)",
+                Date = "2026-01-01"
+            };
+
+            var T = new NyaProg.Presentation.TargetEdit { Name = "Основной МК", Device = "STM32F107" };
+            T.Steps.Add(new NyaProg.Presentation.StepEdit { Command = "wflash", Value = "fw.hex", Comment = "Прошивка" });
+            M.Targets.Add(T);
+
+            var Dir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "nyap_mk");
+            System.IO.Directory.CreateDirectory(Dir);
+            var File = System.IO.Path.Combine(Dir, "test.nyap");
+
+            Programmer.Project.XML.XMLWriter.Save(M.ToProject(), File);
+            Console.WriteLine(System.IO.File.ReadAllText(File));
+
+            var P = new Programmer.Project.Project();
+            Programmer.Project.XML.XMLLoader.Load(P, File);
+            Console.WriteLine($"reloaded: name={P.Name}, type=[{string.Join(",", P.Arch)}], targets={P.Targets.Count}, steps={P.Targets[0].Steps.Count}");
 
             return 0;
         }

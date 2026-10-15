@@ -1,4 +1,4 @@
-namespace Programmer.Project
+﻿namespace Programmer.Project
 {
     /// <summary>
     /// Шаг присвоения переменной окружения: <c>&lt;set name="url" value="http://{host}/fw" /&gt;</c>.

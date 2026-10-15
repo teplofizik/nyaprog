@@ -1,4 +1,4 @@
-namespace Programmer.Modules
+﻿namespace Programmer.Modules
 {
     /// <summary>
     /// Единица работы: одно исполняемое действие.

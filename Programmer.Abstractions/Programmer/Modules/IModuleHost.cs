@@ -1,4 +1,4 @@
-using Extension.Argument;
+﻿using Extension.Argument;
 using Programmer.Platform;
 
 namespace Programmer.Modules

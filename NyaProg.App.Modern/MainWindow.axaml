@@ -11,7 +11,11 @@
     <!-- Хлебные крошки: Список → Проект → Контроллер -->
     <Border Grid.Row="0" Background="#F0F0F0" Padding="12,8">
       <DockPanel>
-        <Button DockPanel.Dock="Right" Content="Настройки" Click="OnPrefs" />
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6">
+          <Button Content="Создать проект" Click="OnCreateProject" IsVisible="{Binding IsList}" />
+          <Button Content="Изменить" Click="OnEditProject" IsVisible="{Binding HasProject}" />
+          <Button Content="Настройки" Click="OnPrefs" />
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Spacing="6">
           <Button Content="Список" Command="{Binding HomeCommand}" IsVisible="{Binding !IsList}" />
           <TextBlock Text="›" VerticalAlignment="Center" IsVisible="{Binding HasProject}" />

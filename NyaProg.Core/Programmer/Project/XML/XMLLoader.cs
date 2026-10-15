@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Programmer.Project.XML
 {
-    static class XMLLoader
+    public static class XMLLoader
     {
         private static void LoadOptions(Target S, XmlLoad X)
         {
@@ -140,6 +140,27 @@ namespace Programmer.Project.XML
                     default: S.Arguments.Set(X.ElementName, X.GetAttribute("value")); break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Перечитать проект из его файла (после редактирования).
+        /// </summary>
+        public static bool Reload(Project P)
+        {
+            var FN = P.File;
+            if (string.IsNullOrEmpty(FN)) return false;
+
+            P.Name = null;
+            P.Description = null;
+            P.Date = null;
+            P.Photo = null;
+            P.Readme = null;
+            P.Tags.Clear();
+            P.Arch.Clear();
+            P.Options.Clear();
+            P.Targets.Clear();
+
+            return Load(P, FN);
         }
 
         public static bool Load(Project P, string FileName)
