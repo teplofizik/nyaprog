@@ -27,6 +27,7 @@ namespace NyaProg.Plugins.Esp32
 
             AddCommand(new ScanPortsCommand());
             AddCommand(new ChipInfoCommand());
+            AddCommand(new CheckCommand());
             AddCommand(new FlashCommand());
             AddCommand(new EraseCommand());
         }

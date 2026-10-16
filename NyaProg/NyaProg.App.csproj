@@ -25,6 +25,8 @@
     <ProjectReference Include="..\NyaProg.Modules.Net\NyaProg.Modules.Net.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Plugins.Sample\NyaProg.Plugins.Sample.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Plugins.Esp32\NyaProg.Plugins.Esp32.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Plugins.SettingsGen\NyaProg.Plugins.SettingsGen.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Plugins.FileInfo\NyaProg.Plugins.FileInfo.csproj" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
   <Target Name="CopyPlugins" AfterTargets="Build">
@@ -32,6 +34,8 @@
       <PluginFiles Include="..\NyaProg.Modules.Internal\bin\$(Configuration)\*.dll" Exclude="..\NyaProg.Modules.Internal\bin\$(Configuration)\Programmer.Abstractions.dll" />
       <PluginFiles Include="..\NyaProg.Modules.Net\bin\$(Configuration)\*.dll" Exclude="..\NyaProg.Modules.Net\bin\$(Configuration)\Programmer.Abstractions.dll" />
       <PluginFiles Include="..\NyaProg.Plugins.Sample\bin\$(Configuration)\NyaProg.Plugins.Sample.dll" />
+      <PluginFiles Include="..\NyaProg.Plugins.SettingsGen\bin\$(Configuration)\NyaProg.Plugins.SettingsGen.dll" />
+      <PluginFiles Include="..\NyaProg.Plugins.FileInfo\bin\$(Configuration)\NyaProg.Plugins.FileInfo.dll" />
     </ItemGroup>
     <MakeDir Directories="$(OutDir)plugins" />
     <Delete Files="$(OutDir)plugins\System.IO.Ports.dll" />

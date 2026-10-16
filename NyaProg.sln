@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -18,6 +18,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Plugins.Sample", "NyaProg.Plugins.Sample\NyaProg.Plugins.Sample.csproj", "{0C6AC53A-C7EE-40D2-ABD2-E32CDEB9EB4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Plugins.Esp32", "NyaProg.Plugins.Esp32\NyaProg.Plugins.Esp32.csproj", "{0C4B7304-AB54-4D3C-BF8E-83B51A7CFE6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Plugins.SettingsGen", "NyaProg.Plugins.SettingsGen\NyaProg.Plugins.SettingsGen.csproj", "{FBCA1186-E6BD-4BD0-B56B-83F4BFBF0ADC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Plugins.FileInfo", "NyaProg.Plugins.FileInfo\NyaProg.Plugins.FileInfo.csproj", "{76348A0E-EC6D-4D43-B8EB-4939C2A3B59A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NyaProg.Core", "NyaProg.Core\NyaProg.Core.csproj", "{FD9EF842-30CA-464E-BF55-94CFE934AAA0}"
 EndProject
@@ -75,6 +79,14 @@ Global
 		{0C4B7304-AB54-4D3C-BF8E-83B51A7CFE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C4B7304-AB54-4D3C-BF8E-83B51A7CFE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C4B7304-AB54-4D3C-BF8E-83B51A7CFE6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBCA1186-E6BD-4BD0-B56B-83F4BFBF0ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBCA1186-E6BD-4BD0-B56B-83F4BFBF0ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBCA1186-E6BD-4BD0-B56B-83F4BFBF0ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBCA1186-E6BD-4BD0-B56B-83F4BFBF0ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76348A0E-EC6D-4D43-B8EB-4939C2A3B59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76348A0E-EC6D-4D43-B8EB-4939C2A3B59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76348A0E-EC6D-4D43-B8EB-4939C2A3B59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76348A0E-EC6D-4D43-B8EB-4939C2A3B59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

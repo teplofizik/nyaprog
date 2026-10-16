@@ -75,6 +75,9 @@ namespace Programmer.Modules
 
         public CommandDescriptor Descriptor { get; }
 
+        /// <summary>Legacy XML-инструменты раскрывают {..} сами (в шаблоне команды).</summary>
+        public bool ExpandArgs => false;
+
         public CommandResult Execute(CommandContext Ctx)
         {
             var R = Module.Exec(Id, Ctx.Args, Ctx.Host.ProcessRunner);

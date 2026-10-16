@@ -106,6 +106,10 @@ namespace Programmer.Environment
                 if (!CommandBinder.Bind(Cmd, FullArgs, E.InputTypes, out Error))
                     return new ERError(Error);
 
+                // Нативные команды: раскрыть {переменные} в значениях аргументов
+                if (Cmd.ExpandArgs)
+                    ExpandArgs(FullArgs, E);
+
                 var Ctx = new CommandContext(Command, FullArgs, P.Dir, E);
                 var R = Cmd.Execute(Ctx);
 
@@ -120,6 +124,22 @@ namespace Programmer.Environment
             }
             else
                 return new ERError($"Not available command: {Command}");
+        }
+
+        /// <summary>Раскрыть {переменные} в значениях аргументов (для нативных команд).</summary>
+        private static void ExpandArgs(ArgumentList Args, ProgEnv E)
+        {
+            foreach (var K in Args.Keys)
+            {
+                var V = Args.Get(K);
+                if (string.IsNullOrEmpty(V) || (V.IndexOf('{') < 0)) continue;
+
+                try
+                {
+                    Args.Set(K, CommandTemplating.Process(V, N => E.ResolveArgument(N, Args) ?? ("{" + N + "}")));
+                }
+                catch { }
+            }
         }
 
         /// <summary>
