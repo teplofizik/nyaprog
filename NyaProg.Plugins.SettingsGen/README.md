@@ -139,6 +139,64 @@
 MAC/RDM берутся из полей ввода (или из `lookup` по серийнику) и подставляются в
 EEPROM вместо значений по умолчанию.
 
+## MAC/RDM из REST (lookup) → EEPROM
+
+Типовой сценарий: **серийный номер → REST API → MAC/RDM → EEPROM**.
+
+1. Поле ввода серийника: `<input name="serial" value="str" default="SN12345" />`.
+2. Команда **`lookup`** (плагин Net) запрашивает REST и кладёт значения в переменные
+   (`mac`, `rdm`) — они попадают в **окружение запуска**.
+3. Команда **`settings`** подставляет их в описание настроек (`default="{mac}"`,
+   `default="{rdm}"`) и формирует EEPROM.
+
+Проект:
+
+```xml
+<project>
+  <name value="EEPROM by REST" />
+  <type value="stm32" />
+  <target>
+    <name value="Настройки" />
+    <input name="serial" value="str" default="SN12345" />
+    <steps>
+      <lookup url="http://127.0.0.1:8099/device/{serial}"
+              extract="mac=json:$.network.mac; rdm=json:$.rdm"
+              comment="MAC/RDM по серийнику" />
+      <settings file="settings.xml" out="eeprom.hex" format="hex" offset="0x08010000"
+                comment="EEPROM (MAC/RDM из lookup)" />
+    </steps>
+  </target>
+</project>
+```
+
+`settings.xml`:
+
+```xml
+<eeprom>
+  <u32 name="Magic" default="0x61" />
+  <u8  name="Type" default="4" />
+  <mac name="MAC" default="{mac}" />
+  <u32 name="RDM" default="{rdm}" />
+  <crc16 name="CRC" />
+</eeprom>
+```
+
+Сервер (пример): `NyaProg.Modules.Net/examples/fastapi_lookup.py` —
+`GET /device/{serial}` возвращает JSON с `network.mac` и `rdm`.
+
+Проверка (CLI, без UI):
+
+```
+NyaProg.Cli config.xml --run "EEPROM by REST" 0
+  lookup:   Ok
+  settings: Ok
+  mac = AA:BB:CC:DD:EE:FF   rdm = 0x00000001
+```
+
+Результат (`eeprom.hex`, offset `0x08010000`): `Magic` `Type` `MAC=AA BB CC DD EE FF`
+`RDM=01 00 00 00` `CRC16`. То есть выходы `lookup` вливаются в окружение запуска и
+используются следующим шагом `settings`.
+
 ## Размер файла в переменную
 
 Отдельный плагин **`NyaProg.Plugins.FileInfo`** — команда `filesize`:

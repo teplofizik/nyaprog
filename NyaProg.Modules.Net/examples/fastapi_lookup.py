@@ -23,11 +23,13 @@ DEVICES = {
     "SN12345": {
         "serial": "SN12345",
         "model": "GC-0611W4",
+        "rdm": "0x00000001",
         "network": {"mac": "AA:BB:CC:DD:EE:FF", "ip": "10.0.0.5"},
     },
     "SN77777": {
         "serial": "SN77777",
         "model": "GC-0611W4",
+        "rdm": "0x00000002",
         "network": {"mac": "11:22:33:44:55:66", "ip": "10.0.0.6"},
     },
 }
