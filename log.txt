@@ -28,3 +28,63 @@ Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli
 Plugin module: Internal (core.internal) v1.0
 Plugin module: Net (core.net) v1.0
 Plugin module: Sample plugin (sample) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools
+Not found 'Tools' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Tools\Custom
+Not found 'Projects' dir: C:\Users\Professional\source\repos\nyaprog\NyaProg.Cli\bin\Debug\Projects
+Plugin module: Internal (core.internal) v1.0
+Plugin module: Net (core.net) v1.0
+Plugin module: ESP32 (native) (esp32) v1.0
+Plugin module: File info (fileinfo) v1.0
+Plugin module: HEX converter (hexconv) v1.0
+Plugin module: Sample plugin (sample) v1.0
+Plugin module: Settings generator (settingsgen) v1.0
