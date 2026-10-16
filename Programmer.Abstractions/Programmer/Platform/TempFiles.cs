@@ -35,6 +35,46 @@ namespace Programmer.Platform
         }
 
         /// <summary>
+        /// Удалить «старые» временные файлы/каталоги под Root (изменённые раньше OlderThan).
+        /// Оставшиеся от аварийно завершившихся сеансов; текущие файлы не трогаются.
+        /// Возвращает число удалённых.
+        /// </summary>
+        public static int Purge(string Root, DateTime OlderThan)
+        {
+            if (string.IsNullOrEmpty(Root) || !Directory.Exists(Root)) return 0;
+
+            int Count = 0;
+
+            try
+            {
+                foreach (var F in Directory.GetFiles(Root, "*", SearchOption.AllDirectories))
+                {
+                    try
+                    {
+                        if (File.GetLastWriteTime(F) < OlderThan) { File.Delete(F); Count++; }
+                    }
+                    catch { }
+                }
+
+                foreach (var D in Directory.GetDirectories(Root, "*", SearchOption.AllDirectories))
+                {
+                    try
+                    {
+                        if ((Directory.GetFileSystemEntries(D).Length == 0) && (Directory.GetLastWriteTime(D) < OlderThan))
+                        {
+                            Directory.Delete(D, false);
+                            Count++;
+                        }
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+
+            return Count;
+        }
+
+        /// <summary>
         /// Удалить все пути из переменной и очистить список.
         /// Возвращает количество обработанных путей.
         /// </summary>

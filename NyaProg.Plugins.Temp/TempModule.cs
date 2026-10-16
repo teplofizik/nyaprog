@@ -19,6 +19,16 @@ namespace NyaProg.Plugins.Temp
         public override string Name => "Temp files";
 
         public override IEnumerable<ITool> GetTools() => new ITool[] { new TempTool() };
+
+        public override void Initialize(IModuleHost Host)
+        {
+            // Уборка «хвостов» при завершении процесса (в т.ч. после аварийного):
+            // удаляем файлы, появившиеся до старта этого сеанса.
+            var Start = DateTime.Now;
+
+            try { AppDomain.CurrentDomain.ProcessExit += (S, E) => TempFiles.Purge(TempPaths.Root, Start); }
+            catch { }
+        }
     }
 
     public sealed class TempTool : CodedToolBase
