@@ -149,7 +149,7 @@ namespace Programmer.Environment
         {
             switch (R.Status)
             {
-                case CommandStatus.Ok: return new EROk();
+                case CommandStatus.Ok: return new EROk(R.Message);
                 case CommandStatus.Warning: return new ERWarning(R.Message);
                 default: return new ERError(R.Message);
             }

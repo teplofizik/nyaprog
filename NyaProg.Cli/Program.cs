@@ -238,8 +238,15 @@ namespace NyaProg.Cli
 
                 var R = SE.Exec(Env, Tool, P, S, A, Args);
                 Console.WriteLine($"  {A.Command}: {R.Result} {R.Message}");
-                if (R.Result == ExecResultType.Error) return 1;
+                if (R.Result == ExecResultType.Error)
+                {
+                    TempFiles.Cleanup(Args);
+                    return 1;
+                }
             }
+
+            // Конец прогона: удалить зарегистрированные временные файлы
+            TempFiles.Cleanup(Args);
 
             Console.WriteLine("environment:");
             foreach (var K in Args.Keys)

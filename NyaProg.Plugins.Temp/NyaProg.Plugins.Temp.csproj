@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>NyaProg.Plugins.Temp</AssemblyName>
+    <RootNamespace>NyaProg.Plugins.Temp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Programmer.Abstractions\Programmer.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -31,6 +31,8 @@ namespace Programmer.Tool
     public class EROk : ExecResult
     {
         public EROk() : base(ExecResultType.Ok, "") { }
+
+        public EROk(string Text) : base(ExecResultType.Ok, Text ?? "") { }
     }
     
     /// <summary>

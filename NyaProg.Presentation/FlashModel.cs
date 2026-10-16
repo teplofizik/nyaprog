@@ -7,6 +7,7 @@ using Programmer.Environment;
 using Programmer.Options;
 using Programmer.Options.Types;
 using Programmer.Modules;
+using Programmer.Platform;
 using Programmer.Project;
 using Programmer.Tool;
 
@@ -274,6 +275,9 @@ namespace NyaProg.Presentation
         private void Finish(bool Success)
         {
             Running = false;
+
+            // Конец прогона: удалить зарегистрированные временные файлы
+            TempFiles.Cleanup(Session.State.CompiledArgs);
 
             if (Success && Options.Any(M => M.Autoincrement))
                 Autoincrement();

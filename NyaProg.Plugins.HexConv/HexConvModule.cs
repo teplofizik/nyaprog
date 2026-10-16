@@ -102,7 +102,7 @@ namespace NyaProg.Plugins.HexConv
             Outputs.Set("size", Data.Length.ToString());
             Outputs.Set("offset", "0x" + Offset.ToString("X8"));
 
-            return new CommandResult(CommandStatus.Ok, "", Outputs);
+            return new CommandResult(CommandStatus.Ok, Resolve(Ctx, Out), Outputs);
         }
     }
 
@@ -142,7 +142,7 @@ namespace NyaProg.Plugins.HexConv
             Outputs.Set("size", Data.Length.ToString());
             Outputs.Set("base", "0x" + Base.ToString("X8"));
 
-            return new CommandResult(CommandStatus.Ok, "", Outputs);
+            return new CommandResult(CommandStatus.Ok, Resolve(Ctx, Out), Outputs);
         }
     }
 }

@@ -31,6 +31,7 @@
     <ProjectReference Include="..\NyaProg.Plugins.SettingsGen\NyaProg.Plugins.SettingsGen.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Plugins.FileInfo\NyaProg.Plugins.FileInfo.csproj" ReferenceOutputAssembly="false" Private="false" />
     <ProjectReference Include="..\NyaProg.Plugins.HexConv\NyaProg.Plugins.HexConv.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\NyaProg.Plugins.Temp\NyaProg.Plugins.Temp.csproj" ReferenceOutputAssembly="false" Private="false" />
   </ItemGroup>
 
   <Target Name="CopyPlugins" AfterTargets="Build">
@@ -41,6 +42,7 @@
       <PluginFiles Include="..\NyaProg.Plugins.SettingsGen\bin\$(Configuration)\NyaProg.Plugins.SettingsGen.dll" />
       <PluginFiles Include="..\NyaProg.Plugins.FileInfo\bin\$(Configuration)\NyaProg.Plugins.FileInfo.dll" />
       <PluginFiles Include="..\NyaProg.Plugins.HexConv\bin\$(Configuration)\NyaProg.Plugins.HexConv.dll" />
+      <PluginFiles Include="..\NyaProg.Plugins.Temp\bin\$(Configuration)\NyaProg.Plugins.Temp.dll" />
     </ItemGroup>
     <MakeDir Directories="$(OutDir)plugins" />
     <!-- Убрать возможный устаревший корневой System.IO.Ports (нужен RID-вариант из runtimes/). -->
