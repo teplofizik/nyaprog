@@ -16,6 +16,10 @@
         <TextBlock Text="Описание" FontWeight="Bold" />
         <TextBox Text="{Binding Description, Mode=TwoWay}" />
 
+        <TextBlock Text="Подробное описание (readme)" />
+        <TextBox Text="{Binding Readme, Mode=TwoWay}"
+                 AcceptsReturn="True" TextWrapping="Wrap" Height="70" />
+
         <Grid ColumnDefinitions="*,*">
           <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,4,0">
             <TextBlock Text="Дата" />
@@ -74,9 +78,24 @@
                   </StackPanel>
 
                   <StackPanel Spacing="2">
+                    <TextBlock Text="Описание" />
+                    <TextBox Text="{Binding Description, Mode=TwoWay}" />
+                  </StackPanel>
+
+                  <StackPanel Spacing="2">
+                    <TextBlock Text="Подробное описание (readme)" />
+                    <TextBox Text="{Binding Readme, Mode=TwoWay}"
+                             AcceptsReturn="True" TextWrapping="Wrap" Height="60" />
+                  </StackPanel>
+
+                  <StackPanel Spacing="2">
                     <TextBlock Text="Документ (файл или URL)" />
                     <TextBox Text="{Binding Doc, Mode=TwoWay}" />
                   </StackPanel>
+
+                  <TextBlock Text="Сложные шаги (set/if) не редактируются и сохраняются как есть"
+                             IsVisible="{Binding HasComplexSteps}"
+                             FontStyle="Italic" Opacity="0.6" FontSize="12" />
 
                   <TextBlock Text="Шаги (команда, значение, подпись)" FontWeight="Bold" Margin="0,6,0,0" />
 

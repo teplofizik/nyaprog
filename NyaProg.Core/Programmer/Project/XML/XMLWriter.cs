@@ -38,6 +38,8 @@ namespace Programmer.Project.XML
                 foreach (var A in P.Arch) Tag(W, "type", A);
                 foreach (var T in P.Tags) Tag(W, "tag", T);
 
+                Programmer.Options.XML.XMLWriter.Write(W, P.Options);
+
                 if (!string.IsNullOrEmpty(P.Readme)) Tag(W, "readme", P.Readme);
 
                 foreach (var T in P.Targets) WriteTarget(W, T);
@@ -58,6 +60,8 @@ namespace Programmer.Project.XML
             W.WriteStartElement("target");
 
             Tag(W, "name", T.Name);
+            if (!string.IsNullOrEmpty(T.Description)) Tag(W, "description", T.Description);
+            if (!string.IsNullOrEmpty(T.Readme)) Tag(W, "readme", T.Readme);
             if (!string.IsNullOrEmpty(T.Photo)) Tag(W, "photo", T.Photo);
             if (!string.IsNullOrEmpty(T.Doc)) Tag(W, "doc", T.Doc);
             if (!string.IsNullOrEmpty(T.Cathegory)) Tag(W, "cathegory", T.Cathegory);
@@ -67,9 +71,28 @@ namespace Programmer.Project.XML
             foreach (var K in T.Arguments.Keys)
                 Tag(W, K, T.Arguments.Get(K));
 
+            WriteInput(W, T.Input);
+
+            Programmer.Options.XML.XMLWriter.Write(W, T.Options);
+
             WriteSteps(W, T.Steps);
 
             W.WriteEndElement();
+        }
+
+        private static void WriteInput(XmlWriter W, List<InputParam> Input)
+        {
+            foreach (var In in Input)
+            {
+                W.WriteStartElement("input");
+                if (!string.IsNullOrEmpty(In.Name)) W.WriteAttributeString("name", In.Name);
+                if (!string.IsNullOrEmpty(In.Type)) W.WriteAttributeString("value", In.Type);
+                if (!string.IsNullOrEmpty(In.Comment)) W.WriteAttributeString("comment", In.Comment);
+                if (!string.IsNullOrEmpty(In.Default)) W.WriteAttributeString("default", In.Default);
+                if (!string.IsNullOrEmpty(In.ID)) W.WriteAttributeString("id", In.ID);
+                if (In.Autoincrement) W.WriteAttributeString("autoincrement", "1");
+                W.WriteEndElement();
+            }
         }
 
         private static void WriteSteps(XmlWriter W, List<Step> Steps)

@@ -56,7 +56,11 @@ namespace NyaProg.Presentation
 
         public string PhotoPath => PhotoResolver.Resolve(Project.Dir, Target.Photo);
 
-        public string Readme => !string.IsNullOrEmpty(Target.Readme) ? Target.Readme : Project.Readme;
+        public string Readme =>
+            !string.IsNullOrEmpty(Target.Readme) ? Target.Readme :
+            !string.IsNullOrEmpty(Target.Description) ? Target.Description :
+            !string.IsNullOrEmpty(Project.Readme) ? Project.Readme :
+            Project.Description;
 
         /// <summary>Документация: файл (относительно проекта) или URL.</summary>
         public string Doc => !string.IsNullOrEmpty(Target.Doc) ? Target.Doc : Project.Doc;

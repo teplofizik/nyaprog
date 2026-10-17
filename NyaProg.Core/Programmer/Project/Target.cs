@@ -30,6 +30,11 @@ namespace Programmer.Project
         public string Photo;
 
         /// <summary>
+        /// Описание (кратко)
+        /// </summary>
+        public string Description;
+
+        /// <summary>
         /// Описание подробное
         /// </summary>
         public string Readme;

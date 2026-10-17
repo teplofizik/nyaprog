@@ -109,6 +109,7 @@ namespace Programmer.Project.XML
                 switch (X.ElementName)
                 {
                     case "cathegory": S.Cathegory = X.GetAttribute("value"); break;
+                    case "description": S.Description = X.GetAttribute("value"); break;
                     case "name": S.Name = X.GetAttribute("value"); break;
                     case "photo": S.Photo = X.GetAttribute("value"); break;
                     case "doc": S.Doc = X.GetAttribute("value"); break;

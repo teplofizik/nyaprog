@@ -67,6 +67,11 @@ namespace NyaProg.App.Modern.ViewModels
         public string Type { get => Model.Type; set { Model.Type = value; Raise(); } }
         public string Photo { get => Model.Photo; set { Model.Photo = value; Raise(); } }
         public string Doc { get => Model.Doc; set { Model.Doc = value; Raise(); } }
+        public string Description { get => Model.Description; set { Model.Description = value; Raise(); } }
+        public string Readme { get => Model.Readme; set { Model.Readme = value; Raise(); } }
+
+        /// <summary>Есть шаги set/if — они не редактируются и сохраняются как есть.</summary>
+        public bool HasComplexSteps => Model.HasComplexSteps;
 
         public void SetControllers(IReadOnlyList<ControllerEntry> Controllers)
         {
@@ -161,6 +166,7 @@ namespace NyaProg.App.Modern.ViewModels
 
         public string Name { get => Model.Name; set { Model.Name = value; Raise(); Raise(nameof(Title)); } }
         public string Description { get => Model.Description; set { Model.Description = value; Raise(); } }
+        public string Readme { get => Model.Readme; set { Model.Readme = value; Raise(); } }
         public string Date { get => Model.Date; set { Model.Date = value; Raise(); } }
         public string Type { get => Model.Type; set { Model.Type = value; Raise(); } }
         public string Photo { get => Model.Photo; set { Model.Photo = value; Raise(); } }

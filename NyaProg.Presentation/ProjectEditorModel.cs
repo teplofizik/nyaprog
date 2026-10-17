@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Programmer.Project;
 
@@ -20,7 +21,15 @@ namespace NyaProg.Presentation
         public string Type = "";
         public string Photo = "";
         public string Doc = "";
+        public string Description = "";
+        public string Readme = "";
         public List<StepEdit> Steps = new List<StepEdit>();
+
+        /// <summary>Исходная цель (null — новая): нередактируемые поля сохраняются.</summary>
+        public Target Source;
+
+        /// <summary>Есть шаги set/if — они не редактируются и сохраняются как есть.</summary>
+        public bool HasComplexSteps;
     }
 
     /// <summary>
@@ -31,6 +40,7 @@ namespace NyaProg.Presentation
     {
         public string Name = "";
         public string Description = "";
+        public string Readme = "";
         public string Date = "";
         public string Type = "";
         public string Photo = "";
@@ -38,6 +48,9 @@ namespace NyaProg.Presentation
         public string File;
         public string Dir;
         public List<TargetEdit> Targets = new List<TargetEdit>();
+
+        /// <summary>Исходный проект (null — новый): нередактируемые поля (теги, опции, ...) сохраняются.</summary>
+        public Project Source;
 
         public bool IsNew => string.IsNullOrEmpty(File);
 
@@ -47,12 +60,14 @@ namespace NyaProg.Presentation
             {
                 Name = P.Name ?? "",
                 Description = P.Description ?? "",
+                Readme = P.Readme ?? "",
                 Date = P.Date ?? "",
                 Type = (P.Arch.Count > 0) ? P.Arch[0] : "",
                 Photo = P.Photo ?? "",
                 Doc = P.Doc ?? "",
                 File = P.File,
-                Dir = P.Dir
+                Dir = P.Dir,
+                Source = P
             };
 
             foreach (var T in P.Targets)
@@ -63,7 +78,11 @@ namespace NyaProg.Presentation
                     Device = T.Arguments.Get("device") ?? "",
                     Type = (T.Arch.Count > 0) ? T.Arch[0] : "",
                     Photo = T.Photo ?? "",
-                    Doc = T.Doc ?? ""
+                    Doc = T.Doc ?? "",
+                    Description = T.Description ?? "",
+                    Readme = T.Readme ?? "",
+                    Source = T,
+                    HasComplexSteps = T.Steps.Any(S => !(S is Action))
                 };
 
                 foreach (var S in T.Steps)
@@ -89,39 +108,57 @@ namespace NyaProg.Presentation
 
         public Project ToProject()
         {
-            var P = new Project
+            // Существующий проект правим на месте: теги, опции, input, доп. аргументы
+            // и шаги set/if сохраняются (редактор их не показывает).
+            var P = Source ?? new Project();
+
+            P.Name = Name;
+            P.Description = NullIfEmpty(Description);
+            P.Readme = NullIfEmpty(Readme);
+            P.Date = Date;
+            P.Photo = NullIfEmpty(Photo);
+            P.Doc = NullIfEmpty(Doc);
+            P.File = File;
+            P.Dir = Dir;
+
+            if (!string.IsNullOrEmpty(Type))
             {
-                Name = Name,
-                Description = Description,
-                Date = Date,
-                Photo = (Photo.Length > 0) ? Photo : null,
-                Doc = (Doc.Length > 0) ? Doc : null,
-                File = File,
-                Dir = Dir
-            };
+                if (P.Arch.Count == 0) P.Arch.Add(Type);
+                else P.Arch[0] = Type;
+            }
 
-            if (!string.IsNullOrEmpty(Type)) P.Arch.Add(Type);
-
+            P.Targets.Clear();
             foreach (var TE in Targets)
             {
-                var T = new Target
-                {
-                    Name = TE.Name,
-                    Photo = (TE.Photo.Length > 0) ? TE.Photo : null,
-                    Doc = (TE.Doc.Length > 0) ? TE.Doc : null
-                };
+                var T = TE.Source ?? new Target();
 
-                if (!string.IsNullOrEmpty(TE.Type)) T.Arch.Add(TE.Type);
+                T.Name = TE.Name;
+                T.Photo = NullIfEmpty(TE.Photo);
+                T.Doc = NullIfEmpty(TE.Doc);
+                T.Description = NullIfEmpty(TE.Description);
+                T.Readme = NullIfEmpty(TE.Readme);
+
+                if (!string.IsNullOrEmpty(TE.Type))
+                {
+                    if (T.Arch.Count == 0) T.Arch.Add(TE.Type);
+                    else T.Arch[0] = TE.Type;
+                }
+
                 if (!string.IsNullOrEmpty(TE.Device)) T.Arguments.Set("device", TE.Device);
 
-                foreach (var SE in TE.Steps)
+                // Шаги перестраиваем только если нет set/if — иначе сохраняем исходные.
+                if (!TE.HasComplexSteps)
                 {
-                    if (string.IsNullOrEmpty(SE.Command)) continue;
+                    T.Steps.Clear();
+                    foreach (var SE in TE.Steps)
+                    {
+                        if (string.IsNullOrEmpty(SE.Command)) continue;
 
-                    var A = new Action(SE.Command) { Comment = (SE.Comment.Length > 0) ? SE.Comment : null };
-                    if (!string.IsNullOrEmpty(SE.Value)) A.Arguments.Set("value", SE.Value);
+                        var A = new Action(SE.Command) { Comment = NullIfEmpty(SE.Comment) };
+                        if (!string.IsNullOrEmpty(SE.Value)) A.Arguments.Set("value", SE.Value);
 
-                    T.Steps.Add(A);
+                        T.Steps.Add(A);
+                    }
                 }
 
                 P.Targets.Add(T);
@@ -129,5 +166,7 @@ namespace NyaProg.Presentation
 
             return P;
         }
+
+        private static string NullIfEmpty(string S) => string.IsNullOrEmpty(S) ? null : S;
     }
 }
